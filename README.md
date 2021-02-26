@@ -1,8 +1,5 @@
 # Digital Waiter Robot (DWR -19)
 
-Directed by:
-- Luís André Magalhães de Barros
-
 Members:
 - Bruno Miguel Vasconcelos da Silva, a88289
 - Diogo Miguel Cunha Fernandes, a88262
@@ -10,6 +7,9 @@ Members:
 - Francisco Lopes Salgado, a88231 
 - João Pedro Dias Miranda, a88237
 - José Tomás Lima de Abreu, a88218
+
+Directed by:
+- Luís André Magalhães de Barros
 
 Short description (PT):
 - A ideia do produto surgiu da necessidade de atuar perante o panorama pandémico (Covid-19), mais propriamente no auxílio a pessoas que se encontrem em isolamento.
