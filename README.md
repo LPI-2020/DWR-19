@@ -1,5 +1,8 @@
 # Digital Waiter Robot (DWR -19)
 
+Developed in:
+- Projeto Integrador - LPI II (2021)
+
 Members:
 - Bruno Miguel Vasconcelos da Silva, a88289
 - Diogo Miguel Cunha Fernandes, a88262
