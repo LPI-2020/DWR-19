@@ -6,10 +6,12 @@
 GPIO_Pins in use:
 - Obstacle Detector:
 ADC - triggered by timer
-Ex: PC0 (CN9)
+Ex: TIM6 (0.5sec interrupt)
+    PC0 (CN9)
 
 - Cross Detector
 - Room Detector
 EXTI GPIO pin A
 GPIO pin B
-Ex: PD0 & PD1 (CN9)
+Ex: PinA = PD0 (EXTI)(CN9)
+    PinB = PD1 (CN9)
