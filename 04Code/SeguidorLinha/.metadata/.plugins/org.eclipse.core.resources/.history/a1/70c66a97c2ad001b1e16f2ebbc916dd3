@@ -1,0 +1,13 @@
+#include "qtr.h"
+
+#define TAM 8
+
+
+void line_follower_sensor_mean()
+{
+	static float r_sensor[TAM] = {};
+	static float l_sensor[TAM] = {};
+
+
+
+}

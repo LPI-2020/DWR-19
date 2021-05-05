@@ -1,0 +1,14 @@
+#include "pid.h"
+
+void init_pid(pid_st* st, float sample_time)
+{
+	st->kp_h = KP;
+	st->ki_h = KI * sample_time;
+	st->kd_h = KD * (1 - a_pid) / sample_time;
+	st->error = 0;
+	st->sum_errors = 0;
+	st->prev_error = 0;
+	st->u = 0;
+	st->u_d = 0;
+	st->prev_u_d = 0;
+}

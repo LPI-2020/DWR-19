@@ -1,0 +1,43 @@
+!SESSION 2021-05-05 14:16:12.334 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_PT
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-05-05 14:16:27.184
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-05-05 14:16:27.240
+!MESSAGE Log4j initialized with config file C:\Users\user\Desktop\SeguidorLinha\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-05-05 14:16:39.114
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-05-05 14:16:51.235
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-05-05 14:17:59.952
+!MESSAGE Indexed 'lineFollower' (30 sources, 90 headers) in 6.46 sec: 6,173 declarations; 35,381 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0048%)
+!SESSION 2021-05-05 14:18:10.760 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_PT
+Framework arguments:  C:\Users\user\Desktop\SeguidorLinha\lineFollower\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\user\Desktop\SeguidorLinha\lineFollower\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-05-05 14:18:17.523
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-05-05 14:18:17.573
+!MESSAGE Log4j initialized with config file C:\Users\user\Desktop\SeguidorLinha\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-05-05 14:18:33.163
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-05-05 14:18:33.800
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-05-05 14:18:37.746
+!MESSAGE Indexed 'lineFollower' (30 sources, 108 headers) in 4,44 sec: 9 456 declarations; 42 794 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0,28%)
