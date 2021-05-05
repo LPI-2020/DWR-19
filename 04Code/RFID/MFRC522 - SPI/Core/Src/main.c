@@ -103,7 +103,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
+    
 		int status = TM_MFRC522_Check(CardID, &type);
 		if (status == MI_OK) {
 			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
@@ -116,7 +116,7 @@ int main(void)
             str = "error";
         }
     }
-			
+		/* USER CODE END WHILE */	
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
