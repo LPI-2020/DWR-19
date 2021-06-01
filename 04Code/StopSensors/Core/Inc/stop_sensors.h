@@ -19,7 +19,7 @@ Define Peripherals in Use
 Define Parameters
 ******************************************************************************/
 // Obstacle Detector Limit
-#define ADC_DISTANCE_LIMIT (400)
+#define ADC_DISTANCE_LIMIT (1139) // Digital value of 30 cm
 /******************************************************************************
 Stop Sensors Flags
 ******************************************************************************/
@@ -32,6 +32,8 @@ extern uint8_t room_found_flag;
 /******************************************************************************
 Stop Sensors ISRs
 ******************************************************************************/
+void stop_sensors_init(void);
+
 void isr_obs_detector(void);
 
 #endif /* !_STOP_SENSORS_H_ */

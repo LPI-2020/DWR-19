@@ -21,7 +21,8 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "stop_sensors.h"
+#include "usart.h"
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim6;
@@ -40,9 +41,9 @@ void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 60000-1;
+  htim6.Init.Prescaler = 863;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 900-1;
+  htim6.Init.Period = 62499;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -93,7 +94,11 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+//void HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef * htim )
+//{
+//	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+//	UART_puts("timer interrupt.\n\r");
+//}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
