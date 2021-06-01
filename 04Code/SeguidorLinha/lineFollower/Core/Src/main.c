@@ -27,7 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "move.h"
+#include "motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +59,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -68,7 +68,6 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -93,7 +92,11 @@ int main(void)
   MX_ADC1_Init();
   MX_DAC_Init();
   MX_TIM6_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim6);			// <---------------------------------------------------------------------
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);	// <---------------------------------------------------------------------
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);	// <---------------------------------------------------------------------
   HAL_ADC_Start_DMA(&hadc1, buffer, 2);
   /* USER CODE END 2 */
 

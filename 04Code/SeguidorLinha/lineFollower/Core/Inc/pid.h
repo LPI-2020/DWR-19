@@ -11,7 +11,7 @@ extern "C" {
 #define KI 0
 #define KD 0
 
-#define a_pid 0
+#define a_pid (float) 0.3
 
 #define U_SAT_A 1.0
 #define U_SAT_B 0
@@ -32,7 +32,7 @@ typedef struct
 	float prev_u_d;
 } pid_st;
 
-void pid_init(pid_st* pid, float sample_time);
+//void pid_init(pid_st* pid, float sample_time);
 void pid_calcule(pid_st* pid, float ref_sensor, float sensor);
 
 #ifdef __cplusplus

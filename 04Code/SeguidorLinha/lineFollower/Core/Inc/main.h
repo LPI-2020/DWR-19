@@ -68,14 +68,26 @@ void Error_Handler(void);
 #define LD1_GPIO_Port GPIOB
 #define TESTE_Pin GPIO_PIN_11
 #define TESTE_GPIO_Port GPIOB
+#define IN1_LEFT_Pin GPIO_PIN_12
+#define IN1_LEFT_GPIO_Port GPIOB
+#define IN2_RIGHT_Pin GPIO_PIN_13
+#define IN2_RIGHT_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
+#define IN1_RIGHT_Pin GPIO_PIN_15
+#define IN1_RIGHT_GPIO_Port GPIOB
 #define USB_PowerSwitchOn_Pin GPIO_PIN_6
 #define USB_PowerSwitchOn_GPIO_Port GPIOG
 #define USB_OverCurrent_Pin GPIO_PIN_7
 #define USB_OverCurrent_GPIO_Port GPIOG
+#define PWN_RIGHT_Pin GPIO_PIN_6
+#define PWN_RIGHT_GPIO_Port GPIOC
+#define PWM_LEFT_Pin GPIO_PIN_7
+#define PWM_LEFT_GPIO_Port GPIOC
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define IN2_LEFT_Pin GPIO_PIN_15
+#define IN2_LEFT_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */

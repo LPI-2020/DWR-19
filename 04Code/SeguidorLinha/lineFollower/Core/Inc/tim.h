@@ -31,16 +31,25 @@ extern "C" {
 
 /* USER CODE END Includes */
 
+extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN Private defines */
 
+#define TIMER6_PERIOD (float) 0.01
+
+//#define CLK_APB1 108000000
+//#define TIMER6_PERIOD (*htim) (((htim->Init.Period + 1) * (htim->Init.Prescaler + 1)) / (float) CLK_APB1)
+
 /* USER CODE END Private defines */
 
+void MX_TIM3_Init(void);
 void MX_TIM6_Init(void);
 
-/* USER CODE BEGIN Prototypes */
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
+/* USER CODE BEGIN Prototypes */
+void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t signal);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

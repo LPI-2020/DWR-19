@@ -1,1 +1,0 @@
-#include "auxiliares.h"

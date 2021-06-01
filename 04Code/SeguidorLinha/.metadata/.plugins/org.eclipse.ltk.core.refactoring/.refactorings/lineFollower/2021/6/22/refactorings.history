@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;lineFollower/Core/Src/motor.h&apos; to &apos;motor.c&apos;" description="Rename resource &apos;motor.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Core/Src/motor.h" name="motor.c" stamp="1622542329022" updateReferences="true"/>
+</session>
