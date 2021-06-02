@@ -57,9 +57,9 @@ void move_front()
 void line_follower()
 {
 	move_front();
-	//pid_calcule(&pid_right, qtr[SENSOR3], qtr[SENSOR6]);
-	//pid_calcule(&pid_left, qtr[SENSOR6], qtr[SENSOR3]);
-	set_pwm(&PWM_TIM_INSTANCE, PWM_R_TIM_CHANNEL, 50);//pid_right.u * 100);
-	set_pwm(&PWM_TIM_INSTANCE, PWM_L_TIM_CHANNEL, 30);//pid_left.u * 100);
+	pid_calcule(&pid_right, qtr[SENSOR3], qtr[SENSOR6]);
+	pid_calcule(&pid_left, qtr[SENSOR6], qtr[SENSOR3]);
+	set_pwm(&PWM_TIM_INSTANCE, PWM_R_TIM_CHANNEL, pid_right.u * 100);
+	set_pwm(&PWM_TIM_INSTANCE, PWM_L_TIM_CHANNEL, pid_left.u * 100);
 
 }

@@ -21,9 +21,6 @@
 #include "adc.h"
 
 /* USER CODE BEGIN 0 */
-#include "dac.h"
-
-uint32_t buffer[2];
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
@@ -53,7 +50,7 @@ void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.NbrOfConversion = 8;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -62,7 +59,7 @@ void MX_ADC1_Init(void)
   }
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
-  sConfig.Channel = ADC_CHANNEL_10;
+  sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -71,8 +68,56 @@ void MX_ADC1_Init(void)
   }
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
-  sConfig.Channel = ADC_CHANNEL_13;
+  sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = ADC_REGULAR_RANK_4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = ADC_REGULAR_RANK_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_10;
+  sConfig.Rank = ADC_REGULAR_RANK_6;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_12;
+  sConfig.Rank = ADC_REGULAR_RANK_7;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_13;
+  sConfig.Rank = ADC_REGULAR_RANK_8;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -96,14 +141,32 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     __HAL_RCC_ADC1_CLK_ENABLE();
 
     __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN10
+    PC2     ------> ADC1_IN12
     PC3     ------> ADC1_IN13
+    PA0/WKUP     ------> ADC1_IN0
+    PA3     ------> ADC1_IN3
+    PA4     ------> ADC1_IN4
+    PB0     ------> ADC1_IN8
+    PB1     ------> ADC1_IN9
     */
-    GPIO_InitStruct.Pin = Right_lineSensor_Pin|Left_lineSensor_Pin;
+    GPIO_InitStruct.Pin = SENSOR6_Pin|SENSOR7_Pin|SENSOR8_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = SENSOR1_Pin|SENSOR2_Pin|SENSOR3_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = SENSOR4_Pin|SENSOR5_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* ADC1 DMA Init */
     /* ADC1 Init */
@@ -146,9 +209,19 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN10
+    PC2     ------> ADC1_IN12
     PC3     ------> ADC1_IN13
+    PA0/WKUP     ------> ADC1_IN0
+    PA3     ------> ADC1_IN3
+    PA4     ------> ADC1_IN4
+    PB0     ------> ADC1_IN8
+    PB1     ------> ADC1_IN9
     */
-    HAL_GPIO_DeInit(GPIOC, Right_lineSensor_Pin|Left_lineSensor_Pin);
+    HAL_GPIO_DeInit(GPIOC, SENSOR6_Pin|SENSOR7_Pin|SENSOR8_Pin);
+
+    HAL_GPIO_DeInit(GPIOA, SENSOR1_Pin|SENSOR2_Pin|SENSOR3_Pin);
+
+    HAL_GPIO_DeInit(GPIOB, SENSOR4_Pin|SENSOR5_Pin);
 
     /* ADC1 DMA DeInit */
     HAL_DMA_DeInit(adcHandle->DMA_Handle);
@@ -162,21 +235,19 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
-//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-//{
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
 //	HAL_GPIO_TogglePin (TESTE_GPIO_Port, TESTE_Pin);
-//	  rigth_sensor = buffer[0];
-////		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
-////			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_1);
+//		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
+//			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_1);
 //		if(HAL_DAC_Start(&hdac,DAC1_CHANNEL_1) == HAL_OK)
-//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_1, DAC_ALIGN_12B_R,  rigth_sensor);
+//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_1, DAC_ALIGN_12B_R,  qtr[SENSOR0]);
 //
-//		left_sensor = buffer[1];
-////		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
-////			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_2);
+//		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
+//			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_2);
 //		if(HAL_DAC_Start(&hdac,DAC1_CHANNEL_2) == HAL_OK)
-//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_2, DAC_ALIGN_12B_R,  left_sensor);
-//}
+//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_2, DAC_ALIGN_12B_R,  qtr[SENSOR1]);
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

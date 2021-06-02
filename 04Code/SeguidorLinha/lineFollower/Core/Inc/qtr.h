@@ -9,6 +9,6 @@ extern "C" {
 
 typedef enum { SENSOR1, SENSOR2, SENSOR3, SENSOR4, SENSOR5, SENSOR6, SENSOR7, SENSOR8 } qtr_e;
 
-float qtr[8];
+uint32_t qtr[8];
 
 #endif /*__QTR_H__*/
