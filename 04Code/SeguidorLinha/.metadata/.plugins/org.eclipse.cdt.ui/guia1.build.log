@@ -1,0 +1,10 @@
+17:07:25 **** Incremental Build of configuration Debug for project guia1 ****
+make -j4 all 
+arm-none-eabi-size   guia1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  54724	   6048	   3392	  64164	   faa4	guia1.elf
+Finished building: default.size.stdout
+ 
+
+17:07:26 Build Finished. 0 errors, 0 warnings. (took 365ms)
+

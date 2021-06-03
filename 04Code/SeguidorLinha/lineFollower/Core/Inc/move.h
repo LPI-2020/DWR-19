@@ -12,7 +12,13 @@ extern "C" {
 #include "pid.h"
 #include "motor.h"
 
+typedef enum { RIGHT, LEFT } direction_e;
+
+#define MOVE_RIGHT 	0
+#define MOVE_LEFT	1
+
 void line_follower();
+void turn(uint8_t direction);
 
 #ifdef __cplusplus
 }

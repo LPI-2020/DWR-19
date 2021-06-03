@@ -16,7 +16,9 @@ typedef struct
 	uint16_t GPIO_pin_IN2;
 }motor_st;
 
-void motor_front(motor_st* m);
+void motor_stop(motor_st* m);
+void motor_forward(motor_st* m);
+void motor_backward(motor_st* m);
 
 #ifdef __cplusplus
 }

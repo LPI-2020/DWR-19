@@ -28,8 +28,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "move.h"
-#include "qtr.h"
-#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -104,7 +102,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //transmit_string(Tx_buffer);
 	  //HAL_Delay(500);
     /* USER CODE END WHILE */
 
