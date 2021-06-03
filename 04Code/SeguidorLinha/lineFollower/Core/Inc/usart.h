@@ -34,7 +34,7 @@ extern "C" {
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
-
+extern char Tx_buffer[128];
 /* USER CODE END Private defines */
 
 void MX_USART3_UART_Init(void);

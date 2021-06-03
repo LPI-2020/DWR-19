@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 #include <stdio.h>
+#include <string.h>
+char Tx_buffer[128];
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;

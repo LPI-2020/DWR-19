@@ -1,8 +1,0 @@
-#include "move.h"
-
-
-void set_move()
-{
-	pid_calcule(&pid_right, qtr[SENSOR3], qtr[SENSOR6]);
-	pid_calcule(&pid_left, qtr[SENSOR6], qtr[SENSOR3]);
-}
