@@ -12,14 +12,25 @@ Define Peripherals in Use
 ******************************************************************************/
 #include "adc.h"
 #include "tim.h"
+#include "gpio.h"
+
+// Peripherals used to detect obstacles
 #define OBS_DETECTOR_TIM (htim6)
 #define OBS_DETECTOR_ADC (hadc1)
+
+// Pins used to detect stop marks
+#define PIN_A 		(PinA_Pin)
+#define PIN_A_PORT 	(PinA_GPIO_Port)
+
+#define PIN_B 		(PinB_Pin)
+#define PIN_B_PORT	(PinB_GPIO_Port)
 
 /******************************************************************************
 Define Parameters
 ******************************************************************************/
 // Obstacle Detector Limit
 #define ADC_DISTANCE_LIMIT (1139) // Digital value of 30 cm
+
 /******************************************************************************
 Stop Sensors Flags
 ******************************************************************************/
@@ -29,11 +40,14 @@ extern uint8_t obs_found_flag;
 extern uint8_t cross_found_flag;
 // Room Found Flag
 extern uint8_t room_found_flag;
+
 /******************************************************************************
 Stop Sensors ISRs
 ******************************************************************************/
 void stop_sensors_init(void);
+void stop_sensors_deInit(void);
 
 void isr_obs_detector(void);
+void isr_stop_detector(void);
 
 #endif /* !_STOP_SENSORS_H_ */

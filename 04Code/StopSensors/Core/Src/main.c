@@ -93,7 +93,7 @@ int main(void)
   MX_TIM6_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  Rx_UART_init(); // set USART3 interrupt
+  //Rx_UART_init(); // set USART3 interrupt
 
   stop_sensors_init();
   /* USER CODE END 2 */
