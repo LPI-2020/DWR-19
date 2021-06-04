@@ -773,3 +773,34 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\user\Desktop\
 
 !ENTRY org.eclipse.cdt.core 1 0 2021-06-03 09:25:58.054
 !MESSAGE Indexed 'lineFollower' (36 sources, 117 headers) in 5,53 sec: 10 788 declarations; 65 726 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0,19%)
+!SESSION 2021-06-03 16:01:52.114 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_PT
+Framework arguments:  C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-06-03 16:02:08.950
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-06-03 16:02:09.040
+!MESSAGE Log4j initialized with config file C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-06-03 16:02:28.088
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-06-03 16:02:29.008
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-06-03 16:02:36.026
+!MESSAGE Indexed 'lineFollower' (36 sources, 117 headers) in 7,44 sec: 10 775 declarations; 65 708 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0,19%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-06-03 17:05:27.835
+!MESSAGE Indexed 'guia1' (43 sources, 125 headers) in 5,88 sec: 12 079 declarations; 68 955 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0,18%)
+
+!ENTRY org.eclipse.core.jobs 2 2 2021-06-03 19:40:02.253
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.cdt.dsf.gdb.internal.ui.console.GdbBasicCliConsole$InputReadJob
+
+!ENTRY org.eclipse.core.jobs 2 2 2021-06-03 19:40:02.254
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.debug.core.DebugPlugin$EventDispatchJob

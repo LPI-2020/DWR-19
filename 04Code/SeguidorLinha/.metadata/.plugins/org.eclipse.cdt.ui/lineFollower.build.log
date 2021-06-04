@@ -1,9 +1,6 @@
-12:08:43 **** Incremental Build of configuration Debug for project lineFollower ****
+19:39:37 **** Incremental Build of configuration Debug for project lineFollower ****
 make -j4 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
-arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
-arm-none-eabi-gcc "../Core/Src/tim.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/tim.d" -MT"Core/Src/tim.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/tim.o"
 arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: lineFollower.elf
  
@@ -11,7 +8,7 @@ arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
 arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
 arm-none-eabi-size   lineFollower.elf 
    text	   data	    bss	    dec	    hex	filename
-  36468	    564	   2212	  39244	   994c	lineFollower.elf
+  35748	    484	   2212	  38444	   962c	lineFollower.elf
 Finished building: default.size.stdout
  
 Finished building: lineFollower.bin
@@ -19,5 +16,5 @@ Finished building: lineFollower.bin
 Finished building: lineFollower.list
  
 
-12:08:45 Build Finished. 0 errors, 0 warnings. (took 2s.178ms)
+19:39:39 Build Finished. 0 errors, 0 warnings. (took 1s.944ms)
 

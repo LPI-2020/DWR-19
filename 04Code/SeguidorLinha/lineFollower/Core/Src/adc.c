@@ -235,19 +235,6 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-//	HAL_GPIO_TogglePin (TESTE_GPIO_Port, TESTE_Pin);
-//		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
-//			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_1);
-//		if(HAL_DAC_Start(&hdac,DAC1_CHANNEL_1) == HAL_OK)
-//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_1, DAC_ALIGN_12B_R,  qtr[SENSOR0]);
-//
-//		if(HAL_DAC_GetState(&hdac) != HAL_DAC_STATE_READY)
-//			HAL_DAC_Stop(&hdac,DAC1_CHANNEL_2);
-//		if(HAL_DAC_Start(&hdac,DAC1_CHANNEL_2) == HAL_OK)
-//			HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_2, DAC_ALIGN_12B_R,  qtr[SENSOR1]);
-}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
