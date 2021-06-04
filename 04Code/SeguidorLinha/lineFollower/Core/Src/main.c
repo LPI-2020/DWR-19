@@ -95,13 +95,15 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);			// <---------------------------------------------------------------------
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);	// <---------------------------------------------------------------------
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);	// <---------------------------------------------------------------------
-  HAL_ADC_Start_DMA(&hadc1, qtr, 8);
+  HAL_ADC_Start_DMA(&hadc1, lf_sens, 2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  //move_rotate(MOVE_RIGHT);
+	  //move_rotate(MOVE_LEFT);
 	  //HAL_Delay(500);
     /* USER CODE END WHILE */
 

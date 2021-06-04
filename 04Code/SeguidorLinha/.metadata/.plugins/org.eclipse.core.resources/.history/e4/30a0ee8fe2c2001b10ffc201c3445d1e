@@ -1,9 +1,0 @@
-#include "motor.h"
-
-void move_front(motor_st* right, motor_st* left)
-{
-	HAL_GPIO_WritePin(right->GPIO_port_IN1, right->GPIO_pin_IN1, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(right->GPIO_port_IN2, right->GPIO_pin_IN2, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(left->GPIO_pin_IN1, left->GPIO_pin_IN1, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(left->GPIO_pin_IN2, left->GPIO_pin_IN2, GPIO_PIN_RESET);
-}

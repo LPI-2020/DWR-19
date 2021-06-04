@@ -1,6 +1,0 @@
-#include "motor.h"
-
-void direction()
-{
-
-}

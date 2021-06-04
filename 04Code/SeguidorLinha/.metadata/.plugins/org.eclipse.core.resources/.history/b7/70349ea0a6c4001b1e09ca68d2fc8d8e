@@ -1,0 +1,38 @@
+#include "motor.h"
+
+void motor_stop(motor_st* m)
+{
+	HAL_GPIO_WritePin(m->GPIO_port_IN1, m->GPIO_pin_IN1, GPIO_PIN_RESET	);
+	HAL_GPIO_WritePin(m->GPIO_port_IN2, m->GPIO_pin_IN2, GPIO_PIN_RESET);
+}
+
+void motor_forward(motor_st* m)
+{
+	HAL_GPIO_WritePin(m->GPIO_port_IN1, m->GPIO_pin_IN1, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(m->GPIO_port_IN2, m->GPIO_pin_IN2, GPIO_PIN_RESET);
+}
+
+void motor_backward(motor_st* m)
+{
+	HAL_GPIO_WritePin(m->GPIO_port_IN1, m->GPIO_pin_IN1, GPIO_PIN_RESET	);
+	HAL_GPIO_WritePin(m->GPIO_port_IN2, m->GPIO_pin_IN2, GPIO_PIN_SET);
+}
+
+#define MOTOR_STOP 	0
+#define MOTOR_FW 	1
+#define MOTOR_BW	2
+
+const uint8_t motor_pin_config[3][2] = {
+		// STOP
+		(GPIO_PIN_RESET, GPIO_PIN_RESET),
+		// FORWARD
+		(GPIO_PIN_SET, GPIO_PIN_SET),
+		// BACKWARD
+		(GPIO_PIN_RESET, GPIO_PIN_SET)
+};
+
+void motor_direction(motor_st *m, uint8_t dir)
+{
+	HAL_GPIO_WritePin(m->GPIO_port_IN1, m->GPIO_pin_IN1, motor_pin_config[dir][0]);
+	HAL_GPIO_WritePin(m->GPIO_port_IN2, m->GPIO_pin_IN2, motor_pin_config[dir][1]);
+}

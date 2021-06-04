@@ -1,20 +1,5 @@
 #include "pid.h"
 
-//void pid_init(pid_st* pid, float sample_time)
-//{
-//	pid->y = 0;		// <----
-//	pid->prev_y = 0; 	// <------
-//	pid->kp_h = KP;
-//	pid->ki_h = KI * sample_time;
-//	pid->kd_h = KD * (1 - a_pid) / sample_time;
-//	pid->error = 0;
-//	pid->sum_errors = 0;
-//	pid->prev_error = 0;
-//	pid->u = 0;
-//	pid->u_d = 0;
-//	pid->prev_u_d = 0;
-//}
-
 void pid_calcule(pid_st* pid, float ref_sensor, float sensor)
 {
 	pid->error = ref_sensor - sensor;
