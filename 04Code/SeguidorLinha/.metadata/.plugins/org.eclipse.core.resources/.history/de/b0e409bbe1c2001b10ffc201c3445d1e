@@ -1,3 +1,0 @@
-#include "motor.h"
-
-void move_front(motor_st* right, motor_st* left)

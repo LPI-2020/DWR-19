@@ -8,17 +8,18 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "tim.h"
-#include "qtr.h"
 #include "pid.h"
 #include "motor.h"
 
-typedef enum { RIGHT, LEFT } direction_e;
+#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_1)
+#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_2)
 
-#define MOVE_RIGHT 	0
-#define MOVE_LEFT	1
+typedef enum { MOVE_RIGHT, MOVE_LEFT } move_dir;
 
-void line_follower();
-void turn(uint8_t direction);
+uint32_t lf_sens[2];
+
+void move_forward();
+void move_rotate(move_dir direction);
 
 #ifdef __cplusplus
 }

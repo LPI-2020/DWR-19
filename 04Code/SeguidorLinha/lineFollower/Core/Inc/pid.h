@@ -32,7 +32,6 @@ typedef struct
 	float prev_u_d;
 } pid_st;
 
-//void pid_init(pid_st* pid, float sample_time);
 void pid_calcule(pid_st* pid, float ref_sensor, float sensor);
 
 #ifdef __cplusplus
