@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  000201dc  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000149a6  00000000  00000000  0002020a  2**0
+ 12 .debug_info   00015449  00000000  00000000  0002020a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00002e55  00000000  00000000  00034bb0  2**0
+ 13 .debug_abbrev 00002ffa  00000000  00000000  00035653  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001060  00000000  00000000  00037a08  2**3
+ 14 .debug_aranges 00001088  00000000  00000000  00038650  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000f18  00000000  00000000  00038a68  2**3
+ 15 .debug_ranges 00000f30  00000000  00000000  000396d8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00029904  00000000  00000000  00039980  2**0
+ 16 .debug_macro  0002a5b4  00000000  00000000  0003a608  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00014515  00000000  00000000  00063284  2**0
+ 17 .debug_line   00014c5b  00000000  00000000  00064bbc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    001022a9  00000000  00000000  00077799  2**0
+ 18 .debug_str    001023df  00000000  00000000  00079817  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  00179a42  2**0
+ 19 .comment      00000053  00000000  00000000  0017bbf6  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000050f0  00000000  00000000  00179a98  2**2
+ 20 .debug_frame  00005148  00000000  00000000  0017bc4c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2512,46 +2512,103 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
  800110c:	40020c00 	.word	0x40020c00
 
 08001110 <Reset_Handler>:
+
+    .section  .text.Reset_Handler
+  .weak  Reset_Handler
+  .type  Reset_Handler, %function
+Reset_Handler:  
+  ldr   sp, =_estack      /* set stack pointer */
  8001110:	f8df d034 	ldr.w	sp, [pc, #52]	; 8001148 <LoopFillZerobss+0x12>
+
+/* Copy the data segment initializers from flash to SRAM */  
+  ldr r0, =_sdata
  8001114:	480d      	ldr	r0, [pc, #52]	; (800114c <LoopFillZerobss+0x16>)
+  ldr r1, =_edata
  8001116:	490e      	ldr	r1, [pc, #56]	; (8001150 <LoopFillZerobss+0x1a>)
+  ldr r2, =_sidata
  8001118:	4a0e      	ldr	r2, [pc, #56]	; (8001154 <LoopFillZerobss+0x1e>)
+  movs r3, #0
  800111a:	2300      	movs	r3, #0
+  b LoopCopyDataInit
  800111c:	e002      	b.n	8001124 <LoopCopyDataInit>
 
 0800111e <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
  800111e:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
  8001120:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
  8001122:	3304      	adds	r3, #4
 
 08001124 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
  8001124:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
  8001126:	428c      	cmp	r4, r1
+  bcc CopyDataInit
  8001128:	d3f9      	bcc.n	800111e <CopyDataInit>
+  
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
  800112a:	4a0b      	ldr	r2, [pc, #44]	; (8001158 <LoopFillZerobss+0x22>)
+  ldr r4, =_ebss
  800112c:	4c0b      	ldr	r4, [pc, #44]	; (800115c <LoopFillZerobss+0x26>)
+  movs r3, #0
  800112e:	2300      	movs	r3, #0
+  b LoopFillZerobss
  8001130:	e001      	b.n	8001136 <LoopFillZerobss>
 
 08001132 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
  8001132:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
  8001134:	3204      	adds	r2, #4
 
 08001136 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
  8001136:	42a2      	cmp	r2, r4
+  bcc FillZerobss
  8001138:	d3fb      	bcc.n	8001132 <FillZerobss>
+
+/* Call the clock system initialization function.*/
+  bl  SystemInit   
  800113a:	f7ff fe1f 	bl	8000d7c <SystemInit>
+/* Call static constructors */
+    bl __libc_init_array
  800113e:	f004 fe47 	bl	8005dd0 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl  main
  8001142:	f7ff fc13 	bl	800096c <main>
+  bx  lr    
  8001146:	4770      	bx	lr
+  ldr   sp, =_estack      /* set stack pointer */
  8001148:	20080000 	.word	0x20080000
+  ldr r0, =_sdata
  800114c:	20000000 	.word	0x20000000
+  ldr r1, =_edata
  8001150:	200001dc 	.word	0x200001dc
+  ldr r2, =_sidata
  8001154:	08008ad4 	.word	0x08008ad4
+  ldr r2, =_sbss
  8001158:	200001dc 	.word	0x200001dc
+  ldr r4, =_ebss
  800115c:	20000464 	.word	0x20000464
 
 08001160 <CAN1_RX0_IRQHandler>:
+ * @retval None       
+*/
+    .section  .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b  Infinite_Loop
  8001160:	e7fe      	b.n	8001160 <CAN1_RX0_IRQHandler>
 
 08001162 <HAL_Init>:
