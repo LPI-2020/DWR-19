@@ -23,9 +23,21 @@ typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
 /******************************************************************************
 Define PID parameters to be used
 ******************************************************************************/
+//static pid_st pid = {
+//	.y 			= 0,	// <----
+//	.prev_y 	= 0, 	// <------
+//	.kp_h 		= KP,
+//	.ki_h 		= KI * TIMER6_PERIOD,
+//	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
+//	.error 		= 0,
+//	.sum_errors = 0,
+//	.prev_error = 0,
+//	.u 			= 0,
+//	.u_d 		= 0,
+//	.prev_u_d 	= 0
+//};
+
 static pid_st pid = {
-	.y 			= 0,	// <----
-	.prev_y 	= 0, 	// <------
 	.kp_h 		= KP,
 	.ki_h 		= KI * TIMER6_PERIOD,
 	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
@@ -65,9 +77,9 @@ Line Follower PID
 void lfollower_pid(void)
 {
 	// Apply PID to adjust motor PWM/velocity
-	// RIGHT SENSOR is used as REFERENCE. i.e: error = S_RIGHT_VAL - S_LEFT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]),
-						DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]));
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]),
+						DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
 
 	// Move forward with speed equal to pid.u (%)
 	move_forward(pid.u);

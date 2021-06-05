@@ -1,6 +1,6 @@
-16:40:48 **** Incremental Build of configuration Debug for project lineFollower ****
+21:42:44 **** Incremental Build of configuration Debug for project lineFollower ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
 arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: lineFollower.elf
  
@@ -8,7 +8,7 @@ arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
 arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
 arm-none-eabi-size   lineFollower.elf 
    text	   data	    bss	    dec	    hex	filename
-  35524	    484	   2188	  38196	   9534	lineFollower.elf
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
 Finished building: default.size.stdout
  
 Finished building: lineFollower.bin
@@ -16,5 +16,5 @@ Finished building: lineFollower.bin
 Finished building: lineFollower.list
  
 
-16:40:50 Build Finished. 0 errors, 0 warnings. (took 1s.766ms)
+21:42:45 Build Finished. 0 errors, 0 warnings. (took 1s.422ms)
 
