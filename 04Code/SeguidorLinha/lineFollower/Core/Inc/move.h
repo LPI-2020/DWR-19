@@ -9,19 +9,8 @@
 //#ifdef __cplusplus
 //extern "C" {
 //#endif
-//
-///* Includes ------------------------------------------------------------------*/
-//#include "main.h"
-//#include "tim.h"
-//#include "pid.h"
-//#include "motor.h"
 
-/******************************************************************************
-Define PWM TIM channels to be used
-******************************************************************************/
-#include "tim.h"
-#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_1)
-#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_2)
+#include <stdint.h> // using uint32_t
 
 /******************************************************************************
 Move Directions Enum
@@ -29,13 +18,16 @@ Move Directions Enum
 typedef enum { MOVE_RIGHT, MOVE_LEFT } move_dir_e;
 
 /******************************************************************************
-
+Line Follower Sensor
 ******************************************************************************/
 extern uint32_t lf_sens[2];
 
 /******************************************************************************
 Move Functions
 ******************************************************************************/
+void move_start(void);
+void move_stop(void);
+
 void move_forward(void);
 void move_rotate(move_dir_e direction);
 

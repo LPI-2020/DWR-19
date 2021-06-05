@@ -10,6 +10,7 @@ void pid_calcule(pid_st* pid, float ref_sensor, float sensor)
 	pid->prev_error = pid->error;
 	pid->prev_y = pid->y;
 	pid->prev_u_d = pid->u_d;
+
 	if(pid->u > U_SAT_A)
 	{
 		pid->u = U_SAT_A;

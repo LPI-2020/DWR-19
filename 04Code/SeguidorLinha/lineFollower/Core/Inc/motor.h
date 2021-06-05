@@ -10,14 +10,17 @@
 //extern "C" {
 //#endif
 
-///* Includes ------------------------------------------------------------------*/
-//#include "main.h"
-
 /******************************************************************************
-Define PWM TIM Instance to be used
+Define PWM TIM Instance and Channels to be used
 ******************************************************************************/
 #include "tim.h"
 #define PWM_TIM_INSTANCE 	(htim3)
+
+// Define Right Motor PWM TIM channel
+#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_1)
+
+// Define Left Motor PWM TIM channel
+#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_2)
 
 /******************************************************************************
 Motor Struct
@@ -39,8 +42,11 @@ Motor Directions Enum
 typedef enum { MOTOR_STOP, MOTOR_FORWARD, MOTOR_BACKWARD} motor_dir_e;
 
 /******************************************************************************
-Motor Control
+Motor Functions
 ******************************************************************************/
+void motor_init(motor_st *m);
+void motor_kill(motor_st *m);
+
 void motor_control(motor_st *m,  uint8_t dc, motor_dir_e dir);
 
 /******************************************************************************

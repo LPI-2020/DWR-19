@@ -19,6 +19,30 @@ static const GPIO_PinState motor_pin_config[3][2] =
 };
 
 /******************************************************************************
+Motor Init
+
+@brief	Start PWM generation to a given motor
+@param	Motor to be initialized
+@retval none
+******************************************************************************/
+void motor_init(motor_st *m)
+{
+	HAL_TIM_PWM_Start(&PWM_TIM_INSTANCE, m->pwm_channel);
+}
+
+/******************************************************************************
+Motor Kill
+
+@brief	Stops PWM generation to a given motor
+@param	Motor to be killed
+@retval none
+******************************************************************************/
+void motor_kill(motor_st *m)
+{
+	HAL_TIM_PWM_Stop(&PWM_TIM_INSTANCE, m->pwm_channel);
+}
+
+/******************************************************************************
 Motor control
 
 @brief	Controls Motor PWM duty cycle in desired direction
