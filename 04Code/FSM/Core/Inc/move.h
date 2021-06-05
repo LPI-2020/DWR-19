@@ -1,27 +1,25 @@
 /*
- * fsm.h
+ * move.h
  *
- * FSM module
+ * Movement control module
  *
- *  Created on: June 3, 2021
+ *  Created on: May 5, 2021
  */
+#ifndef __MOVE_H__
+#define __MOVE_H__
 
 /******************************************************************************
-FSM states
+Move Directions Enum
 ******************************************************************************/
-#define S_STOPPED		0
-#define S_RECEIVE		1
-#define S_FLW_LINE 		2
-#define S_ROOM			3
-#define S_RD_RFID		4
-#define S_ROTATE		5
-#define S_WAIT			6
-#define S_ERROR			7
+typedef enum { MOVE_RIGHT, MOVE_LEFT } move_dir_e;
 
 /******************************************************************************
-FSM current state pointer
+Move Functions
 ******************************************************************************/
-extern void (*fsm_func_ptr[])(void);
+void move_start(void);
+void move_stop(void);
 
-extern uint8_t state;
-extern uint8_t nstate;
+void move_forward(float speed);
+void move_rotate(move_dir_e direction);
+
+#endif /*__MOVE_H__ */

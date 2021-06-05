@@ -1,10 +1,13 @@
 /*
  * fsm.c
  *
+ * FSM module
+ *
  *  Created on: June 3, 2021
  */
 
 #include "stop_sensors.h"
+#include "lfollower.h"
 
 /******************************************************************************
 FSM state functions
@@ -17,7 +20,6 @@ static void s_rd_rfid(void);
 static void s_rotate(void);
 static void s_wait(void);
 static void s_error(void);
-
 
 /******************************************************************************
 FSM current state pointer
