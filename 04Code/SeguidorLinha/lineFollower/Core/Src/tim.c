@@ -21,7 +21,7 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-#include "move.h"
+#include "lfollower.h"
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim3;
@@ -217,16 +217,16 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
 /* USER CODE BEGIN 1 */
 
-void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t signal)
+void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc)
 {
-	__HAL_TIM_SET_COMPARE(htim, channel, signal);
+	__HAL_TIM_SET_COMPARE(htim, channel, dc);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	if(htim == &htim6)
 	{
-		//move_forward();
+		//lfollower_pid();
 	}
 }
 

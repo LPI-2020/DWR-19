@@ -2,6 +2,7 @@
 "Core/Src/auxiliares.o"
 "Core/Src/dma.o"
 "Core/Src/gpio.o"
+"Core/Src/lfollower.o"
 "Core/Src/main.o"
 "Core/Src/motor.o"
 "Core/Src/move.o"

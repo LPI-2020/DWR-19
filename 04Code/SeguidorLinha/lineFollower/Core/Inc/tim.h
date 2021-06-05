@@ -49,7 +49,10 @@ void MX_TIM6_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
-void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t signal);
+
+// set PWM htim-channel duty cycle
+void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

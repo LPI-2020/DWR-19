@@ -1,6 +1,8 @@
 /*
  * motor.c
  *
+ * Motor control module
+ *
  *  Created on: May 5, 2021
  */
 #include "motor.h"

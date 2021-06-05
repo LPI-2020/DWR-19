@@ -1,14 +1,12 @@
 /*
  * motor.h
  *
+ * Motor control module
+ *
  *  Created on: May 5, 2021
  */
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
-
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
 
 /******************************************************************************
 Define PWM TIM Instance and Channels to be used
@@ -56,7 +54,4 @@ Motor Control on each direction
 #define motor_forward(_m_, _dc_) 	motor_control((motor_st *)(_m_), (uint8_t)(_dc_), MOTOR_FORWARD)
 #define motor_backward(_m_, _dc_) 	motor_control((motor_st *)(_m_), (uint8_t)(_dc_), MOTOR_BACKWARD)
 
-//#ifdef __cplusplus
-//}
-//#endif
 #endif /* !__MOTOR_H__ */
