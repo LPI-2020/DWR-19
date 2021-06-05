@@ -1,0 +1,25 @@
+#ifndef __MOVE_H__
+#define __MOVE_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+#include "tim.h"
+#include "pid.h"
+#include "motor.h"
+
+
+typedef enum { MOVE_RIGHT, MOVE_LEFT } direction_e;
+uint32_t lf_sens[2];
+
+
+void line_follower();
+void turn(uint8_t direction);
+
+#ifdef __cplusplus
+}
+#endif
+#endif /*__MOVE_H__ */

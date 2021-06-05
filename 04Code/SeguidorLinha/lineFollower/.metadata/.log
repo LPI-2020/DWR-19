@@ -1,0 +1,41 @@
+!SESSION 2021-06-01 09:01:33.274 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_PT
+Framework arguments:  C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-06-01 09:02:12.119
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-06-01 09:02:12.187
+!MESSAGE Log4j initialized with config file C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.metadata\.log4j.xml
+
+!ENTRY org.eclipse.core.jobs 2 2 2021-06-01 09:02:23.703
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$40
+!SESSION 2021-06-01 09:03:06.872 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_PT
+Framework arguments:  C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-06-01 09:03:55.748
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-06-01 09:03:55.807
+!MESSAGE Log4j initialized with config file C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-06-01 09:04:10.433
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-06-01 09:04:33.253
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.core.jobs 2 2 2021-06-01 09:04:39.647
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.equinox.internal.p2.transport.ecf.FileInfoReader
+
+!ENTRY org.eclipse.core.jobs 2 2 2021-06-01 09:04:39.648
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ecf.provider.filetransfer.browse.AbstractFileSystemBrowser$DirectoryJob

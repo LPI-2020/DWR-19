@@ -1,0 +1,30 @@
+#ifndef __MOTOR_H__
+#define __MOTOR_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+typedef struct
+{
+	GPIO_TypeDef *GPIO_port_IN1;
+	uint16_t GPIO_pin_IN1;
+	GPIO_TypeDef *GPIO_port_IN2;
+	uint16_t GPIO_pin_IN2;
+}motor_st;
+
+typedef enum { MOTOR_STOP, MOTOR_FORWARD, MOTOR_BACKWARD} rotation_e;
+
+#define motor_stop(_m_) motor_direction((motor_st *)(_m_), MOTOR_STOP)
+
+//void motor_stop(motor_st* m);
+//void motor_forward(motor_st* m);
+//void motor_backward(motor_st* m);
+
+#ifdef __cplusplus
+}
+#endif
+#endif /*__MOTOR_H__ */
