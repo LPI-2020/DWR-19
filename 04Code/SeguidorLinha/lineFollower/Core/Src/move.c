@@ -10,7 +10,7 @@
 #include "motor.h"
 
 /******************************************************************************
-Define Move Speeds
+Define Move Speeds (from 0 to 1)
 ******************************************************************************/
 #define FORWARD_SPEED 	(float)(0.78)
 #define TURN_SPEED 		(float)(0.7)
@@ -37,7 +37,7 @@ static motor_st motor_left = {
 	.GPIO_pin_IN1 	= IN1_LEFT_Pin,
 
 	.GPIO_port_IN2 	= IN2_LEFT_GPIO_Port,
-	.GPIO_pin_IN2 	=  IN2_LEFT_Pin
+	.GPIO_pin_IN2 	= IN2_LEFT_Pin
 };
 
 // List of motors
@@ -72,9 +72,15 @@ void move_stop(void)
 /******************************************************************************
 Move Forward
 
-@brief	Set both motors to FORWARD with base speed equal to FORWARD_SPEED (%)
-		>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> explain (FORWARD_SPEED - speed * (1 - FORWARD_SPEED))!!!
-@param	none
+@brief	Set both motors to FORWARD with Base_Speed equal to FORWARD_SPEED
+		If speed is not zero, then Motor_Speed will equal to:
+			(Base_Speed + Additional_Speed) which is less or equal to 100 %
+
+		i.e: 	if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
+				if FORWARD_SPEED=70% and speed=50%, then
+					Motor_Speed=70+50*(30%), which is 85%
+
+@param	speed value, from 0 to 1
 @retval none
 ******************************************************************************/
 void move_forward(float speed)
@@ -96,7 +102,7 @@ Move Rotate
 ******************************************************************************/
 void move_rotate(move_dir_e direction)
 {
-	// Set motor to forward with speed TURN_SPEED (%)
+	// Set motor to forward with speed TURN_SPEED
 	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
 	// Stop other motor
 	motor_stop(motors[direction & 0x01]);

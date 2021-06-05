@@ -21,7 +21,8 @@ Define Peripherals in use
 Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
-void lfollower_pid(void);
 void lfollower_stop(void);
+
+void lfollower_pid(void);
 
 #endif // !__LFOLLOWER_H__

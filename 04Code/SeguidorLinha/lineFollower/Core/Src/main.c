@@ -107,8 +107,11 @@ int main(void)
 
   while (1)
   {
-	  move_rotate(MOVE_RIGHT);
+	  //lfollower_pid();
+
+	  //move_rotate(MOVE_RIGHT);
 	  //move_rotate(MOVE_LEFT);
+
 	  //HAL_Delay(500);
     /* USER CODE END WHILE */
 

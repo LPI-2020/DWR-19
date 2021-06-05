@@ -21,7 +21,7 @@ static uint32_t lf_sens[2];
 typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
 
 /******************************************************************************
-Define PID algorithm to be used
+Define PID parameters to be used
 ******************************************************************************/
 static pid_st pid = {
 	.y 			= 0,	// <----
