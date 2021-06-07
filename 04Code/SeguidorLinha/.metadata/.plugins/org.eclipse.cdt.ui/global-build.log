@@ -73425,3 +73425,135 @@ Finished building: lineFollower.bin
  
 Finished building: lineFollower.list
  
+23:24:00 **** Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/auxiliares.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"Core/Src/auxiliares.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/auxiliares.o"
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:84:27: error: 'FORWARD_SPEED' undeclared (first use in this function)
+   84 | #define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+      |                           ^~~~~~~~~~~~~
+../Core/Src/lfollower.c:97:7: note: in expansion of macro 'CALC_SPEED'
+   97 |  move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+      |       ^~~~~~~~~~
+../Core/Src/lfollower.c:84:27: note: each undeclared identifier is reported only once for each function it appears in
+   84 | #define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+      |                           ^~~~~~~~~~~~~
+../Core/Src/lfollower.c:97:7: note: in expansion of macro 'CALC_SPEED'
+   97 |  move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+      |       ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+23:30:18 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc "../Core/Src/auxiliares.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"Core/Src/auxiliares.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/auxiliares.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:84:27: error: 'FORWARD_SPEED' undeclared (first use in this function)
+   84 | #define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+      |                           ^~~~~~~~~~~~~
+../Core/Src/lfollower.c:97:7: note: in expansion of macro 'CALC_SPEED'
+   97 |  move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+      |       ^~~~~~~~~~
+../Core/Src/lfollower.c:84:27: note: each undeclared identifier is reported only once for each function it appears in
+   84 | #define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+      |                           ^~~~~~~~~~~~~
+../Core/Src/lfollower.c:97:7: note: in expansion of macro 'CALC_SPEED'
+   97 |  move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+      |       ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+23:32:58 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+00:08:29 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+In file included from ../Core/Src/move.c:8:
+../Core/Inc/move.h:30:21: error: expected parameter name, found "("
+   30 | #define move_rotate((_dir_), (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                     ^
+In file included from ../Core/Src/main.c:30:
+../Core/Inc/move.h:30:21: error: expected parameter name, found "("
+   30 | #define move_rotate((_dir_), (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                     ^
+../Core/Src/move.c:44:18: warning: 'motors' defined but not used [-Wunused-variable]
+   44 | static motor_st* motors[] = { &motor_right, &motor_left };
+      |                  ^~~~~~
+In file included from ../Core/Src/lfollower.c:10:
+../Core/Inc/move.h:30:21: error: expected parameter name, found "("
+   30 | #define move_rotate((_dir_), (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                     ^
+make: *** [Core/Src/subdir.mk:74: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Core/Src/subdir.mk:78: Core/Src/move.o] Error 1
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+00:09:32 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+In file included from ../Core/Src/move.c:8:
+../Core/Inc/move.h:30:28: error: expected parameter name, found "("
+   30 | #define move_rotate(_dir_, (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                            ^
+In file included from ../Core/Src/lfollower.c:10:
+../Core/Inc/move.h:30:28: error: expected parameter name, found "("
+   30 | #define move_rotate(_dir_, (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                            ^
+In file included from ../Core/Src/main.c:30:
+../Core/Inc/move.h:30:28: error: expected parameter name, found "("
+   30 | #define move_rotate(_dir_, (_speed_)) (move((1 - (_dir_))*(_speed_), (_dir_)*(_speed_)))
+      |                            ^
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/move.c:44:18: warning: 'motors' defined but not used [-Wunused-variable]
+   44 | static motor_st* motors[] = { &motor_right, &motor_left };
+      |                  ^~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/main.o] Error 1
+make: *** [Core/Src/subdir.mk:78: Core/Src/move.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+00:09:41 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/move.c:44:18: warning: 'motors' defined but not used [-Wunused-variable]
+   44 | static motor_st* motors[] = { &motor_right, &motor_left };
+      |                  ^~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 

@@ -12,8 +12,8 @@
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
-#define FORWARD_SPEED 	(float)(0.78)
-#define TURN_SPEED 		(float)(0.7)
+//#define FORWARD_SPEED 	(float)(0.78)
+//#define TURN_SPEED 		(float)(0.7)
 
 /******************************************************************************
 Define Motors in use
@@ -72,23 +72,16 @@ void move_stop(void)
 /******************************************************************************
 Move Forward
 
-@brief	Set both motors to FORWARD with Base_Speed equal to FORWARD_SPEED
-		If speed is not zero, then Motor_Speed will equal to:
-			(Base_Speed + Additional_Speed) which is less or equal to 100 %
-
-		i.e: 	if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
-				if FORWARD_SPEED=70% and speed=50%, then
-					Motor_Speed=70+50*(30%), which is 85%
-
+@brief	Set both motors to FORWARD at speed = speed
 @param	speed value, from 0 to 1
 @retval none
 ******************************************************************************/
-void move_forward(float speed)
-{
-	// Set both motors to Forward
-	motor_forward(&motor_right, (FORWARD_SPEED - speed * (1 - FORWARD_SPEED)) * 100);
-	motor_forward(&motor_left, 	(FORWARD_SPEED + speed * (1 - FORWARD_SPEED)) * 100);
-}
+//void move_forward(float speed)
+//{
+//	// Set both motors to Forward
+//	motor_forward(&motor_right, speed);
+//	motor_forward(&motor_left, 	speed);
+//}
 
 /******************************************************************************
 Move Rotate
@@ -100,10 +93,33 @@ Move Rotate
 @param	none
 @retval none
 ******************************************************************************/
-void move_rotate(move_dir_e direction)
+//void move_rotate(move_dir_e direction)
+//{
+//	// Set motor to forward with speed TURN_SPEED
+////	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
+//	// Stop other motor
+//	motor_stop(motors[direction & 0x01]);
+//}
+
+//void move(float speedL, float speedR)
+//{
+//	motor_forward(&motor_right, speedR);
+//	motor_forward(&motor_left, speedL);
+//}
+
+const static motor_dir_e move_dir[] =
 {
-	// Set motor to forward with speed TURN_SPEED
-	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
-	// Stop other motor
-	motor_stop(motors[direction & 0x01]);
+		// FORWARD
+		MOTOR_FORWARD,
+		// BACKWARD
+		MOTOR_BACKWARD
+};
+
+void move(float speedL, float speedR)
+{
+	uint8_t dirL = 0.99 + speedL;
+	uint8_t dirR = 0.99 - speedR;
+
+	motor_control(&motor_right, speedR, move_dir[dirR & 0x01]);
+	motor_control(&motor_left, speedL, move_dir[dirL & 0x01]);
 }

@@ -12,6 +12,23 @@
 #include "auxiliares.h" // DIG_TO_ANALOG macro
 
 /******************************************************************************
+Define Move Speeds (from 0 to 1)
+******************************************************************************/
+#define FORWARD_SPEED 	(float)(0.78)
+#define TURN_SPEED 		(float)(0.7)
+
+// Sum of pid.u and FORWARD_SPEED is calculated by CALC_SPEED
+// which give us a command variable used to set a certain speed in each
+// motor.
+// If speed is not zero, then Motor_Speed will equal to:
+//	(Base_Speed + Additional_Speed) which is less or equal to 100 %
+//
+// i.e: if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
+//		if FORWARD_SPEED=70% and speed=50%, then
+//			Motor_Speed=70+50*(30%), which is 85%
+#define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+
+/******************************************************************************
 Define Line Follower Sensors in use
 ******************************************************************************/
 // Line Follower Sensor
@@ -23,6 +40,10 @@ typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
 /******************************************************************************
 Define PID parameters to be used
 ******************************************************************************/
+#define KP (float) (1)
+#define KI (float) (0.1)
+#define KD (float) (0.3)
+
 //static pid_st pid = {
 //	.y 			= 0,	// <----
 //	.prev_y 	= 0, 	// <------
@@ -48,6 +69,9 @@ static pid_st pid = {
 	.u_d 		= 0,
 	.prev_u_d 	= 0
 };
+
+#define LAST_ERRORS_SIZE (8)
+static float last_errors[LAST_ERRORS_SIZE] = {0};
 
 /******************************************************************************
 Line Follower Start
@@ -76,13 +100,19 @@ Line Follower PID
 ******************************************************************************/
 void lfollower_pid(void)
 {
+	static float mean_err;
+
 	// Apply PID to adjust motor PWM/velocity
 	// error = S_LEFT_VAL - S_RIGHT_VAL
 	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]),
 						DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
 
-	// Move forward with speed equal to pid.u (%)
-	move_forward(pid.u);
+	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+
+	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
+	// command var. LEFT is equal to (+pid.u)
+	// command var. RIGHT is equal to (-pid.u)
+	move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
 }
 
 /******************************************************************************
