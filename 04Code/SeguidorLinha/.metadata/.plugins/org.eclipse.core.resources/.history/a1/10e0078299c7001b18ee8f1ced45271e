@@ -107,10 +107,10 @@ int main(void)
 
    while (1)
   {
-//	  //  ------ test move module ------
-//	  test_move(0.7);
-//	  // test saturation
-//	  test_move(1);
+	  //  ------ test move module ------
+	  test_move(0.7);
+	  // test saturation
+	  test_move(1);
 
 	  // ------- test line follower module -------
 	  lfollower_start();

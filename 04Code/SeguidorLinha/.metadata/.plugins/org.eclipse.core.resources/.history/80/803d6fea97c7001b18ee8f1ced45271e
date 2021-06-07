@@ -27,11 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "tests.h"
-
-//#include "move.h"
-//#include "lfollower.h"
-
+#include "move.h"
+#include "lfollower.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,19 +104,51 @@ int main(void)
 
    while (1)
   {
-//	  //  ------ test move module ------
-//	  test_move(0.7);
-//	  // test saturation
-//	  test_move(1);
+	  // test FORWARD movement
+	  move_forward(0.7);
+	  HAL_Delay(5000);
+	  move_stop();
 
-	  // ------- test line follower module -------
-	  lfollower_start();
+	  // test BACKWARDS movement
+	  move_backwards(0.7);
+	  HAL_Delay(5000);
+	  move_stop();
 
-	  lfollower_pid();
+	  // test rotate RIGHT
+	  move_rotate(MOVE_RIGHT, 0.7);
+	  HAL_Delay(5000);
+	  move_stop();
 
-	  lfollower_stop();
+	  // test rotate LEFT
+	  move_rotate(MOVE_LEFT, 0.7);
+	  HAL_Delay(5000);
+	  move_stop();
+
+	  test_move(0.7);
+
+	  // --------------------------- testing saturation -----------------------
+	  // test FORWARD movement
+	  move_forward(1);
+	  HAL_Delay(5000);
+	  move_stop();
+
+	  // test BACKWARDS movement
+	  move_backwards(1);
+	  HAL_Delay(5000);
+	  move_stop();
+
+	  // test rotate RIGHT
+	  move_rotate(MOVE_RIGHT, 1);
+	  HAL_Delay(5000);
+	  move_stop();
+
+	  // test rotate LEFT
+	  move_rotate(MOVE_LEFT, 1);
+	  HAL_Delay(5000);
+	  move_stop();
 
 	  break;
+	  //lfollower_pid();
 
     /* USER CODE END WHILE */
 

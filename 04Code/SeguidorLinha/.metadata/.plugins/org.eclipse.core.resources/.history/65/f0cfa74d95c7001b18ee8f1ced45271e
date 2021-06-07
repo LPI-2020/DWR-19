@@ -77,10 +77,10 @@ Move Control
 ******************************************************************************/
 const static motor_dir_e move_dir[] =
 {
-		// BACKWARD,
-		MOTOR_BACKWARD,
 		// FORWARD
-		MOTOR_FORWARD
+		MOTOR_FORWARD,
+		// BACKWARD
+		MOTOR_BACKWARD
 };
 
 void move_control(float speedL, float speedR)
@@ -91,7 +91,7 @@ void move_control(float speedL, float speedR)
 
 	// check if speedL and speedR are positive/negative
 	uint8_t dirL = 0.99 + speedL;
-	uint8_t dirR = 0.99 + speedR;
+	uint8_t dirR = 0.99 - speedR;
 
 	motor_control(&motor_right, speedR * 100, move_dir[dirR & 0x01]);
 	motor_control(&motor_left, speedL * 100, move_dir[dirL & 0x01]);
