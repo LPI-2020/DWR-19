@@ -12,7 +12,12 @@
 #include "auxiliares.h" // DIG_TO_ANALOG macro
 
 /******************************************************************************
- * CALC_SPEED macro
+Define Move Speeds (from 0 to 1)
+******************************************************************************/
+#define FORWARD_SPEED 	(float)(0.78)
+#define TURN_SPEED 		(float)(0.7)
+
+/* CALC_SPEED macro
  *
  * Sum of pid.u and FORWARD_SPEED is calculated by CALC_SPEED
  * which give us a command variable used to set a certain speed in each
@@ -24,17 +29,8 @@
  * i.e: if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
  *		if FORWARD_SPEED=70% and speed=50%, then
  *			Motor_Speed=70+50*(30%), which is 85%
-******************************************************************************/
-//#define GET_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
-
-#define GET_SPEED(_u_, _extra_) ((FORWARD_SPEED*(1 - (_extra_)) + (_u_) * \
-								(1 - FORWARD_SPEED * (1 - (_extra_)))) * 100)
-
-/******************************************************************************
-Define Move Speeds (from 0 to 1)
-******************************************************************************/
-#define FORWARD_SPEED 	(float)(0.78)
-#define TURN_SPEED 		(float)(0.7)
+*/
+#define CALC_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
 
 /******************************************************************************
 Define Line Follower Sensors in use
@@ -96,8 +92,7 @@ void lfollower_pid(void)
 	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
 	// command var. LEFT is equal to (+pid.u)
 	// command var. RIGHT is equal to (-pid.u)
-	//move_control(GET_SPEED(+pid.u), GET_SPEED(-pid.u));
-	move_control(GET_SPEED(+pid.u, mean_err), GET_SPEED(-pid.u, mean_err));
+	move_control(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
 }
 
 /******************************************************************************
