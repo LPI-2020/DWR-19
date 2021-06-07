@@ -6,6 +6,7 @@
  *  Created on: May 5, 2021
  */
 #include "move.h"
+//#include "pid.h"
 #include "motor.h"
 
 /******************************************************************************
@@ -32,6 +33,9 @@ static motor_st motor_left = {
 	.GPIO_port_IN2 	= IN2_LEFT_GPIO_Port,
 	.GPIO_pin_IN2 	= IN2_LEFT_Pin
 };
+
+// List of motors
+//static motor_st* motors[] = { &motor_right, &motor_left };
 
 /******************************************************************************
 Move Start

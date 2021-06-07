@@ -44,21 +44,30 @@ Define PID parameters to be used
 #define KI (float) (0.1)
 #define KD (float) (0.3)
 
+//static pid_st pid = {
+//	.y 			= 0,	// <----
+//	.prev_y 	= 0, 	// <------
+//	.kp_h 		= KP,
+//	.ki_h 		= KI * TIMER6_PERIOD,
+//	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
+//	.error 		= 0,
+//	.sum_errors = 0,
+//	.prev_error = 0,
+//	.u 			= 0,
+//	.u_d 		= 0,
+//	.prev_u_d 	= 0
+//};
+
 static pid_st pid = {
 	.kp_h 		= KP,
 	.ki_h 		= KI * TIMER6_PERIOD,
-	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
-
+	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
 	.error 		= 0,
-	.prev_error = 0,
 	.sum_errors = 0,
-
+	.prev_error = 0,
+	.u 			= 0,
 	.u_d 		= 0,
-	.prev_u_d 	= 0,
-
-	.u			= 0,
-	.u_sat_a	= +1.0,
-	.u_sat_b	= -1.0
+	.prev_u_d 	= 0
 };
 
 #define LAST_ERRORS_SIZE (8)
@@ -79,23 +88,6 @@ void lfollower_start(void)
 	HAL_TIM_Base_Start_IT(&TIM_PID_SAMPLING);
 	// start movement
 	move_start();
-}
-
-/******************************************************************************
-Line Follower Stop
-
-@brief 	Stops line follower process.
-@param	none
-@retval	none
-******************************************************************************/
-void lfollower_stop(void)
-{
-	// stop storing Line Follower Sensor values
-	HAL_ADC_Stop_DMA(&ADC_DMA_INSTANCE);
-	// stop sampling for PID application
-	HAL_TIM_Base_Stop_IT(&TIM_PID_SAMPLING);
-	// stop movement
-	move_stop();
 }
 
 /******************************************************************************
@@ -120,7 +112,22 @@ void lfollower_pid(void)
 	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
 	// command var. LEFT is equal to (+pid.u)
 	// command var. RIGHT is equal to (-pid.u)
-	move_control(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+	move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
 }
 
+/******************************************************************************
+Line Follower Stop
 
+@brief 	Stops line follower process.
+@param	none
+@retval	none
+******************************************************************************/
+void lfollower_stop(void)
+{
+	// stop storing Line Follower Sensor values
+	HAL_ADC_Stop_DMA(&ADC_DMA_INSTANCE);
+	// stop sampling for PID application
+	HAL_TIM_Base_Stop_IT(&TIM_PID_SAMPLING);
+	// stop movement
+	move_stop();
+}

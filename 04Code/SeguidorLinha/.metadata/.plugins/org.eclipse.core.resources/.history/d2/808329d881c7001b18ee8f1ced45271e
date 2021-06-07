@@ -55,6 +55,7 @@ static pid_st pid = {
 
 	.u_d 		= 0,
 	.prev_u_d 	= 0,
+	.a			= 0.3,
 
 	.u			= 0,
 	.u_sat_a	= +1.0,

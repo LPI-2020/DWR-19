@@ -73557,3 +73557,440 @@ Finished building: lineFollower.bin
  
 Finished building: lineFollower.list
  
+11:45:59 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/auxiliares.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"Core/Src/auxiliares.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/auxiliares.o"
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+In file included from ../Core/Src/auxiliares.c:1:
+../Core/Inc/auxiliares.h:16:45: error: unknown type name 'uint8_t'
+   16 | float mean_window(float val, float* window, uint8_t w_size);
+      |                                             ^~~~~~~
+make: *** [Core/Src/subdir.mk:66: Core/Src/auxiliares.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+11:46:27 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/auxiliares.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"Core/Src/auxiliares.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/auxiliares.o"
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:55:37 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/auxiliares.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"Core/Src/auxiliares.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/auxiliares.o"
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:115:2: warning: implicit declaration of function 'move' [-Wimplicit-function-declaration]
+  115 |  move(CALC_SPEED(+pid.u), CALC_SPEED(-pid.u));
+      |  ^~~~
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:55:55 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:56:38 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:56:55 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:57:01 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:57:05 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+In file included from ../Core/Src/move.c:8:
+../Core/Inc/move.h:30:13: error: expected identifier or '(' before 'move_dir_e'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |             ^~~~~~~~~~
+../Core/Inc/move.h:30:24: error: expected ')' before '_dir_'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |                        ^~~~~
+      |                        )
+In file included from ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h:134,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h:30,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h:29,
+                 from ../Core/Inc/stm32f7xx_hal_conf.h:270,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/tim.h:28,
+                 from ../Core/Inc/motor.h:14,
+                 from ../Core/Src/move.c:10:
+../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h:169:3: warning: data definition has no type or storage class
+  169 | } IRQn_Type;
+      |   ^~~~~~~~~
+../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h:169:3: warning: type defaults to 'int' in declaration of 'IRQn_Type' [-Wimplicit-int]
+In file included from ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h:185,
+                 from ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h:134,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h:30,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h:29,
+                 from ../Core/Inc/stm32f7xx_hal_conf.h:270,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/tim.h:28,
+                 from ../Core/Inc/motor.h:14,
+                 from ../Core/Src/move.c:10:
+../Drivers/CMSIS/Include/core_cm7.h:1896:39: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1896 | __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+      |                                       ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:1913:46: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1913 | __STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+      |                                              ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:1932:40: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1932 | __STATIC_INLINE void __NVIC_DisableIRQ(IRQn_Type IRQn)
+      |                                        ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:1951:47: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1951 | __STATIC_INLINE uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+      |                                               ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:1970:43: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1970 | __STATIC_INLINE void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+      |                                           ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:1985:45: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 1985 | __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+      |                                             ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2002:43: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 2002 | __STATIC_INLINE uint32_t __NVIC_GetActive(IRQn_Type IRQn)
+      |                                           ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2024:41: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 2024 | __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+      |                                         ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2046:45: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 2046 | __STATIC_INLINE uint32_t __NVIC_GetPriority(IRQn_Type IRQn)
+      |                                             ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2121:39: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 2121 | __STATIC_INLINE void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector)
+      |                                       ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2136:43: error: expected declaration specifiers or '...' before 'IRQn_Type'
+ 2136 | __STATIC_INLINE uint32_t __NVIC_GetVector(IRQn_Type IRQn)
+      |                                           ^~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h: In function 'SysTick_Config':
+../Drivers/CMSIS/Include/core_cm7.h:1829:39: warning: implicit declaration of function '__NVIC_SetPriority'; did you mean 'NVIC_SetPriority'? [-Wimplicit-function-declaration]
+ 1829 |   #define NVIC_SetPriority            __NVIC_SetPriority
+      |                                       ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm7.h:2572:3: note: in expansion of macro 'NVIC_SetPriority'
+ 2572 |   NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
+      |   ^~~~~~~~~~~~~~~~
+In file included from ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h:185,
+                 from ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h:134,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h:30,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h:29,
+                 from ../Core/Inc/stm32f7xx_hal_conf.h:270,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/tim.h:28,
+                 from ../Core/Inc/motor.h:14,
+                 from ../Core/Src/move.c:10:
+../Drivers/CMSIS/Include/core_cm7.h:2572:21: error: 'SysTick_IRQn' undeclared (first use in this function); did you mean 'SysTick_Type'?
+ 2572 |   NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
+      |                     ^~~~~~~~~~~~
+      |                     SysTick_Type
+../Drivers/CMSIS/Include/core_cm7.h:2572:21: note: each undeclared identifier is reported only once for each function it appears in
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:286,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/tim.h:28,
+                 from ../Core/Inc/motor.h:14,
+                 from ../Core/Src/move.c:10:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h: At top level:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:262:27: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  262 | void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);
+      |                           ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:263:25: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  263 | void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
+      |                         ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:264:26: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  264 | void HAL_NVIC_DisableIRQ(IRQn_Type IRQn);
+      |                          ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:281:27: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  281 | void HAL_NVIC_GetPriority(IRQn_Type IRQn, uint32_t PriorityGroup, uint32_t* pPreemptPriority, uint32_t* pSubPriority);
+      |                           ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:282:33: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  282 | uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn);
+      |                                 ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:283:29: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  283 | void HAL_NVIC_SetPendingIRQ(IRQn_Type IRQn);
+      |                             ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:284:31: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  284 | void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn);
+      |                               ^~~~~~~~~
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:285:29: error: expected declaration specifiers or '...' before 'IRQn_Type'
+  285 | uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn);
+      |                             ^~~~~~~~~
+In file included from ../Core/Src/main.c:30:
+../Core/Inc/move.h:30:13: error: expected identifier or '(' before 'move_dir_e'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |             ^~~~~~~~~~
+../Core/Inc/move.h:30:24: error: expected ')' before '_dir_'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |                        ^~~~~
+      |                        )
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:106:3: warning: implicit declaration of function 'lfollower_start'; did you mean 'lfollower_stop'? [-Wimplicit-function-declaration]
+  106 |   lfollower_start();
+      |   ^~~~~~~~~~~~~~~
+      |   lfollower_stop
+make: *** [Core/Src/subdir.mk:78: Core/Src/move.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Core/Src/subdir.mk:74: Core/Src/main.o] Error 1
+In file included from ../Core/Src/lfollower.c:10:
+../Core/Inc/move.h:30:13: error: expected identifier or '(' before 'move_dir_e'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |             ^~~~~~~~~~
+../Core/Inc/move.h:30:24: error: expected ')' before '_dir_'
+   30 |           ((move_dir_e)_dir_)*(_speed_)))
+      |                        ^~~~~
+      |                        )
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:110:13: warning: implicit declaration of function 'mean_window' [-Wimplicit-function-declaration]
+  110 |  mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+      |             ^~~~~~~~~~~
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+11:57:09 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+11:57:38 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:103:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  103 |  static float mean_err;
+      |               ^~~~~~~~
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+12:14:49 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/pid.c: In function 'pid_calcule':
+../Core/Src/pid.c:21:7: error: 'pid_st' {aka 'struct <anonymous>'} has no member named 'errpr'; did you mean 'error'?
+   21 |  pid->errpr = in1 - in2;
+      |       ^~~~~
+      |       error
+../Core/Src/pid.c:28:59: error: 'a_pid' undeclared (first use in this function); did you mean 'pid'?
+   28 |  pid->u_d =  pid->kd_h * (pid->error - pid->prev_error) + a_pid * pid->prev_u_d;
+      |                                                           ^~~~~
+      |                                                           pid
+../Core/Src/pid.c:28:59: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/pid.c:38:12: error: 'U_SAT_A' undeclared (first use in this function)
+   38 |   pid->u = U_SAT_A;
+      |            ^~~~~~~
+../Core/Src/pid.c:45:12: error: 'U_SAT_B' undeclared (first use in this function)
+   45 |   pid->u = U_SAT_B;
+      |            ^~~~~~~
+make: *** [Core/Src/subdir.mk:80: Core/Src/pid.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/lfollower.c:50:22: error: 'a_pid' undeclared here (not in a function); did you mean 'pid'?
+   50 |  .kd_h   = KD * (1 - a_pid) / TIMER6_PERIOD,
+      |                      ^~~~~
+      |                      pid
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:112:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  112 |  static float mean_err;
+      |               ^~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+12:16:21 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/lfollower.c:50:22: error: 'a_pid' undeclared here (not in a function); did you mean 'pid'?
+   50 |  .kd_h   = KD * (1 - a_pid) / TIMER6_PERIOD,
+      |                      ^~~~~
+      |                      pid
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:112:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  112 |  static float mean_err;
+      |               ^~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/lfollower.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+12:17:28 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/pid.c: In function 'pid_calcule':
+../Core/Src/pid.c:28:62: error: 'pid_st' {aka 'struct <anonymous>'} has no member named 'a'
+   28 |  pid->u_d =  pid->kd_h * (pid->error - pid->prev_error) + pid->a * pid->prev_u_d;
+      |                                                              ^~
+make: *** [Core/Src/subdir.mk:80: Core/Src/pid.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:111:15: warning: variable 'mean_err' set but not used [-Wunused-but-set-variable]
+  111 |  static float mean_err;
+      |               ^~~~~~~~
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+12:17:39 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35580	    524	   2188	  38292	   9594	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 

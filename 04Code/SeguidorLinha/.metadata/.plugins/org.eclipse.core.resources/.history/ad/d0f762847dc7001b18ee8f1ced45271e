@@ -6,6 +6,7 @@
  *  Created on: May 5, 2021
  */
 #include "move.h"
+//#include "pid.h"
 #include "motor.h"
 
 /******************************************************************************
@@ -32,6 +33,9 @@ static motor_st motor_left = {
 	.GPIO_port_IN2 	= IN2_LEFT_GPIO_Port,
 	.GPIO_pin_IN2 	= IN2_LEFT_Pin
 };
+
+// List of motors
+static motor_st* motors[] = { &motor_right, &motor_left };
 
 /******************************************************************************
 Move Start
@@ -60,12 +64,42 @@ void move_stop(void)
 }
 
 /******************************************************************************
-Move Control
+Move Forward
 
-@brief	Controls movement, setting speeds on each motor.
-@param	Left and right motor speeds, respectively
+@brief	Set both motors to FORWARD at speed = speed
+@param	speed value, from 0 to 1
 @retval none
 ******************************************************************************/
+//void move_forward(float speed)
+//{
+//	// Set both motors to Forward
+//	motor_forward(&motor_right, speed);
+//	motor_forward(&motor_left, 	speed);
+//}
+
+/******************************************************************************
+Move Rotate
+
+@brief	Set motor to FORWARD, in the opposite position to the one in which it
+		will turn.
+		i.e: 	Rotate right: set motor LEFT to FORWARD and STOP motor RIGHT
+				Rotate left: set motor RIGHT to FORWARD and STOP motor LEFT
+@param	none
+@retval none
+******************************************************************************/
+//void move_rotate(move_dir_e direction)
+//{
+//	// Set motor to forward with speed TURN_SPEED
+////	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
+//	// Stop other motor
+//	motor_stop(motors[direction & 0x01]);
+//}
+
+//void move(float speedL, float speedR)
+//{
+//	motor_forward(&motor_right, speedR);
+//	motor_forward(&motor_left, speedL);
+//}
 
 const static motor_dir_e move_dir[] =
 {
@@ -75,7 +109,7 @@ const static motor_dir_e move_dir[] =
 		MOTOR_BACKWARD
 };
 
-void move_control(float speedL, float speedR)
+void move(float speedL, float speedR)
 {
 	uint8_t dirL = 0.99 + speedL;
 	uint8_t dirR = 0.99 - speedR;

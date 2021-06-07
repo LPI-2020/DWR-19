@@ -47,7 +47,7 @@ Define PID parameters to be used
 static pid_st pid = {
 	.kp_h 		= KP,
 	.ki_h 		= KI * TIMER6_PERIOD,
-	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
+	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
 
 	.error 		= 0,
 	.prev_error = 0,
@@ -55,6 +55,7 @@ static pid_st pid = {
 
 	.u_d 		= 0,
 	.prev_u_d 	= 0,
+	.a			= 0.3,
 
 	.u			= 0,
 	.u_sat_a	= +1.0,

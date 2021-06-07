@@ -1,10 +1,3 @@
-/*
- * auxiliares.c
- *
- * Auxiliares module
- *
- *  Created on: June 6, 2021
- */
 #include "auxiliares.h"
 
 /******************************************************************************

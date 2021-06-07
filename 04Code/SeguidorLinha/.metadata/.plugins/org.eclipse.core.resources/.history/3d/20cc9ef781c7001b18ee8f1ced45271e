@@ -11,10 +11,10 @@
 PID
 
 @brief	PID Algoritm
-@param	PID struct
-		inputs to the controller, in1 and in2
+@param
 @retval none
 ******************************************************************************/
+
 void pid_calcule(pid_st* pid, float in1, float in2)
 {
 	// set error
@@ -25,7 +25,7 @@ void pid_calcule(pid_st* pid, float in1, float in2)
 	pid->sum_errors += pid->prev_error;
 
 	// calculate u
-	pid->u_d =  pid->kd_h * (pid->error - pid->prev_error) + A_PID * pid->prev_u_d;
+	pid->u_d =  pid->kd_h * (pid->error - pid->prev_error) + pid->a * pid->prev_u_d;
 	pid->u = pid->kp_h * pid->error + pid->ki_h * pid->sum_errors + pid->u_d;
 
 	// update previous values

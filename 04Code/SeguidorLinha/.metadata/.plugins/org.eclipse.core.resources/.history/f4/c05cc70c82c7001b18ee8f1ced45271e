@@ -11,10 +11,10 @@
 PID
 
 @brief	PID Algoritm
-@param	PID struct
-		inputs to the controller, in1 and in2
+@param
 @retval none
 ******************************************************************************/
+
 void pid_calcule(pid_st* pid, float in1, float in2)
 {
 	// set error

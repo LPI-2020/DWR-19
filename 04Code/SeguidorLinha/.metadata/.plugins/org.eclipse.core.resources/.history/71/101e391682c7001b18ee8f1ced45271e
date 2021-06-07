@@ -38,6 +38,7 @@ typedef struct
 /******************************************************************************
 PID calculation
 ******************************************************************************/
+//void pid_calcule(pid_st* pid, float ref_sensor, float sensor);
 void pid_calcule(pid_st* pid, float in1, float in2);
 
 #endif /* __PID_H__ */
