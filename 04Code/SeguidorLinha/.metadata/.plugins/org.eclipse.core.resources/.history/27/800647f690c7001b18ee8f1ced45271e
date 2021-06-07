@@ -100,32 +100,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   // inits motors, PID and DMA to sensors
-  //lfollower_start();
+  lfollower_start();
 
-   while (1)
+  while (1)
   {
-	  // test FORWARD movement
-	  move_forward(0.7);
+	  move_forward();
 	  HAL_Delay(5000);
-	  move_stop();
 
-	  // test BACKWARDS movement
-	  move_backwards(0.7);
-	  HAL_Delay(5000);
-	  move_stop();
-
-	  // test rotate RIGHT
-	  move_rotate(MOVE_RIGHT, 0.7);
-	  HAL_Delay(5000);
-	  move_stop();
-
-	  // test rotate LEFT
-	  move_rotate(MOVE_LEFT, 0.7);
-	  HAL_Delay(5000);
-	  move_stop();
 
 	  //lfollower_pid();
 
+	  //move_rotate(MOVE_RIGHT);
+	  //move_rotate(MOVE_LEFT);
+
+	  HAL_Delay(5000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

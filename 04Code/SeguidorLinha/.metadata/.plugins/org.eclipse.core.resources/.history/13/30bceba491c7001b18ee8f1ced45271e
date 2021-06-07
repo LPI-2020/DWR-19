@@ -24,9 +24,9 @@ void move_control(float speedL, float speedR);
 /******************************************************************************
 Move in each direction
 ******************************************************************************/
-#define move_forward(_speed_) 		(move_control(_speed_, _speed_))
-#define move_backwards(_speed_)		(move_control(-(_speed_), -_speed_))
-#define move_rotate(_dir_, _speed_) (move_control((1 - ((move_dir_e)_dir_))*(_speed_), \
-													((move_dir_e)_dir_)*(_speed_)))
+#define move_forward(_speed_) 		(move(_speed_, _speed_))
+#define move_backward(_speed_)		(move(_speed_, _speed_))
+#define move_rotate(_dir_, _speed_) (move((1 - ((move_dir_e)_dir_))*(_speed_), \
+										 ((move_dir_e)_dir_)*(_speed_)))
 
 #endif /*__MOVE_H__ */

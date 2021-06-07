@@ -74033,3 +74033,124 @@ Finished building: lineFollower.bin
  
 Finished building: lineFollower.list
  
+14:09:53 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/motor.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/motor.d" -MT"Core/Src/motor.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/motor.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+In file included from ../Core/Src/main.c:30:
+../Core/Src/main.c: In function 'main':
+../Core/Inc/move.h:27:34: warning: implicit declaration of function 'move' [-Wimplicit-function-declaration]
+   27 | #define move_forward(_speed_)   (move(_speed_, _speed_))
+      |                                  ^~~~
+../Core/Src/main.c:109:4: note: in expansion of macro 'move_forward'
+  109 |    move_forward(0.7);
+      |    ^~~~~~~~~~~~
+../Core/Src/motor.c:35:20: error: macro "__HAL_TIM_GET_FLAG" requires 2 arguments, but only 1 given
+   35 | __HAL_TIM_GET_FLAG()
+      |                    ^
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:406,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/tim.h:28,
+                 from ../Core/Inc/motor.h:14,
+                 from ../Core/Src/motor.c:8:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h:1311: note: macro "__HAL_TIM_GET_FLAG" defined here
+ 1311 | #define __HAL_TIM_GET_FLAG(__HANDLE__, __FLAG__)          (((__HANDLE__)->Instance->SR &(__FLAG__)) == (__FLAG__))
+      | 
+../Core/Src/motor.c:35:19: error: expected ';' before 'void'
+   35 | __HAL_TIM_GET_FLAG()
+      |                   ^
+      |                   ;
+......
+   44 | void motor_kill(motor_st *m)
+      | ~~~~               
+../Core/Src/main.c:115:4: warning: implicit declaration of function 'move_backwards'; did you mean 'move_backward'? [-Wimplicit-function-declaration]
+  115 |    move_backwards(0.7);
+      |    ^~~~~~~~~~~~~~
+      |    move_backward
+make: *** [Core/Src/subdir.mk:76: Core/Src/motor.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+14:10:04 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/motor.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/motor.d" -MT"Core/Src/motor.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/motor.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+c:\st\stm32cubeide_1.6.0\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_1.5.0.202011040924\tools\arm-none-eabi\bin\ld.exe: Core/Src/main.o: in function `main':
+C:/Users/user/Desktop/DWR-19/04Code/SeguidorLinha/lineFollower/Debug/../Core/Src/main.c:109: undefined reference to `move'
+c:\st\stm32cubeide_1.6.0\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_1.5.0.202011040924\tools\arm-none-eabi\bin\ld.exe: C:/Users/user/Desktop/DWR-19/04Code/SeguidorLinha/lineFollower/Debug/../Core/Src/main.c:115: undefined reference to `move_backwards'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:65: lineFollower.elf] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+14:10:54 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:115:4: warning: implicit declaration of function 'move_backwards'; did you mean 'move_backward'? [-Wimplicit-function-declaration]
+  115 |    move_backwards(0.7);
+      |    ^~~~~~~~~~~~~~
+      |    move_backward
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+c:\st\stm32cubeide_1.6.0\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_1.5.0.202011040924\tools\arm-none-eabi\bin\ld.exe: Core/Src/main.o: in function `main':
+C:/Users/user/Desktop/DWR-19/04Code/SeguidorLinha/lineFollower/Debug/../Core/Src/main.c:115: undefined reference to `move_backwards'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:65: lineFollower.elf] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+14:11:16 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35100	    524	   2180	  37804	   93ac	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 
+14:13:41 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35132	    524	   2180	  37836	   93cc	lineFollower.elf
+Finished building: default.size.stdout
+Finished building: lineFollower.bin
+ 
+ 
+Finished building: lineFollower.list
+ 
+14:18:31 **** Incremental Build of configuration Debug for project lineFollower ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/move.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/move.d" -MT"Core/Src/move.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/move.o"
+arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: lineFollower.elf
+ 
+arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
+arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
+arm-none-eabi-size   lineFollower.elf 
+   text	   data	    bss	    dec	    hex	filename
+  35180	    524	   2180	  37884	   93fc	lineFollower.elf
+Finished building: default.size.stdout
+ 
+Finished building: lineFollower.bin
+ 
+Finished building: lineFollower.list
+ 

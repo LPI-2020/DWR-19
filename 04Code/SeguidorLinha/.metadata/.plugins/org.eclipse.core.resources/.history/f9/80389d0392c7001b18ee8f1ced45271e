@@ -9,11 +9,6 @@
 #include "motor.h"
 
 /******************************************************************************
-Private variables
-******************************************************************************/
-static uint8_t move_flag = 0; // Module flag. Indicates state of motors
-
-/******************************************************************************
 Define Motors in use
 ******************************************************************************/
 // Right Motor Struct
@@ -49,8 +44,6 @@ void move_start(void)
 {
 	motor_init(&motor_right);
 	motor_init(&motor_left);
-	// indicate to the module that motors have been enabled
-	move_flag = 1;
 }
 
 /******************************************************************************
@@ -64,8 +57,6 @@ void move_stop(void)
 {
 	motor_kill(&motor_right);
 	motor_kill(&motor_left);
-	// indicate to the module that motors have been disable
-	move_flag = 0;
 }
 
 /******************************************************************************
@@ -75,6 +66,7 @@ Move Control
 @param	Left and right motor speeds, respectively
 @retval none
 ******************************************************************************/
+
 const static motor_dir_e move_dir[] =
 {
 		// FORWARD
@@ -85,11 +77,6 @@ const static motor_dir_e move_dir[] =
 
 void move_control(float speedL, float speedR)
 {
-	if(move_flag == 0)
-		// move_start hasn't occurred
-		move_start();
-
-	// check if speedL and speedR are positive/negative
 	uint8_t dirL = 0.99 + speedL;
 	uint8_t dirR = 0.99 - speedR;
 
