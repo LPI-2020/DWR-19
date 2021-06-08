@@ -48,7 +48,7 @@ void init_UART1(void);
 
 void printmsg(char* ptr, uint8_t);
 
-void newMessage(ST_FIFO stfifo);
+void newMessage(ST_FIFO* stfifo);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

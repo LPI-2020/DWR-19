@@ -25,7 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fifo.h"
-
+#include "ucmd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -71,6 +71,8 @@ void SystemClock_Config(void);
 	extern int Tx_string_transmitting;
 	
 	extern uint8_t Message[BUFFER_SIZE];
+	
+	extern Command my_cmd_list;
 /* USER CODE END 0 */
 
 /**
@@ -126,14 +128,16 @@ int main(void)
 	init_UART3();
 	init_UART1();
 	printmsg(HelloMessage, 3);
+	printmsg(HelloMessage, 1);
   /* USER CODE END 2 */
-
+	
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 		if(Rx_string_processing)
 		{
+			ucmd_parse(&my_cmd_list," ",(char*) Message);
 			Rx_string_processing = 0;
 		}
     /* USER CODE END WHILE */

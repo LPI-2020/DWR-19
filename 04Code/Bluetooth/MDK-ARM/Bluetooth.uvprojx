@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -524,6 +524,16 @@
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>ucmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ucmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\cmd_list.c</FilePath>
             </File>
           </Files>
         </Group>
