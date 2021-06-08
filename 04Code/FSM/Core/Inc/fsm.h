@@ -20,6 +20,17 @@ FSM states
 #define S_ERROR			7	// Robot waiting for intervention
 
 /******************************************************************************
+FSM Private Defines
+******************************************************************************/
+//#define OBS_TIM
+
+// defines speed of rotation
+#define ROTATE_SPEED 0.6
+
+#define SENSOR4 (000) // >>>>>>>>>>>>>>> define this
+#define SENSOR5 (000)
+
+/******************************************************************************
 FSM current state pointer
 ******************************************************************************/
 extern void (*fsm_func_ptr[])(void);
