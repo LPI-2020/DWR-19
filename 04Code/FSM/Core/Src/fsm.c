@@ -6,8 +6,13 @@
  *  Created on: June 3, 2021
  */
 
+#include "fsm.h"
+
 #include "stop_sensors.h"
 #include "lfollower.h"
+//#include "spi.h"
+#include "rfid-rc522.h"
+#include "move.h"
 
 /******************************************************************************
 FSM state functions
@@ -50,14 +55,16 @@ uint8_t route_finished = 0;
 // New route incoming flag
 uint8_t new_route_incoming = 0;
 
-// Stop sensors flags
+// Timeout flags
 uint8_t pick_up_timeout = 0;
 uint8_t obs_found_timeout = 0;
 uint8_t rotate_timeout = 0;
+uint8_t read_rfid_timeout = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
 
+uint8_t user_btn; //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> define this pin
 /******************************************************************************
 State Stopped
 ******************************************************************************/
@@ -99,12 +106,9 @@ State Receive
 static void s_receive(void)
 {
 	if(new_route_incoming == 0)
-	{
 		// new route has been fully received
 		nstate = S_STOPPED;
-		// stop line follower
-		//lfollower_stop();
-	}
+
 	// Else, continue receiving route
 }
 
@@ -128,6 +132,8 @@ static void s_flw_line(void)
 		nstate = S_RD_RFID;
 		// stop line follower
 		lfollower_stop();
+		// enable RFID reader
+		RFID_RC522_Init();
 	}
 	if(room_found_flag)
 	{
@@ -136,24 +142,55 @@ static void s_flw_line(void)
 		// stop line follower
 		lfollower_stop();
 	}
-
 }
 
 /******************************************************************************
 State Read RFID
 ******************************************************************************/
+uint8_t read_RFID(void)
+{
+	int status;
+
+	uint8_t CardID[4];
+	uint8_t type;
+  	char *result;
+
+  	// return val: initialized as return not successfull
+  	uint8_t retval = 1;
+
+	do
+	{
+		status = TM_MFRC522_Check(CardID, &type);
+
+		if (status == MI_OK)
+		{
+			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
+			// return successfull
+			retval = 0;
+		}
+	} while((status != MI_OK) && (!read_rfid_timeout));
+
+	return retval;
+}
+
 static void s_rd_rfid(void)
 {
-	// move forward until RFID card is in range of RFID detector
-	move_forward(0.6);
-	HAL_Delay(500);
+	uint8_t err;
+
+	// start movement
+	move_forward(RD_RFID_SPEED);
+	// wait for RFID read or 'read_rfid_timeout'
+	err = read_RFID();
+	// stop movement
 	move_stop();
 
-	// read RFID
-	// ...
-
-	// calculate next movement on the route
-	nstate = S_NEXT_MOV;
+	// read RFID correctly?
+	if(err == 0)
+		// calculate next movement on the route
+		nstate = S_NEXT_MOV;
+	else
+		// continue to error state
+		nstate = S_ERROR;
 }
 
 /******************************************************************************

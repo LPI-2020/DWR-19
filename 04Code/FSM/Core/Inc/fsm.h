@@ -6,6 +6,8 @@
  *  Created on: June 3, 2021
  */
 
+#include <stdint.h> // using uint8_t
+
 /******************************************************************************
 FSM states
 ******************************************************************************/
@@ -24,11 +26,11 @@ FSM Private Defines
 ******************************************************************************/
 //#define OBS_TIM
 
+// defines robot speed when using RFID reader
+#define RD_RFID_SPEED 0.6
+
 // defines speed of rotation
 #define ROTATE_SPEED 0.6
-
-#define SENSOR4 (000) // >>>>>>>>>>>>>>> define this
-#define SENSOR5 (000)
 
 /******************************************************************************
 FSM current state pointer
