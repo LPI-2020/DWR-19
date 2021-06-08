@@ -19,7 +19,14 @@ Move Functions
 void move_start(void);
 void move_stop(void);
 
-void move_forward(float speed);
-void move_rotate(move_dir_e direction);
+void move_control(float speedL, float speedR);
+
+/******************************************************************************
+Move in each direction
+******************************************************************************/
+#define move_forward(_speed_) 		(move_control(_speed_, _speed_))
+#define move_backwards(_speed_)		(move_control(-(_speed_), -_speed_))
+#define move_rotate(_dir_, _speed_) (move_control((1 - ((move_dir_e)_dir_))*(_speed_), \
+													((move_dir_e)_dir_)*(_speed_)))
 
 #endif /*__MOVE_H__ */

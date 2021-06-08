@@ -6,14 +6,14 @@
  *  Created on: May 5, 2021
  */
 #include "move.h"
-#include "pid.h"
 #include "motor.h"
 
+#include <math.h>
+
 /******************************************************************************
-Define Move Speeds (from 0 to 1)
+Private variables
 ******************************************************************************/
-#define FORWARD_SPEED 	(float)(0.78)
-#define TURN_SPEED 		(float)(0.7)
+static uint8_t move_flag = 0; // Module flag. Indicates state of motors
 
 /******************************************************************************
 Define Motors in use
@@ -40,9 +40,6 @@ static motor_st motor_left = {
 	.GPIO_pin_IN2 	= IN2_LEFT_Pin
 };
 
-// List of motors
-static motor_st* motors[] = { &motor_right, &motor_left };
-
 /******************************************************************************
 Move Start
 
@@ -54,6 +51,8 @@ void move_start(void)
 {
 	motor_init(&motor_right);
 	motor_init(&motor_left);
+	// indicate to the module that motors have been enabled
+	move_flag = 1;
 }
 
 /******************************************************************************
@@ -67,43 +66,35 @@ void move_stop(void)
 {
 	motor_kill(&motor_right);
 	motor_kill(&motor_left);
+	// indicate to the module that motors have been disable
+	move_flag = 0;
 }
 
 /******************************************************************************
-Move Forward
+Move Control
 
-@brief	Set both motors to FORWARD with Base_Speed equal to FORWARD_SPEED
-		If speed is not zero, then Motor_Speed will equal to:
-			(Base_Speed + Additional_Speed) which is less or equal to 100 %
-
-		i.e: 	if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
-				if FORWARD_SPEED=70% and speed=50%, then
-					Motor_Speed=70+50*(30%), which is 85%
-
-@param	speed value, from 0 to 1
+@brief	Controls movement, setting speeds on each motor.
+@param	Left and right motor speeds, respectively
 @retval none
 ******************************************************************************/
-void move_forward(float speed)
+const static motor_dir_e move_dir[] =
 {
-	// Set both motors to Forward
-	motor_forward(&motor_right, (FORWARD_SPEED - speed * (1 - FORWARD_SPEED)) * 100);
-	motor_forward(&motor_left, 	(FORWARD_SPEED + speed * (1 - FORWARD_SPEED)) * 100);
-}
+		// BACKWARD,
+		MOTOR_BACKWARD,
+		// FORWARD
+		MOTOR_FORWARD
+};
 
-/******************************************************************************
-Move Rotate
-
-@brief	Set motor to FORWARD, in the opposite position to the one in which it
-		will turn.
-		i.e: 	Rotate right: set motor LEFT to FORWARD and STOP motor RIGHT
-				Rotate left: set motor RIGHT to FORWARD and STOP motor LEFT
-@param	none
-@retval none
-******************************************************************************/
-void move_rotate(move_dir_e direction)
+void move_control(float speedL, float speedR)
 {
-	// Set motor to forward with speed TURN_SPEED
-	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
-	// Stop other motor
-	motor_stop(motors[direction & 0x01]);
+	if(move_flag == 0)
+		// move_start hasn't occurred
+		move_start();
+
+	// check if speedL and speedR are positive/negative
+	uint8_t dirL = 0.99 + speedL;
+	uint8_t dirR = 0.99 + speedR;
+
+	motor_control(&motor_right, fabs(speedR) * 100, move_dir[dirR & 0x01]);
+	motor_control(&motor_left, fabs(speedL) * 100, move_dir[dirL & 0x01]);
 }
