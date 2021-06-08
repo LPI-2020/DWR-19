@@ -29,8 +29,8 @@
 /* USER CODE BEGIN Includes */
 #include "tests.h"
 
-//#include "move.h"
-//#include "lfollower.h"
+#include "move.h"
+#include "lfollower.h"
 
 /* USER CODE END Includes */
 
@@ -103,23 +103,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   // inits motors, PID and DMA to sensors
-  //lfollower_start();
+  lfollower_start();
 
    while (1)
   {
-//	  //  ------ test move module ------
-//	  test_move(0.7);
-//	  // test saturation
-//	  test_move(1);
+	   //move_forward(0.7);
+
+		//  ------ test move module ------
+		// test_move(0.7);
+		// test saturation
+		// test_move(-1);
 
 	  // ------- test line follower module -------
-	  lfollower_start();
+	  //lfollower_pid();
+	  //HAL_Delay(1000);
 
-	  lfollower_pid();
+	  //lfollower_stop();
 
-	  lfollower_stop();
-
-	  break;
+	  //break;
 
     /* USER CODE END WHILE */
 

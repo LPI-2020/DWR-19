@@ -1,6 +1,15 @@
-14:58:05 **** Incremental Build of configuration Debug for project lineFollower ****
+10:57:03 **** Incremental Build of configuration Debug for project lineFollower ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/lfollower.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/lfollower.d" -MT"Core/Src/lfollower.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/lfollower.o"
+../Core/Src/lfollower.c: In function 'lfollower_pid':
+../Core/Src/lfollower.c:105:15: warning: unused variable 'mean_err' [-Wunused-variable]
+  105 |  static float mean_err;
+      |               ^~~~~~~~
+At top level:
+../Core/Src/lfollower.c:105:15: warning: 'mean_err' defined but not used [-Wunused-variable]
+../Core/Src/lfollower.c:93:14: warning: 'last_errors' defined but not used [-Wunused-variable]
+   93 | static float last_errors[LAST_ERRORS_SIZE] = {0};
+      |              ^~~~~~~~~~~
 arm-none-eabi-gcc -o "lineFollower.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\SeguidorLinha\lineFollower\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lineFollower.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: lineFollower.elf
  
@@ -8,7 +17,7 @@ arm-none-eabi-objdump -h -S  lineFollower.elf  > "lineFollower.list"
 arm-none-eabi-objcopy  -O binary  lineFollower.elf  "lineFollower.bin"
 arm-none-eabi-size   lineFollower.elf 
    text	   data	    bss	    dec	    hex	filename
-  35252	    524	   2180	  37956	   9444	lineFollower.elf
+  36516	    572	   2188	  39276	   996c	lineFollower.elf
 Finished building: default.size.stdout
  
 Finished building: lineFollower.bin
@@ -16,5 +25,5 @@ Finished building: lineFollower.bin
 Finished building: lineFollower.list
  
 
-14:58:07 Build Finished. 0 errors, 0 warnings. (took 1s.840ms)
+10:57:05 Build Finished. 0 errors, 3 warnings. (took 1s.827ms)
 

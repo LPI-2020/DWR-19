@@ -1,0 +1,157 @@
+/*
+ * lfollower.c
+ *
+ * Line Follower Module
+ *
+ *  Created on: June 5, 2021
+ */
+#include "lfollower.h"
+#include "pid.h"
+#include "move.h"
+
+#include "auxiliares.h"
+
+#include "usart.h"
+#include <stdio.h>
+#include <math.h>
+/******************************************************************************
+Define Move Speeds (from 0 to 1)
+******************************************************************************/
+#define FORWARD_SPEED 	(float)(0.65)
+#define TURN_SPEED 		(float)(0.7)
+
+/******************************************************************************
+ * GET_SPEED macro
+ *
+ * Sum of pid.u and FORWARD_SPEED is calculated by CALC_SPEED
+ * which give us a command variable used to set a certain speed in each
+ * motor.
+ *
+ * If speed is not zero, then Motor_Speed will equal to:
+ *	(Base_Speed + Additional_Speed) which is less or equal to 100 %
+ *
+ * i.e: if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
+ *		if FORWARD_SPEED=70% and speed=50%, then
+ *			Motor_Speed=70+50*(30%), which is 85%
+******************************************************************************/
+#define GET_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)))
+
+//#define GET_SPEED(_u_, _extra_) ((FORWARD_SPEED*(1 - (_extra_)) + (_u_) * (1 - FORWARD_SPEED * (1 - (_extra_)))) * 100)
+#define GET_SPEED_P(_u_, _extra_) ((FORWARD_SPEED + 							\
+								(1 - FORWARD_SPEED) * (1 - fabs(_extra_)) + 	\
+								(1 - FORWARD_SPEED - (1 - FORWARD_SPEED) * (1 - fabs(_extra_))) * (_u_)))
+
+/******************************************************************************
+Define Line Follower Sensors in use
+******************************************************************************/
+// Line Follower Sensor
+static uint32_t lf_sens[2];
+
+// Sensor elements
+typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
+
+/******************************************************************************
+Define PID parameters to be used
+******************************************************************************/
+#define KP (float) (1.05)
+#define KI (float) (0.35)
+#define KD (float) (0.013)
+
+static pid_st pid = {
+	.kp_h 		= KP,
+	.ki_h 		= KI * TIMER6_PERIOD,
+	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
+
+	.error 		= 0,
+	.prev_error = 0,
+	.sum_errors = 0,
+
+	.u_d 		= 0,
+	.prev_u_d 	= 0,
+
+	.u			= 0,
+	.u_sat_a	= +1.0,
+	.u_sat_b	= -1.0
+};
+
+//static pid_st pid = {
+//	.y 			= 0,	// <----
+//	.prev_y 	= 0, 	// <------
+//	.kp_h 		= KP,
+//	.ki_h 		= KI * TIMER6_PERIOD,
+//	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
+//	.error 		= 0,
+//	.sum_errors = 0,
+//	.prev_error = 0,
+//	.u 			= 0,
+//	.u_d 		= 0,
+//	.prev_u_d 	= 0
+//};
+
+// Define array of LAST_ERRORS_SIZE elements, of pid->error
+#define LAST_ERRORS_SIZE (8)
+static float last_errors[LAST_ERRORS_SIZE] = {0};
+
+/******************************************************************************
+Line Follower PID
+
+@brief	Applies PID algorithm to obtain movement speed required to follow the
+		line.
+@param	none
+@retval	none
+******************************************************************************/
+void lfollower_pid(void)
+{
+	static float mean_err;
+
+	// Apply PID to adjust motor PWM/velocity
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]),
+						DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
+
+	// calculates mean of the last PID errors
+	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+
+	//sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	//sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n", DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]), DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
+	//transmit_string(Tx_buffer);
+	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
+	// command var. LEFT is equal to (+pid.u)
+	// command var. RIGHT is equal to (-pid.u)
+	//move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
+}
+
+/******************************************************************************
+Line Follower Start
+
+@brief	Starts line follower process.
+@param	none
+@retval	none
+******************************************************************************/
+void lfollower_start(void)
+{
+	// start storing Line Follower Sensor values
+	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE, lf_sens, 2);
+	// start sampling for PID application
+	HAL_TIM_Base_Start_IT(&TIM_PID_SAMPLING);
+	// start movement
+	move_start();
+}
+
+/******************************************************************************
+Line Follower Stop
+
+@brief 	Stops line follower process.
+@param	none
+@retval	none
+******************************************************************************/
+void lfollower_stop(void)
+{
+	// stop storing Line Follower Sensor values
+	HAL_ADC_Stop_DMA(&ADC_DMA_INSTANCE);
+	// stop sampling for PID application
+	HAL_TIM_Base_Stop_IT(&TIM_PID_SAMPLING);
+	// stop movement
+	move_stop();
+}

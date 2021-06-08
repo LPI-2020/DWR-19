@@ -13,6 +13,8 @@ PID constants
 ******************************************************************************/
 #define A_PID (float) (0.3)
 
+#define U_SAT_A (1)
+#define U_SAT_B (-1)
 /******************************************************************************
 PID struct
 ******************************************************************************/
@@ -34,6 +36,22 @@ typedef struct
 	float u_sat_a;			// command variable saturation limit ABOVE
 	float u_sat_b;			// command variable saturation limit BELLOW
 } pid_st;
+
+//typedef struct
+//{
+//	float y;
+//	float prev_y;
+//	float kp_h;
+//	float ki_h;
+//	float kd_h;
+//	float error;
+//	float prev_error;
+//	float sum_errors;
+//	float sum_errors_bck;
+//	float u;
+//	float u_d;
+//	float prev_u_d;
+//} pid_st;
 
 /******************************************************************************
 PID calculation

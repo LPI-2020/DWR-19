@@ -8,6 +8,8 @@
 #include "move.h"
 #include "motor.h"
 
+#include <math.h>
+
 /******************************************************************************
 Private variables
 ******************************************************************************/
@@ -93,6 +95,6 @@ void move_control(float speedL, float speedR)
 	uint8_t dirL = 0.99 + speedL;
 	uint8_t dirR = 0.99 + speedR;
 
-	motor_control(&motor_right, speedR * 100, move_dir[dirR & 0x01]);
-	motor_control(&motor_left, speedL * 100, move_dir[dirL & 0x01]);
+	motor_control(&motor_right, fabs(speedR) * 100, move_dir[dirR & 0x01]);
+	motor_control(&motor_left, fabs(speedL) * 100, move_dir[dirL & 0x01]);
 }

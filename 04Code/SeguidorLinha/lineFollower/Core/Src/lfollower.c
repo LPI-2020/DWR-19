@@ -11,6 +11,15 @@
 
 #include "auxiliares.h"
 
+#include "usart.h"
+#include <stdio.h>
+#include <math.h>
+/******************************************************************************
+Define Move Speeds (from 0 to 1)
+******************************************************************************/
+#define FORWARD_SPEED 	(float)(0.65)
+#define TURN_SPEED 		(float)(0.7)
+
 /******************************************************************************
  * GET_SPEED macro
  *
@@ -25,18 +34,12 @@
  *		if FORWARD_SPEED=70% and speed=50%, then
  *			Motor_Speed=70+50*(30%), which is 85%
 ******************************************************************************/
-//#define GET_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)) * 100)
+#define GET_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)))
 
 //#define GET_SPEED(_u_, _extra_) ((FORWARD_SPEED*(1 - (_extra_)) + (_u_) * (1 - FORWARD_SPEED * (1 - (_extra_)))) * 100)
-#define GET_SPEED(_u_, _extra_) ((FORWARD_SPEED + 							\
-								(1 - FORWARD_SPEED) * (1 - (_extra_)) + 	\
-								(1 - FORWARD_SPEED - (1 - FORWARD_SPEED) * (1 - (_extra_)) * (_u_))) * 100)
-
-/******************************************************************************
-Define Move Speeds (from 0 to 1)
-******************************************************************************/
-#define FORWARD_SPEED 	(float)(0.78)
-#define TURN_SPEED 		(float)(0.7)
+#define GET_SPEED_P(_u_, _extra_) ((FORWARD_SPEED + 							\
+								(1 - FORWARD_SPEED) * (1 - fabs(_extra_)) + 	\
+								(1 - FORWARD_SPEED - (1 - FORWARD_SPEED) * (1 - fabs(_extra_))) * (_u_)))
 
 /******************************************************************************
 Define Line Follower Sensors in use
@@ -50,9 +53,9 @@ typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
 /******************************************************************************
 Define PID parameters to be used
 ******************************************************************************/
-#define KP (float) (1)
-#define KI (float) (0.1)
-#define KD (float) (0.3)
+#define KP (float) (1.05)
+#define KI (float) (0.35)
+#define KD (float) (0.013)
 
 static pid_st pid = {
 	.kp_h 		= KP,
@@ -70,6 +73,20 @@ static pid_st pid = {
 	.u_sat_a	= +1.0,
 	.u_sat_b	= -1.0
 };
+
+//static pid_st pid = {
+//	.y 			= 0,	// <----
+//	.prev_y 	= 0, 	// <------
+//	.kp_h 		= KP,
+//	.ki_h 		= KI * TIMER6_PERIOD,
+//	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
+//	.error 		= 0,
+//	.sum_errors = 0,
+//	.prev_error = 0,
+//	.u 			= 0,
+//	.u_d 		= 0,
+//	.prev_u_d 	= 0
+//};
 
 // Define array of LAST_ERRORS_SIZE elements, of pid->error
 #define LAST_ERRORS_SIZE (8)
@@ -93,13 +110,16 @@ void lfollower_pid(void)
 						DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
 
 	// calculates mean of the last PID errors
-	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+	//mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
 
+	//sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	//sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n", DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]), DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
+	//transmit_string(Tx_buffer);
 	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
 	// command var. LEFT is equal to (+pid.u)
 	// command var. RIGHT is equal to (-pid.u)
-	//move_control(GET_SPEED(+pid.u), GET_SPEED(-pid.u));
-	move_control(GET_SPEED(+pid.u, mean_err), GET_SPEED(-pid.u, mean_err));
+	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	//move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
 }
 
 /******************************************************************************
