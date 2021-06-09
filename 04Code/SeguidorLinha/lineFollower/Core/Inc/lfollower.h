@@ -14,7 +14,8 @@ Define Peripherals in use
 #include "adc.h"
 #include "tim.h"
 
-#define ADC_DMA_INSTANCE (hadc1)	// used to store Sensors values
+#define ADC_DMA_INSTANCE (hadc3)	// used to store Sensors values
+#define ADC_DMA_INSTANCE_STOP	(hadc1)								//<----------------------ATENCAO
 #define TIM_PID_SAMPLING (htim6)	// used to sample values to PID
 
 /******************************************************************************

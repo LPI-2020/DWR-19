@@ -95,6 +95,7 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM3_Init();
   MX_USART3_UART_Init();
+  MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -107,6 +108,7 @@ int main(void)
 
    while (1)
   {
+	   lfollower_start();
 	   //move_forward(0.7);
 
 		//  ------ test move module ------
