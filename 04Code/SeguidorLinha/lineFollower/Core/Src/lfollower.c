@@ -45,7 +45,10 @@ Define Move Speeds (from 0 to 1)
 Define Line Follower Sensors in use
 ******************************************************************************/
 // Line Follower Sensor
-static uint32_t lf_sens[2];
+static uint32_t lf_sens[4];
+
+
+static uint32_t st_sens[2];			//<------------- ATENCAO
 
 // Sensor elements
 typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
@@ -132,7 +135,32 @@ Line Follower Start
 void lfollower_start(void)
 {
 	// start storing Line Follower Sensor values
-	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE, lf_sens, 2);
+	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE, lf_sens, 4);
+	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE_STOP, st_sens, 2);		//<-----------------------ATENCAO
+
+	while(1)
+	{
+		sprintf(Tx_buffer, "Sensor 1: %ld\r\n", st_sens[0]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		sprintf(Tx_buffer, "Sensor 3: %ld\r\n", lf_sens[0]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		sprintf(Tx_buffer, "Sensor 4: %ld\r\n", lf_sens[1]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		sprintf(Tx_buffer, "Sensor 5: %ld\r\n", lf_sens[2]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		sprintf(Tx_buffer, "Sensor 6: %ld\r\n", lf_sens[3]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		sprintf(Tx_buffer, "Sensor 8: %ld\r\n", st_sens[1]);
+		transmit_string(Tx_buffer);
+		HAL_Delay(100);
+		HAL_Delay(1000);
+	}
+
 	// start sampling for PID application
 	HAL_TIM_Base_Start_IT(&TIM_PID_SAMPLING);
 	// start movement
