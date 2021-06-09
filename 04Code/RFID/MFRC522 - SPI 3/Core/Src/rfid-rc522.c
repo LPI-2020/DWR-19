@@ -237,39 +237,23 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 	uint8_t errorRegValue = 0x00;
 	errorRegValue = TM_MFRC522_ReadRegister(MFRC522_REG_ERROR);
 	if (errorRegValue & 0x13) {	 // BufferOvfl ParityErr ProtocolErr	
-		//LCD_UsrLog ((char *)"We have an error.\n");
-
 		status = MI_ERR;
 		return status;
 	}
 
 	if (i == 0) {
-		//LCD_UsrLog ((char *)"I went to zero.\n");
 		return MI_TIMEOUT;
 	}
 
 	if (n & 0x01 && !(n&waitIRq)) {
-		//char inty[15];
-		//sprintf(inty, "%d", i);
-		//LCD_UsrLog ((char *)"Timer timeouted\n");
-		//LCD_UsrLog (inty);
-		//LCD_UsrLog ((char *)"\n");
-
 		return MI_TIMEOUT;
-	}
-
-	if (n&waitIRq) {
-		//LCD_UsrLog ((char *)"Something was transmitted by the rc522.\n");
 	}
 
 	if (i != 0)  {
 		if (!(TM_MFRC522_ReadRegister(MFRC522_REG_ERROR) & 0x1B)) {
-			//LCD_UsrLog ((char *)"No errors and i != 0..\n");
+
 
 			status = MI_OK;
-			// if (n & irqEn & 0x01) {
-			// 	status = MI_NOTAGERR;
-			// }
 
 			if (command == PCD_TRANSCEIVE) {
 				n = TM_MFRC522_ReadRegister(MFRC522_REG_FIFO_LEVEL);
@@ -284,12 +268,6 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 				} else {
 					*backLen = n * 8;
 				}
-
-				//char inty[15];
-				//LCD_UsrLog ((char *)"\n");
-				//sprintf(inty, "%d", *backLen);
-				//LCD_UsrLog (inty);
-				//LCD_UsrLog ((char *)"Back length\n");
 
 				if (n > MFRC522_MAX_LEN) {
 					n = MFRC522_MAX_LEN;
@@ -308,8 +286,6 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 	}
 
 	if (errorRegValue & 0x08) {		// CollErr
-		//LCD_UsrLog ((char *)"We have a colision error.\n");
-
 		return MI_ERR;
 	}
 
@@ -388,15 +364,10 @@ TM_MFRC522_Status_t TM_MFRC522_SelectTag(uint8_t* serNum, uint8_t* type) {
 	status = TM_MFRC522_CalculateCRC(buffer, 7, &buffer[7]);		//??
 
 	if (status != MI_OK) {
-		//LCD_UsrLog ((char *)"Calculate crc nicht gut.\n");
 		return status;
 	}
 
 	status = TM_MFRC522_ToCard(PCD_TRANSCEIVE, buffer, 9, sak, &recvBits);
-
-	if (status != MI_OK) {
-		//LCD_UsrLog ((char *)"Transceive for select tag didnt go so well.\n");
-	}
 
 	if ((status == MI_OK) && (recvBits == 0x18)) {
 		size = buffer[0];
@@ -425,8 +396,6 @@ void TM_MFRC522_Halt(void) {
 }
 
 void TM_MFRC522_CS_Write(uint8_t val) {
-	//HAL_GPIO_WritePin(SPIx_CS_GPIO_PORT, SPIx_CS_PIN, val);
-	//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1,val);
 	HAL_GPIO_WritePin(SPIx_CS_GPIO_PORT, SPIx_CS_PIN, val);
 }
 
