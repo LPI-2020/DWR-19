@@ -19,11 +19,8 @@ Define Peripherals in Use
 #define OBS_DETECTOR_ADC (hadc1)
 
 // Pins used to detect stop marks
-//#define PIN_A 		(SENSOR1_Pin)
-//#define PIN_A_PORT 	(SENSOR1_GPIO_Port)
-
-#define PIN_A 		(GPIO_PIN_0)
-#define PIN_A_PORT 	(GPIOC)
+#define PIN_A 		(SENSOR1_Pin)
+#define PIN_A_PORT 	(SENSOR1_GPIO_Port)
 
 #define PIN_B 		(SENSOR8_Pin)
 #define PIN_B_PORT	(SENSOR8_GPIO_Port)

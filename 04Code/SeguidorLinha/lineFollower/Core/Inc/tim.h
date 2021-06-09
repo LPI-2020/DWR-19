@@ -37,9 +37,15 @@ extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN Private defines */
 
+// number of 2second cycles, counted by interrupt
 extern uint8_t num_timeout_2sec;
 
+// Timer used to count timeouts
 #define TIM_TIMEOUTS	(htim7)
+// timeout 4 seconds -> num_timeout_2sec must be < TIMEOUT_4SEC
+#define TIMEOUT_4SEC	(3)
+
+
 #define TIMER6_PERIOD (float) 0.01
 
 //#define CLK_APB1 108000000

@@ -64,11 +64,12 @@ Define Type of Speed Calculus
 /******************************************************************************
 Define Line Follower Sensors in use
 ******************************************************************************/
-// Line Follower Sensor
-#define LF_SENS_NUM (4) 				// Number of sensors in use
+// Number of sensors in use
+#define LF_SENS_NUM (4)
 static uint32_t lf_sens[LF_SENS_NUM];
 
-static uint32_t st_sens[2];
+#define ST_SENS_NUM	(2)
+static uint32_t st_sens[ST_SENS_NUM];
 
 // Sensor elements
 typedef enum {
@@ -169,38 +170,28 @@ Line Follower Stop
 
 uint8_t lfollower_rotate(move_dir_e dir)
 {
-	// rotate to 'dir' at speed equal to TURN_SPEED
+	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 
-	// start storing Line Follower Sensor values
-	//HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
+	// start storing
+	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC, st_sens, ST_SENS_NUM);
 
-	//-----------
-	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC, st_sens, 2);
+	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
+	// if dir == MOVE_LEFT, check when SENSOR8 is over the line
 
-	//-----------
-
-	// start movement
-	move_start();
+	// dir can be -1 (MOVE_RIGHT) or +1 (MOVE_LEFT)
+	dir += 1;
+	// dir is now 0 or 2
+	dir >>= 1;
+	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 
 	// reset number of 2second Timeouts
 	num_timeout_2sec = 0;
 	// start Rotate_Timeout
 	HAL_TIM_Base_Start_IT(&TIM_LF_ROTATE);
 
-	// if dir == MOVE_RIGHT, check when SENSOR4 is over the line
-	// if dir == MOVE_LEFT, check when SENSOR5 is over the line
-
-	// dir can be -1 (MOVE_RIGHT) or +1 (MOVE_LEFT)
-	dir += 1;
-	// dir is now 0 or 2
-	dir >>= 1;
-	// dir is now 0 or 1
-
-//	while((DIG_TO_ANALOG(lf_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < 3))
-//		;
-
-	while((DIG_TO_ANALOG(st_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < 3))
+	// while Sensor is not over the line and timeout has not occurred
+	while((DIG_TO_ANALOG(st_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < TIMEOUT_4SEC))
 		;
 
 	// stop rotating
@@ -210,9 +201,9 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	HAL_TIM_Base_Stop_IT(&TIM_LF_ROTATE);
 
 	// if timeout didnt occurred then rotate was completed -> Return 0
-	// if timeout occured, then we must return an error code, signaling a non
-	// successfull rotate -> return 1
-	return !(num_timeout_2sec < 2);
+	// if timeout occured, then we must return an error code, signaling a
+	// non successfull rotate -> return 1
+	return !(num_timeout_2sec < TIMEOUT_4SEC);
 }
 
 /******************************************************************************

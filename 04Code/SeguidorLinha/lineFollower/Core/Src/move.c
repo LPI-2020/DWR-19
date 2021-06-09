@@ -8,12 +8,14 @@
 #include "move.h"
 #include "motor.h"
 
-#include <math.h>
+#include <math.h> // using fabs()
 
 /******************************************************************************
 Private variables
 ******************************************************************************/
-static uint8_t move_flag = 0; // Module flag. Indicates state of motors
+// Module flag. Indicates state of movement
+// Equals 1 if its moving, and 0 if its stop
+static uint8_t move_flag = 0;
 
 /******************************************************************************
 Define Motors in use
@@ -83,10 +85,17 @@ void move_control(float speedL, float speedR)
 		// move_start hasn't occurred
 		move_start();
 
-	// check if speedL and speedR are positive/negative
+	// speedL and speedR are PWM values, from -1 to +1
+	// since dirL and dirR are uint8_t, speed values are truncated
+	// so, by adding 0.99 (number less than 1) we get:
+	// dirX = 0 if speedX is negative
+	// dirX = 1 if speedX is positive
 	uint8_t dirL = 0.99 + speedL;
 	uint8_t dirR = 0.99 + speedR;
 
+	// dirL and dirR (motor_dir_e) are:
+	// 0 -> motor moving BACKWARDS (MOTOR_BACKWARD)
+	// 1 -> motor moving FORWARD (MOTOR_FORWARD)
 	motor_control(&motor_right, fabs(speedR) * 100, (motor_dir_e)(dirR & 0x01));
 	motor_control(&motor_left, fabs(speedL) * 100, (motor_dir_e)(dirL & 0x01));
 }
