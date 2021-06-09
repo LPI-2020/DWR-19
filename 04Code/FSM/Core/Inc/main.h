@@ -64,6 +64,9 @@ void Error_Handler(void);
 #define SENSOR4_GPIO_Port GPIOF
 #define SENSOR5_Pin GPIO_PIN_5
 #define SENSOR5_GPIO_Port GPIOF
+#define SENSOR1_Pin GPIO_PIN_0
+#define SENSOR1_GPIO_Port GPIOC
+#define SENSOR1_EXTI_IRQn EXTI0_IRQn
 #define SENSOR3_Pin GPIO_PIN_4
 #define SENSOR3_GPIO_Port GPIOA
 #define SENSOR6_Pin GPIO_PIN_7

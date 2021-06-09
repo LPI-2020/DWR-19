@@ -21,7 +21,8 @@
 #include "adc.h"
 
 /* USER CODE BEGIN 0 */
-#include "stop_sensors.h"
+#include "../../../StopSensors/Core/Inc/stop_sensors.h"
+
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
