@@ -29,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
+#include "tests.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,8 +109,10 @@ int main(void)
 
   while (1)
   {
-	  fsm_func_ptr[state]();
-	  state = nstate;
+	  test_stop_sensor();
+	  break;
+	  //fsm_func_ptr[state]();
+	  //state = nstate;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

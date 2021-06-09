@@ -9,5 +9,6 @@
 #define __TESTS_H__
 
 void test_move(float speed);
+void test_stop_sensor();
 
 #endif // !__TESTS_H__
