@@ -33,9 +33,13 @@ extern "C" {
 
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN Private defines */
 
+extern uint8_t num_timeout_2sec;
+
+#define TIM_TIMEOUTS	(htim7)
 #define TIMER6_PERIOD (float) 0.01
 
 //#define CLK_APB1 108000000
@@ -45,6 +49,7 @@ extern TIM_HandleTypeDef htim6;
 
 void MX_TIM3_Init(void);
 void MX_TIM6_Init(void);
+void MX_TIM7_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 

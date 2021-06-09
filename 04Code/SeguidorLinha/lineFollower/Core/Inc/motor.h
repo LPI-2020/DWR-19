@@ -37,7 +37,11 @@ typedef struct
 /******************************************************************************
 Motor Directions Enum
 ******************************************************************************/
-typedef enum { MOTOR_STOP, MOTOR_FORWARD, MOTOR_BACKWARD} motor_dir_e;
+typedef enum {
+	MOTOR_BACKWARD,
+	MOTOR_FORWARD,
+	MOTOR_STOP
+} motor_dir_e;
 
 /******************************************************************************
 Motor Functions
