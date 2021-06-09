@@ -6,6 +6,8 @@
  *  Created on: June 3, 2021
  */
 
+#include <stdint.h> // using uint8_t
+
 /******************************************************************************
 FSM states
 ******************************************************************************/
@@ -18,6 +20,17 @@ FSM states
 #define S_ROTATE		6	// Robot rotates in order to move in other direction
 
 #define S_ERROR			7	// Robot waiting for intervention
+
+/******************************************************************************
+FSM Private Defines
+******************************************************************************/
+//#define OBS_TIM
+
+// defines robot speed when using RFID reader
+#define RD_RFID_SPEED 0.6
+
+// defines speed of rotation
+#define ROTATE_SPEED 0.6
 
 /******************************************************************************
 FSM current state pointer

@@ -58,6 +58,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SENSOR8_Pin GPIO_PIN_2
+#define SENSOR8_GPIO_Port GPIOF
+#define SENSOR4_Pin GPIO_PIN_3
+#define SENSOR4_GPIO_Port GPIOF
+#define SENSOR5_Pin GPIO_PIN_5
+#define SENSOR5_GPIO_Port GPIOF
+#define SENSOR1_Pin GPIO_PIN_0
+#define SENSOR1_GPIO_Port GPIOC
+#define SENSOR3_Pin GPIO_PIN_4
+#define SENSOR3_GPIO_Port GPIOA
+#define SENSOR6_Pin GPIO_PIN_7
+#define SENSOR6_GPIO_Port GPIOA
+#define USER_BTN_Pin GPIO_PIN_13
+#define USER_BTN_GPIO_Port GPIOF
+#define IN1_LEFT_Pin GPIO_PIN_12
+#define IN1_LEFT_GPIO_Port GPIOB
+#define IN2_RIGHT_Pin GPIO_PIN_13
+#define IN2_RIGHT_GPIO_Port GPIOB
+#define IN1_RIGHT_Pin GPIO_PIN_15
+#define IN1_RIGHT_GPIO_Port GPIOB
+#define PWM_RIGHT_Pin GPIO_PIN_6
+#define PWM_RIGHT_GPIO_Port GPIOC
+#define PWM_LEFT_Pin GPIO_PIN_7
+#define PWM_LEFT_GPIO_Port GPIOC
+#define IN2_LEFT_Pin GPIO_PIN_15
+#define IN2_LEFT_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

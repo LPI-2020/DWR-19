@@ -7,7 +7,7 @@ GPIO_Pins in use:
 - Obstacle Detector:
 ADC - triggered by timer
 Ex: TIM6 (0.5sec interrupt)
-    PC0 (CN9)
+    PC3 (CN9)
 
 - Cross Detector
 - Room Detector
