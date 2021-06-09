@@ -7,18 +7,17 @@
  */
 #include "lfollower.h"
 #include "pid.h"
-#include "move.h"
-
 #include "auxiliares.h"
 
-#include "usart.h"
-#include <stdio.h>
-#include <math.h>
+#include "stop_sensors.h"
+
+#include <math.h> // using fabs()
+
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
 #define FORWARD_SPEED 	(float)(0.65)
-#define TURN_SPEED 		(float)(0.7)
+#define TURN_SPEED 		(float)(0.75)
 
 /******************************************************************************
  * GET_SPEED macro
@@ -33,25 +32,51 @@ Define Move Speeds (from 0 to 1)
  * i.e: if FORWARD_SPEED=70% and speed=0, then Motor_Speed=70%
  *		if FORWARD_SPEED=70% and speed=50%, then
  *			Motor_Speed=70+50*(30%), which is 85%
+*******************************************************************************
+Define Type of Speed Calculus
 ******************************************************************************/
-#define GET_SPEED(_u_) ((FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED)))
+#define _CALC_SPEED1_
+/*****************************************************************************/
 
-//#define GET_SPEED(_u_, _extra_) ((FORWARD_SPEED*(1 - (_extra_)) + (_u_) * (1 - FORWARD_SPEED * (1 - (_extra_)))) * 100)
-#define GET_SPEED_P(_u_, _extra_) ((FORWARD_SPEED + 							\
-								(1 - FORWARD_SPEED) * (1 - fabs(_extra_)) + 	\
-								(1 - FORWARD_SPEED - (1 - FORWARD_SPEED) * (1 - fabs(_extra_))) * (_u_)))
+// calculate speed no.1
+#ifdef _CALC_SPEED1_
+
+	#define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
+
+#endif // !_CALC_SPEED1_
+// calculate speed no.2 - with extra speed on the straights
+#ifdef _CALC_SPEED2_
+
+	#define GET_SPEED(_u_, _extra_) (FORWARD_SPEED * (1 - (_extra_)) +			\
+									(_u_)*(1 - FORWARD_SPEED*(1 - (_extra_))))
+
+#endif // !_CALC_SPEED2_
+// calculate speed no.3 - with extra speed on the straights
+#ifdef _CALC_SPEED3_
+
+	#define GET_SPEED_P(_u_, _extra_) (FORWARD_SPEED + (1 - FORWARD_SPEED) * 	\
+									(1 - fabs(_extra_)) + (1 - FORWARD_SPEED -	\
+									(1 - FORWARD_SPEED)*(1 - fabs(_extra_)))*	\
+									(_u_))
+
+#endif // !_CALC_SPEED3_
 
 /******************************************************************************
 Define Line Follower Sensors in use
 ******************************************************************************/
 // Line Follower Sensor
-static uint32_t lf_sens[4];
+#define LF_SENS_NUM (4) 				// Number of sensors in use
+static uint32_t lf_sens[LF_SENS_NUM];
 
-
-static uint32_t st_sens[2];			//<------------- ATENCAO
+static uint32_t st_sens[2];
 
 // Sensor elements
-typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
+typedef enum {
+	SENSOR3,	// Line Follower RIGHT Sensor
+	SENSOR4,	// Rotate RIGHT Sensor
+	SENSOR5,	// Rotate LEFT Sensor
+	SENSOR6		// Line Follower LEFT Sensor
+} sensor_e;
 
 /******************************************************************************
 Define PID parameters to be used
@@ -105,24 +130,89 @@ Line Follower PID
 ******************************************************************************/
 void lfollower_pid(void)
 {
-	static float mean_err;
 
 	// Apply PID to adjust motor PWM/velocity
 	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]),
-						DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
+	pid_calcule(&pid, 	DIG_TO_ANALOG(lf_sens[SENSOR6]),
+						DIG_TO_ANALOG(lf_sens[SENSOR3]));
 
-	// calculates mean of the last PID errors
-	//mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+#ifdef _DEBUG_
+	sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n",
+							DIG_TO_ANALOG(lf_sens[SENSOR6]),
+							DIG_TO_ANALOG(lf_sens[SENSOR3]));
+	transmit_string(Tx_buffer);
+#endif // !_DEBUG_
 
-	//sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-	//sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n", DIG_TO_ANALOG(lf_sens[SENSOR_LEFT]), DIG_TO_ANALOG(lf_sens[SENSOR_RIGHT]));
-	//transmit_string(Tx_buffer);
 	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
 	// command var. LEFT is equal to (+pid.u)
 	// command var. RIGHT is equal to (-pid.u)
+#ifdef _CALC_SPEED1_
 	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-	//move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
+#endif // !_CALC_SPEED1_
+#ifdef _CALC_SPEED2_
+	static float mean_err;
+
+	// calculates mean of the last PID errors
+	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
+	move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
+#endif // !_CALC_SPEED2_
+}
+
+/******************************************************************************
+Line Follower Stop
+
+@brief 	Stops line follower process.
+@param	none
+@retval	none
+******************************************************************************/
+
+uint8_t lfollower_rotate(move_dir_e dir)
+{
+	// rotate to 'dir' at speed equal to TURN_SPEED
+	move_rotate(dir, TURN_SPEED);
+
+	// start storing Line Follower Sensor values
+	//HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
+
+	//-----------
+	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC, st_sens, 2);
+
+	//-----------
+
+	// start movement
+	move_start();
+
+	// reset number of 2second Timeouts
+	num_timeout_2sec = 0;
+	// start Rotate_Timeout
+	HAL_TIM_Base_Start_IT(&TIM_LF_ROTATE);
+
+	// if dir == MOVE_RIGHT, check when SENSOR4 is over the line
+	// if dir == MOVE_LEFT, check when SENSOR5 is over the line
+
+	// dir can be -1 (MOVE_RIGHT) or +1 (MOVE_LEFT)
+	dir += 1;
+	// dir is now 0 or 2
+	dir >>= 1;
+	// dir is now 0 or 1
+
+//	while((DIG_TO_ANALOG(lf_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < 3))
+//		;
+
+	while((DIG_TO_ANALOG(st_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < 3))
+		;
+
+	// stop rotating
+	move_stop();
+
+	// stop Rotate_Timeout
+	HAL_TIM_Base_Stop_IT(&TIM_LF_ROTATE);
+
+	// if timeout didnt occurred then rotate was completed -> Return 0
+	// if timeout occured, then we must return an error code, signaling a non
+	// successfull rotate -> return 1
+	return !(num_timeout_2sec < 2);
 }
 
 /******************************************************************************
@@ -135,34 +225,9 @@ Line Follower Start
 void lfollower_start(void)
 {
 	// start storing Line Follower Sensor values
-	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE, lf_sens, 4);
-	HAL_ADC_Start_DMA(&ADC_DMA_INSTANCE_STOP, st_sens, 2);		//<-----------------------ATENCAO
-
-	while(1)
-	{
-		sprintf(Tx_buffer, "Sensor 1: %ld\r\n", st_sens[0]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		sprintf(Tx_buffer, "Sensor 3: %ld\r\n", lf_sens[0]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		sprintf(Tx_buffer, "Sensor 4: %ld\r\n", lf_sens[1]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		sprintf(Tx_buffer, "Sensor 5: %ld\r\n", lf_sens[2]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		sprintf(Tx_buffer, "Sensor 6: %ld\r\n", lf_sens[3]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		sprintf(Tx_buffer, "Sensor 8: %ld\r\n", st_sens[1]);
-		transmit_string(Tx_buffer);
-		HAL_Delay(100);
-		HAL_Delay(1000);
-	}
-
+	HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
 	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_PID_SAMPLING);
+	HAL_TIM_Base_Start_IT(&TIM_LF_SENS_PID);
 	// start movement
 	move_start();
 }
@@ -177,9 +242,47 @@ Line Follower Stop
 void lfollower_stop(void)
 {
 	// stop storing Line Follower Sensor values
-	HAL_ADC_Stop_DMA(&ADC_DMA_INSTANCE);
+	HAL_ADC_Stop_DMA(&ADC_LF_SENS_DMA);
 	// stop sampling for PID application
-	HAL_TIM_Base_Stop_IT(&TIM_PID_SAMPLING);
+	HAL_TIM_Base_Stop_IT(&TIM_LF_SENS_PID);
 	// stop movement
 	move_stop();
 }
+
+/******************************************************************************
+Debug Functions
+
+@brief 	Prints Line Follower Sensors Values
+@param	none
+@retval	none
+******************************************************************************/
+#ifdef _DEBUG_
+
+void lfollower_print_sens(void)
+{
+	sprintf(Tx_buffer, "Sensor 1: %ld\r\n", st_sens[0]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+
+	sprintf(Tx_buffer, "Sensor 3: %ld\r\n", lf_sens[0]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+
+	sprintf(Tx_buffer, "Sensor 4: %ld\r\n", lf_sens[1]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+
+	sprintf(Tx_buffer, "Sensor 5: %ld\r\n", lf_sens[2]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+
+	sprintf(Tx_buffer, "Sensor 6: %ld\r\n", lf_sens[3]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+
+	sprintf(Tx_buffer, "Sensor 8: %ld\r\n", st_sens[1]);
+	transmit_string(Tx_buffer);
+	HAL_Delay(100);
+	HAL_Delay(1000);
+}
+#endif // !_DEBUG_

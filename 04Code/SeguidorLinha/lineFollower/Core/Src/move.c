@@ -77,14 +77,6 @@ Move Control
 @param	Left and right motor speeds, respectively
 @retval none
 ******************************************************************************/
-const static motor_dir_e move_dir[] =
-{
-		// BACKWARD,
-		MOTOR_BACKWARD,
-		// FORWARD
-		MOTOR_FORWARD
-};
-
 void move_control(float speedL, float speedR)
 {
 	if(move_flag == 0)
@@ -95,6 +87,6 @@ void move_control(float speedL, float speedR)
 	uint8_t dirL = 0.99 + speedL;
 	uint8_t dirR = 0.99 + speedR;
 
-	motor_control(&motor_right, fabs(speedR) * 100, move_dir[dirR & 0x01]);
-	motor_control(&motor_left, fabs(speedL) * 100, move_dir[dirL & 0x01]);
+	motor_control(&motor_right, fabs(speedR) * 100, (motor_dir_e)(dirR & 0x01));
+	motor_control(&motor_left, fabs(speedL) * 100, (motor_dir_e)(dirL & 0x01));
 }

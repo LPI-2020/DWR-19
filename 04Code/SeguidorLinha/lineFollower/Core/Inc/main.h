@@ -60,6 +60,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
+#define SENSOR1_Pin GPIO_PIN_0
+#define SENSOR1_GPIO_Port GPIOC
+#define SENSOR8_Pin GPIO_PIN_7
+#define SENSOR8_GPIO_Port GPIOA
 #define TESTE_Pin GPIO_PIN_11
 #define TESTE_GPIO_Port GPIOB
 #define IN1_LEFT_Pin GPIO_PIN_12
