@@ -21,7 +21,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-#include "stop_sensors.h"
+#include "../../../StopSensors/Core/Inc/stop_sensors.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -57,11 +57,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PC0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = SENSOR1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(SENSOR1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB0 PBPin PBPin PBPin */
   GPIO_InitStruct.Pin = GPIO_PIN_0|IN1_LEFT_Pin|IN2_RIGHT_Pin|IN1_RIGHT_Pin;
