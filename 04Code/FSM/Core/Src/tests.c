@@ -1,8 +1,6 @@
 #include "tests.h"
-
-
-#include "move.h"
 #include "stop_sensors.h"
+#include "lfollower.h"
 
 #include "stm32f7xx_hal.h"
 
@@ -37,10 +35,9 @@ void test_move(float speed)
 void test_stop_sensor(void)
 {
 	// init stop sensors
-	//stop_sensors_init();
+	stop_sensors_init();
 
 	// start moving forwards
-	move_start();
 	move_forward(0.7);
 
 	// wait for extern interrupt
@@ -50,3 +47,15 @@ void test_stop_sensor(void)
 	// stop movement
 	move_stop();
 }
+
+void test_lfollower(move_dir_e dir)
+{
+	uint8_t err;
+
+	// rotate to direction dir
+	err = lfollower_rotate(dir);
+
+	// write pin if rotate is not completed
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, err & 0x01);
+}
+

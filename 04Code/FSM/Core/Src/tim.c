@@ -22,6 +22,9 @@
 
 /* USER CODE BEGIN 0 */
 #include "lfollower.h"
+
+uint8_t num_timeout_2sec = 0;
+
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim3;

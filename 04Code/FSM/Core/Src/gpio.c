@@ -21,7 +21,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-#include "../../../StopSensors/Core/Inc/stop_sensors.h"
+#include "stop_sensors.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -90,7 +90,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
 		// Stop detector ISR
-		isr_stop_detector();
+//		isr_stop_detector();
 	}
 }
 /* USER CODE END 2 */

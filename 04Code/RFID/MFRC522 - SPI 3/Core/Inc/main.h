@@ -77,6 +77,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 /* Definition for SPIx clock resources */
+/*
 #define SPIx                             SPI3
 #define SPIx_CLK_ENABLE()                __HAL_RCC_SPI3_CLK_ENABLE()
 #define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
@@ -89,6 +90,7 @@ void Error_Handler(void);
 #define SPIx_RELEASE_RESET()             __HAL_RCC_SPI3_RELEASE_RESET()
 
 /* Definition for SPIx Pins */
+/*
 #define SPIx_SCK_PIN                     GPIO_PIN_10 // A5 -> PC10
 #define SPIx_SCK_GPIO_PORT               GPIOC
 #define SPIx_SCK_AF                      GPIO_AF6_SPI3
