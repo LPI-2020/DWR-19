@@ -695,37 +695,37 @@ Text GLabel 4500 5600 3    50   Input ~ 0
 PB6
 Text GLabel 7200 2750 2    50   Input ~ 0
 PC10
-Text GLabel 7200 3050 2    50   Input ~ 0
-PB8
-Wire Wire Line
-	7200 3050 6950 3050
 Text GLabel 7200 3150 2    50   Input ~ 0
-PB9
+PB8
 Wire Wire Line
 	7200 3150 6950 3150
 Text GLabel 7200 3250 2    50   Input ~ 0
-PA5
+PB9
 Wire Wire Line
 	7200 3250 6950 3250
 Text GLabel 7200 3350 2    50   Input ~ 0
-PA6
+PA5
 Wire Wire Line
 	7200 3350 6950 3350
 Text GLabel 7200 3450 2    50   Input ~ 0
-PD14
+PA6
 Wire Wire Line
 	7200 3450 6950 3450
 Text GLabel 7200 3550 2    50   Input ~ 0
-PD15
+PD14
 Wire Wire Line
 	7200 3550 6950 3550
 Text GLabel 7200 3650 2    50   Input ~ 0
-GND
+PD15
 Wire Wire Line
 	7200 3650 6950 3650
+Text GLabel 7200 3750 2    50   Input ~ 0
+GND
 Wire Wire Line
 	7200 3750 6950 3750
-Text GLabel 7200 3750 2    50   Input ~ 0
+Wire Wire Line
+	7200 3050 6950 3050
+Text GLabel 7200 3050 2    50   Input ~ 0
 PD2
 $Comp
 L Connector:Screw_Terminal_01x04 J10
@@ -839,7 +839,7 @@ F 3 "~" H 7050 1250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 7050 1400 3    50   Input ~ 0
-GND~
+GND
 Text GLabel 7050 1100 1    50   Input ~ 0
 +3V3
 $Comp
@@ -854,7 +854,7 @@ F 3 "~" H 7450 1250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 7450 1400 3    50   Input ~ 0
-GND~
+GND
 Text GLabel 7450 1100 1    50   Input ~ 0
 +3V3
 $Comp
@@ -869,7 +869,7 @@ F 3 "~" H 8000 1250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 8000 1400 3    50   Input ~ 0
-GND~
+GND
 Text GLabel 8000 1100 1    50   Input ~ 0
 +5V
 $Comp
@@ -884,7 +884,78 @@ F 3 "~" H 8600 1250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 8600 1400 3    50   Input ~ 0
-GND~
+GND
 Text GLabel 8600 1100 1    50   Input ~ 0
 +5V
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 60C2EC7B
+P 8750 2450
+F 0 "H1" H 8850 2496 50  0000 L CNN
+F 1 "MountingHole" H 8850 2405 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8750 2450 50  0001 C CNN
+F 3 "~" H 8750 2450 50  0001 C CNN
+	1    8750 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 60C2F8E5
+P 8750 2700
+F 0 "H2" H 8850 2746 50  0000 L CNN
+F 1 "MountingHole" H 8850 2655 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8750 2700 50  0001 C CNN
+F 3 "~" H 8750 2700 50  0001 C CNN
+	1    8750 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 60C3B112
+P 8750 2900
+F 0 "H3" H 8850 2946 50  0000 L CNN
+F 1 "MountingHole" H 8850 2855 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8750 2900 50  0001 C CNN
+F 3 "~" H 8750 2900 50  0001 C CNN
+	1    8750 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 60C46AEA
+P 8750 3150
+F 0 "H4" H 8850 3196 50  0000 L CNN
+F 1 "MountingHole" H 8850 3105 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8750 3150 50  0001 C CNN
+F 3 "~" H 8750 3150 50  0001 C CNN
+	1    8750 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J12
+U 1 1 60CFBA54
+P 6750 3950
+F 0 "J12" H 6668 3617 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 6830 3851 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 6750 3950 50  0001 C CNN
+F 3 "~" H 6750 3950 50  0001 C CNN
+	1    6750 3950
+	-1   0    0    -1  
+$EndComp
+Text GLabel 7200 3850 2    50   Input ~ 0
+PE7
+Wire Wire Line
+	7200 3850 6950 3850
+Text GLabel 7200 3950 2    50   Input ~ 0
+GND
+Wire Wire Line
+	7200 3950 6950 3950
+Text GLabel 7200 4050 2    50   Input ~ 0
+PE10
+Wire Wire Line
+	7200 4050 6950 4050
+Text GLabel 7200 4150 2    50   Input ~ 0
+PE12
+Wire Wire Line
+	7200 4150 6950 4150
 $EndSCHEMATC
