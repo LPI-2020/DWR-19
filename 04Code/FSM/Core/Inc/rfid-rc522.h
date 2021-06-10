@@ -62,6 +62,15 @@ typedef enum {
 	MI_TIMEOUT,
 } TM_MFRC522_Status_t;
 
+/*
+ * RFID structure
+ */
+typedef struct {
+	uint8_t CardID[4];
+	uint8_t type;
+	char *result;
+} rfid_t;
+
 /* MFRC522 Commands */
 #define PCD_IDLE						0x00   //NO action; Cancel the current command
 #define PCD_AUTHENT						0x0E   //Authentication Key
@@ -182,6 +191,11 @@ extern void RFID_RC522_Init(void);
  * Returns MI_OK if card is detected
  */
 extern TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type);
+
+/******************************************************************************
+Read RFID
+******************************************************************************/
+extern uint8_t read_RFID(rfid_t rfid);
 
 /**
  * Compare 2 RFID ID's

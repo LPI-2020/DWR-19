@@ -29,11 +29,10 @@ Stop Sensors Flags
 ******************************************************************************/
 // Obstacle Found Flag
 extern uint8_t obs_found_flag;
-
-//// Cross Found Flag
-//extern uint8_t cross_found_flag;
-//// Room Found Flag
-//extern uint8_t room_found_flag;
+// Cross Found Flag
+extern uint8_t cross_found_flag;
+// Room Found Flag
+extern uint8_t room_found_flag;
 
 /******************************************************************************
 Stop Sensors Functions
