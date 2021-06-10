@@ -64,16 +64,10 @@ Text GLabel 3300 2100 0    50   Input ~ 0
 PC9
 Wire Wire Line
 	3500 2100 3300 2100
-Text GLabel 3300 2200 0    50   Input ~ 0
-PC10
 Wire Wire Line
 	3500 2200 3300 2200
-Text GLabel 3300 2300 0    50   Input ~ 0
-PC11
 Wire Wire Line
 	3500 2300 3300 2300
-Text GLabel 3300 2400 0    50   Input ~ 0
-PC12
 Wire Wire Line
 	3500 2400 3300 2400
 Text GLabel 3300 2500 0    50   Input ~ 0
@@ -457,21 +451,10 @@ Text GLabel 5700 3050 2    50   Input ~ 0
 AVDD
 Wire Wire Line
 	5500 3050 5700 3050
-$Comp
-L Connector:Screw_Terminal_01x04 J1
-U 1 1 60C495CA
-P 1950 3000
-F 0 "J1" H 2030 2946 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 2030 2901 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 3000 50  0001 C CNN
-F 3 "~" H 1950 3000 50  0001 C CNN
-	1    1950 3000
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 2300 0    50   Input ~ 0
+Text GLabel 2100 1200 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1500 2300 1750 2300
+	2100 1200 2350 1200
 $Comp
 L Connector_Generic:Conn_02x03_Odd_Even PS_5V1
 U 1 1 60C5324B
@@ -526,116 +509,22 @@ Text GLabel 5850 1350 2    50   Input ~ 0
 +3V3
 Wire Wire Line
 	5850 1350 5600 1350
-Text GLabel 1500 2500 0    50   Input ~ 0
+Text GLabel 2100 1100 0    50   Input ~ 0
 +3V3
 Wire Wire Line
-	1500 2500 1750 2500
-Text GLabel 1500 2400 0    50   Input ~ 0
-+3V3
-Wire Wire Line
-	1500 2400 1750 2400
-Text GLabel 1500 2600 0    50   Input ~ 0
-PC0
-Wire Wire Line
-	1500 2600 1750 2600
-$Comp
-L Connector:Screw_Terminal_01x04 J2
-U 1 1 60C8F6BF
-P 1950 2600
-F 0 "J2" H 2030 2546 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 2030 2501 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 2600 50  0001 C CNN
-F 3 "~" H 1950 2600 50  0001 C CNN
-	1    1950 2600
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 2700 0    50   Input ~ 0
-PC3
-Wire Wire Line
-	1500 2700 1750 2700
-Text GLabel 1500 2800 0    50   Input ~ 0
-PF3
-Wire Wire Line
-	1500 2800 1750 2800
-Text GLabel 1500 2900 0    50   Input ~ 0
-PF5
-Wire Wire Line
-	1500 2900 1750 2900
-Text GLabel 1500 3000 0    50   Input ~ 0
-PF10
-Wire Wire Line
-	1500 3000 1750 3000
-$Comp
-L Connector:Screw_Terminal_01x04 J3
-U 1 1 60C9EC34
-P 1950 2200
-F 0 "J3" H 2030 2146 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 2030 2101 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 2200 50  0001 C CNN
-F 3 "~" H 1950 2200 50  0001 C CNN
-	1    1950 2200
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 3100 0    50   Input ~ 0
-PA7
-Wire Wire Line
-	1500 3100 1750 3100
-Text GLabel 1500 2000 0    50   Input ~ 0
+	2100 1100 2350 1100
+Text GLabel 2100 1500 0    50   Input ~ 0
 +5V
 Wire Wire Line
-	1500 2000 1750 2000
-Text GLabel 1500 2100 0    50   Input ~ 0
+	2100 1500 2350 1500
+Text GLabel 2100 1400 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1500 2100 1750 2100
-Text GLabel 1500 2200 0    50   Input ~ 0
+	2100 1400 2350 1400
+Text GLabel 2100 1300 0    50   Input ~ 0
 PA3
 Wire Wire Line
-	1500 2200 1750 2200
-$Comp
-L Connector:Screw_Terminal_01x04 J4
-U 1 1 60CB3F5F
-P 6750 3550
-F 0 "J4" H 6668 3217 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 6830 3451 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 6750 3550 50  0001 C CNN
-F 3 "~" H 6750 3550 50  0001 C CNN
-	1    6750 3550
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Connector:Screw_Terminal_01x04 J5
-U 1 1 60CB3F51
-P 6750 3150
-F 0 "J5" H 6668 2817 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 6830 3051 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 6750 3150 50  0001 C CNN
-F 3 "~" H 6750 3150 50  0001 C CNN
-	1    6750 3150
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Connector:Screw_Terminal_01x04 J6
-U 1 1 60CB3F43
-P 6750 2750
-F 0 "J6" H 6668 2417 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 6830 2651 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 6750 2750 50  0001 C CNN
-F 3 "~" H 6750 2750 50  0001 C CNN
-	1    6750 2750
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Connector:Screw_Terminal_01x04 J7
-U 1 1 60CCDA9C
-P 6750 2350
-F 0 "J7" H 6668 2017 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 6830 2251 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 6750 2350 50  0001 C CNN
-F 3 "~" H 6750 2350 50  0001 C CNN
-	1    6750 2350
-	-1   0    0    -1  
-$EndComp
+	2100 1300 2350 1300
 $Comp
 L Connector_Generic:Conn_01x06 Bluetooth1
 U 1 1 60CE80A6
@@ -648,35 +537,35 @@ F 3 "~" H 4600 5150 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	7200 2450 6950 2450
-Text GLabel 7200 2950 2    50   Input ~ 0
+	7200 2050 6950 2050
+Text GLabel 7200 2550 2    50   Input ~ 0
 PC12
 Wire Wire Line
-	7200 2550 6950 2550
-Text GLabel 7200 2850 2    50   Input ~ 0
+	7200 1950 6950 1950
+Text GLabel 7200 2650 2    50   Input ~ 0
 PC11
 Wire Wire Line
-	7200 2650 6950 2650
+	7200 1850 6950 1850
 Wire Wire Line
 	7200 2750 6950 2750
-Text GLabel 7200 2650 2    50   Input ~ 0
+Text GLabel 7200 1850 2    50   Input ~ 0
 PC9
 Wire Wire Line
-	7200 2850 6950 2850
-Text GLabel 7200 2550 2    50   Input ~ 0
+	7200 2650 6950 2650
+Text GLabel 7200 1950 2    50   Input ~ 0
 GND
 Wire Wire Line
-	7200 2950 6950 2950
-Text GLabel 7200 2450 2    50   Input ~ 0
+	7200 2550 6950 2550
+Text GLabel 7200 2050 2    50   Input ~ 0
 +3V3
 Text GLabel 7200 2250 2    50   Input ~ 0
 GND
 Wire Wire Line
 	7200 2250 6950 2250
-Text GLabel 7200 2350 2    50   Input ~ 0
+Text GLabel 7200 2150 2    50   Input ~ 0
 PC8
 Wire Wire Line
-	7200 2350 6950 2350
+	7200 2150 6950 2150
 Wire Wire Line
 	4800 5600 4800 5350
 Text GLabel 4800 5600 3    50   Input ~ 0
@@ -695,138 +584,68 @@ Text GLabel 4500 5600 3    50   Input ~ 0
 PB6
 Text GLabel 7200 2750 2    50   Input ~ 0
 PC10
-Text GLabel 7200 3150 2    50   Input ~ 0
+Text GLabel 7200 2350 2    50   Input ~ 0
 PB8
 Wire Wire Line
-	7200 3150 6950 3150
+	7200 2350 6950 2350
 Text GLabel 7200 3250 2    50   Input ~ 0
 PB9
 Wire Wire Line
+	7200 2850 6950 2850
+Wire Wire Line
+	7200 2950 6950 2950
+Wire Wire Line
+	7200 3050 6950 3050
+Wire Wire Line
+	7200 3150 6950 3150
+Wire Wire Line
 	7200 3250 6950 3250
-Text GLabel 7200 3350 2    50   Input ~ 0
-PA5
-Wire Wire Line
-	7200 3350 6950 3350
-Text GLabel 7200 3450 2    50   Input ~ 0
-PA6
-Wire Wire Line
-	7200 3450 6950 3450
-Text GLabel 7200 3550 2    50   Input ~ 0
-PD14
-Wire Wire Line
-	7200 3550 6950 3550
-Text GLabel 7200 3650 2    50   Input ~ 0
-PD15
-Wire Wire Line
-	7200 3650 6950 3650
 Text GLabel 7200 3750 2    50   Input ~ 0
 GND
 Wire Wire Line
-	7200 3750 6950 3750
+	7200 3350 6950 3350
 Wire Wire Line
-	7200 3050 6950 3050
-Text GLabel 7200 3050 2    50   Input ~ 0
+	7200 2450 6950 2450
+Text GLabel 7200 2450 2    50   Input ~ 0
 PD2
-$Comp
-L Connector:Screw_Terminal_01x04 J10
-U 1 1 60F94F13
-P 1950 4200
-F 0 "J10" H 1868 3867 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 2030 4101 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 4200 50  0001 C CNN
-F 3 "~" H 1950 4200 50  0001 C CNN
-	1    1950 4200
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 3500 0    50   Input ~ 0
-PE6
 Wire Wire Line
-	1500 3500 1750 3500
-Text GLabel 1500 3700 0    50   Input ~ 0
+	2100 3000 2350 3000
+Text GLabel 2100 2800 0    50   Input ~ 0
 PE3
 Wire Wire Line
-	1500 3700 1750 3700
-Text GLabel 1500 3600 0    50   Input ~ 0
+	2100 2800 2350 2800
+Text GLabel 2100 2900 0    50   Input ~ 0
 PF0
 Wire Wire Line
-	1500 3600 1750 3600
-Text GLabel 1500 3800 0    50   Input ~ 0
+	2100 2900 2350 2900
+Text GLabel 2100 2700 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1500 3800 1750 3800
-$Comp
-L Connector:Screw_Terminal_01x04 J9
-U 1 1 60F94F21
-P 1950 3800
-F 0 "J9" H 1868 3467 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 2030 3701 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 3800 50  0001 C CNN
-F 3 "~" H 1950 3800 50  0001 C CNN
-	1    1950 3800
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 3900 0    50   Input ~ 0
+	2100 2700 2350 2700
+Text GLabel 2100 2600 0    50   Input ~ 0
 PF8
 Wire Wire Line
-	1500 3900 1750 3900
-Text GLabel 1500 4000 0    50   Input ~ 0
+	2100 2600 2350 2600
+Text GLabel 2100 3500 0    50   Input ~ 0
 PD0
 Wire Wire Line
-	1500 4000 1750 4000
-Text GLabel 1500 4100 0    50   Input ~ 0
+	2100 3500 2350 3500
+Text GLabel 2100 3400 0    50   Input ~ 0
 PF7
 Wire Wire Line
-	1500 4100 1750 4100
-Text GLabel 1500 4200 0    50   Input ~ 0
+	2100 3400 2350 3400
+Text GLabel 2100 3300 0    50   Input ~ 0
 PD1
 Wire Wire Line
-	1500 4200 1750 4200
-$Comp
-L Connector:Screw_Terminal_01x04 J8
-U 1 1 60F94F2F
-P 1950 3400
-F 0 "J8" H 1868 3067 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 2030 3301 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 1950 3400 50  0001 C CNN
-F 3 "~" H 1950 3400 50  0001 C CNN
-	1    1950 3400
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 4300 0    50   Input ~ 0
+	2100 3300 2350 3300
+Text GLabel 2100 3200 0    50   Input ~ 0
 PF9
 Wire Wire Line
-	1500 4300 1750 4300
-Text GLabel 1500 3200 0    50   Input ~ 0
-PF2
-Wire Wire Line
-	1500 3200 1750 3200
-Text GLabel 1500 3300 0    50   Input ~ 0
-PE5
-Wire Wire Line
-	1500 3300 1750 3300
-Text GLabel 1500 3400 0    50   Input ~ 0
-PF1
-Wire Wire Line
-	1500 3400 1750 3400
-$Comp
-L Connector:Screw_Terminal_01x02 J11
-U 1 1 60FA1358
-P 1950 4500
-F 0 "J11" H 1868 4167 50  0000 C CNN
-F 1 "Screw_Terminal_01x02" H 2030 4401 50  0001 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal" H 1950 4500 50  0001 C CNN
-F 3 "~" H 1950 4500 50  0001 C CNN
-	1    1950 4500
-	1    0    0    1   
-$EndComp
-Text GLabel 1500 4400 0    50   Input ~ 0
-PG0
-Wire Wire Line
-	1500 4400 1750 4400
-Text GLabel 1500 4500 0    50   Input ~ 0
+	2100 3200 2350 3200
+Text GLabel 2100 3100 0    50   Input ~ 0
 PG1
 Wire Wire Line
-	1500 4500 1750 4500
+	2100 3100 2350 3100
 $Comp
 L Device:C C_SLINHA1
 U 1 1 60FDE443
@@ -887,4 +706,219 @@ Text GLabel 8600 1400 3    50   Input ~ 0
 GND
 Text GLabel 8600 1100 1    50   Input ~ 0
 +5V
+Text GLabel 3300 2400 0    50   Input ~ 0
+PC12
+Text GLabel 3300 2300 0    50   Input ~ 0
+PC11
+Text GLabel 3300 2200 0    50   Input ~ 0
+PC10
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 60C38C10
+P 8300 3250
+F 0 "H1" H 8400 3296 50  0000 L CNN
+F 1 "MountingHole" H 8400 3205 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8300 3250 50  0001 C CNN
+F 3 "~" H 8300 3250 50  0001 C CNN
+	1    8300 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 60C3974C
+P 8300 3500
+F 0 "H2" H 8400 3546 50  0000 L CNN
+F 1 "MountingHole" H 8400 3455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 8300 3500 50  0001 C CNN
+F 3 "~" H 8300 3500 50  0001 C CNN
+	1    8300 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 60C3ACD3
+P 9100 3250
+F 0 "H3" H 9200 3296 50  0000 L CNN
+F 1 "MountingHole" H 9200 3205 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 9100 3250 50  0001 C CNN
+F 3 "~" H 9100 3250 50  0001 C CNN
+	1    9100 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 60C3ACD9
+P 9100 3500
+F 0 "H4" H 9200 3546 50  0000 L CNN
+F 1 "MountingHole" H 9200 3455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.5mm" H 9100 3500 50  0001 C CNN
+F 3 "~" H 9100 3500 50  0001 C CNN
+	1    9100 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J1
+U 1 1 60C46F03
+P 2550 1300
+F 0 "J1" H 2630 1246 50  0000 L CNN
+F 1 "Screw_Terminal_01x05" H 2630 1201 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 2550 1300 50  0001 C CNN
+F 3 "" H 2550 1300 50  0001 C CNN
+	1    2550 1300
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J2
+U 1 1 60C6AD94
+P 2550 1800
+F 0 "J2" H 2630 1746 50  0000 L CNN
+F 1 "Screw_Terminal_01x05" H 2630 1701 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 2550 1800 50  0001 C CNN
+F 3 "" H 2550 1800 50  0001 C CNN
+	1    2550 1800
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J3
+U 1 1 60C8E111
+P 2550 2300
+F 0 "J3" H 2630 2246 50  0000 L CNN
+F 1 "Screw_Terminal_01x05" H 2630 2201 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 2550 2300 50  0001 C CNN
+F 3 "" H 2550 2300 50  0001 C CNN
+	1    2550 2300
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	2100 2100 2350 2100
+Wire Wire Line
+	2100 2200 2350 2200
+Wire Wire Line
+	2100 2300 2350 2300
+Wire Wire Line
+	2100 2400 2350 2400
+Wire Wire Line
+	2100 2500 2350 2500
+Text GLabel 2100 2100 0    50   Input ~ 0
+PF1
+Text GLabel 2100 2200 0    50   Input ~ 0
+PE5
+Text GLabel 2100 2300 0    50   Input ~ 0
+PF2
+Text GLabel 2100 3000 0    50   Input ~ 0
+PE6
+Text GLabel 2100 2400 0    50   Input ~ 0
+PA7
+Text GLabel 2100 2500 0    50   Input ~ 0
+PF10
+$Comp
+L Connector:Screw_Terminal_01x05 J4
+U 1 1 60CCA5B9
+P 2550 2800
+F 0 "J4" H 2630 2746 50  0000 L CNN
+F 1 "Screw_Terminal_01x05" H 2630 2701 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 2550 2800 50  0001 C CNN
+F 3 "" H 2550 2800 50  0001 C CNN
+	1    2550 2800
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J5
+U 1 1 60CEE5D3
+P 2550 3300
+F 0 "J5" H 2630 3246 50  0000 L CNN
+F 1 "Screw_Terminal_01x05" H 2630 3201 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 2550 3300 50  0001 C CNN
+F 3 "" H 2550 3300 50  0001 C CNN
+	1    2550 3300
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J6
+U 1 1 60D7AC81
+P 6750 2050
+F 0 "J6" H 6668 1717 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 6830 1951 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 6750 2050 50  0001 C CNN
+F 3 "~" H 6750 2050 50  0001 C CNN
+	1    6750 2050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J7
+U 1 1 60D9D871
+P 6750 2550
+F 0 "J7" H 6668 2217 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 6830 2451 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 6750 2550 50  0001 C CNN
+F 3 "~" H 6750 2550 50  0001 C CNN
+	1    6750 2550
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J8
+U 1 1 60DE079A
+P 6750 3050
+F 0 "J8" H 6668 2717 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 6830 2951 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 6750 3050 50  0001 C CNN
+F 3 "~" H 6750 3050 50  0001 C CNN
+	1    6750 3050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 J9
+U 1 1 60E0381A
+P 6750 3550
+F 0 "J9" H 6668 3217 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 6830 3451 50  0001 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal" H 6750 3550 50  0001 C CNN
+F 3 "~" H 6750 3550 50  0001 C CNN
+	1    6750 3550
+	-1   0    0    -1  
+$EndComp
+Text GLabel 7200 3650 2    50   Input ~ 0
+PE10
+Wire Wire Line
+	7200 3450 6950 3450
+Text GLabel 7200 3550 2    50   Input ~ 0
+PE12
+Wire Wire Line
+	7200 3550 6950 3550
+Text GLabel 7200 3450 2    50   Input ~ 0
+PE14
+Wire Wire Line
+	7200 3650 6950 3650
+Text GLabel 7200 3350 2    50   Input ~ 0
+PE15
+Wire Wire Line
+	7200 3750 6950 3750
+Wire Wire Line
+	2100 1600 2350 1600
+Text GLabel 2100 1600 0    50   Input ~ 0
+PF5
+Wire Wire Line
+	2100 1700 2350 1700
+Text GLabel 2100 1700 0    50   Input ~ 0
+PF3
+Wire Wire Line
+	2100 1800 2350 1800
+Text GLabel 2100 1800 0    50   Input ~ 0
+PC3
+Wire Wire Line
+	2100 1900 2350 1900
+Text GLabel 2100 1900 0    50   Input ~ 0
+PC0
+Wire Wire Line
+	2100 2000 2350 2000
+Text GLabel 2100 2000 0    50   Input ~ 0
++3V3
+Text GLabel 7200 2850 2    50   Input ~ 0
+PD15
+Text GLabel 7200 2950 2    50   Input ~ 0
+PD14
+Text GLabel 7200 3050 2    50   Input ~ 0
+PA6
+Text GLabel 7200 3150 2    50   Input ~ 0
+PA5
 $EndSCHEMATC
