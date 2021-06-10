@@ -24,13 +24,8 @@ FSM states
 /******************************************************************************
 FSM Private Defines
 ******************************************************************************/
-//#define OBS_TIM
-
 // defines robot speed when using RFID reader
 #define RD_RFID_SPEED 0.6
-
-// defines speed of rotation
-#define ROTATE_SPEED 0.6
 
 /******************************************************************************
 FSM current state pointer

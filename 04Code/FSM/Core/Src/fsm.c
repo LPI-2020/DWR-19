@@ -153,6 +153,7 @@ State Read RFID
 ******************************************************************************/
 uint8_t read_RFID(void)
 {
+	// RFID status reading
 	int status;
 
 	uint8_t CardID[4];
@@ -183,6 +184,7 @@ static void s_rd_rfid(void)
 
 	// start movement
 	move_forward(RD_RFID_SPEED);
+
 	// wait for RFID read or 'read_rfid_timeout'
 	err = read_RFID();
 	// stop movement
@@ -212,18 +214,14 @@ State Rotate
 ******************************************************************************/
 static void s_rotate(void)
 {
-//	uint8_t turn_cmplt = 0;
-	// rotate to 'next_move_dir' with speed ROTATE_SPEED
-	move_rotate(next_move_dir, ROTATE_SPEED);
+	uint8_t rotate_err;
 
-	// if rotate RIGHT, stop rotate when right sensor is over the line.
-	// if rotate LEFT, stop rotate when left sensor is over the line.
+	// rotate to direction 'next_move_dir'
+	rotate_err = lfollower_rotate(next_move_dir);
 
-	//while(!rotate_timeout && !turn_cmplt)
-	//	turn_cmplt = lf_rotate(next_move_dir);
-
-	if(rotate_timeout)
-		// rotate not successfull
+	// rotate was returned error? (Due to timeout)
+	if(rotate_err)
+		// rotate was not successfull
 		nstate = S_ERROR;
 	else
 	{

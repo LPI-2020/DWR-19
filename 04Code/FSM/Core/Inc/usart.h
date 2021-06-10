@@ -28,20 +28,41 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
+#define RX_BUFF_LEN 16
+#define TX_BUFF_LEN 128
 
+#define NEW_LINE		0x0D
+
+extern char Rx_Buffer[RX_BUFF_LEN];
+extern volatile uint8_t Rx_index;
+
+extern volatile uint8_t Rx_flag;
+//extern volatile uint8_t Tx_flag = 0;
+extern volatile uint8_t cmd_received;
+
+extern volatile uint8_t print_msg_flag;
+extern char message[TX_BUFF_LEN];
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(void);
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+
+extern void Rx_UART_init(void);
+extern char UART_Receive(void);
+
+extern void UART_puts(const char *s);
+extern void UART_putchar(char c);
 
 /* USER CODE END Prototypes */
 

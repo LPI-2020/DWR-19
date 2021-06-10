@@ -26,7 +26,6 @@
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
-ADC_HandleTypeDef hadc2;
 ADC_HandleTypeDef hadc3;
 DMA_HandleTypeDef hdma_adc1;
 DMA_HandleTypeDef hdma_adc3;
@@ -64,7 +63,7 @@ void MX_ADC1_Init(void)
   }
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
-  sConfig.Channel = ADC_CHANNEL_10;
+  sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -82,51 +81,6 @@ void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
-
-}
-/* ADC2 init function */
-void MX_ADC2_Init(void)
-{
-
-  /* USER CODE BEGIN ADC2_Init 0 */
-
-  /* USER CODE END ADC2_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC2_Init 1 */
-
-  /* USER CODE END ADC2_Init 1 */
-  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-  */
-  hadc2.Instance = ADC2;
-  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
-  hadc2.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc2.Init.ContinuousConvMode = ENABLE;
-  hadc2.Init.DiscontinuousConvMode = DISABLE;
-  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-  hadc2.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_CC4;
-  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc2.Init.NbrOfConversion = 1;
-  hadc2.Init.DMAContinuousRequests = DISABLE;
-  hadc2.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  if (HAL_ADC_Init(&hadc2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-  */
-  sConfig.Channel = ADC_CHANNEL_3;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC2_Init 2 */
-
-  /* USER CODE END ADC2_Init 2 */
 
 }
 /* ADC3 init function */
@@ -215,6 +169,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN10
+    PA3     ------> ADC1_IN3
     PA7     ------> ADC1_IN7
     */
     GPIO_InitStruct.Pin = SENSOR1_Pin;
@@ -222,10 +177,10 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(SENSOR1_GPIO_Port, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = SENSOR8_Pin;
+    GPIO_InitStruct.Pin = SENSOR1A3_Pin|SENSOR8_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(SENSOR8_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* ADC1 DMA Init */
     /* ADC1 Init */
@@ -252,30 +207,6 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
   /* USER CODE END ADC1_MspInit 1 */
-  }
-  else if(adcHandle->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspInit 0 */
-
-  /* USER CODE END ADC2_MspInit 0 */
-    /* ADC2 clock enable */
-    __HAL_RCC_ADC2_CLK_ENABLE();
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC2 GPIO Configuration
-    PA3     ------> ADC2_IN3
-    */
-    GPIO_InitStruct.Pin = OBS_DETECTOR_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(OBS_DETECTOR_GPIO_Port, &GPIO_InitStruct);
-
-    /* ADC2 interrupt Init */
-    HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(ADC_IRQn);
-  /* USER CODE BEGIN ADC2_MspInit 1 */
-
-  /* USER CODE END ADC2_MspInit 1 */
   }
   else if(adcHandle->Instance==ADC3)
   {
@@ -310,9 +241,9 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    hdma_adc3.Init.Mode = DMA_NORMAL;
+    hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_adc3.Init.Mode = DMA_CIRCULAR;
     hdma_adc3.Init.Priority = DMA_PRIORITY_LOW;
     hdma_adc3.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
@@ -344,11 +275,12 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN10
+    PA3     ------> ADC1_IN3
     PA7     ------> ADC1_IN7
     */
     HAL_GPIO_DeInit(SENSOR1_GPIO_Port, SENSOR1_Pin);
 
-    HAL_GPIO_DeInit(SENSOR8_GPIO_Port, SENSOR8_Pin);
+    HAL_GPIO_DeInit(GPIOA, SENSOR1A3_Pin|SENSOR8_Pin);
 
     /* ADC1 DMA DeInit */
     HAL_DMA_DeInit(adcHandle->DMA_Handle);
@@ -365,32 +297,6 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
   /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
   /* USER CODE END ADC1_MspDeInit 1 */
-  }
-  else if(adcHandle->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspDeInit 0 */
-
-  /* USER CODE END ADC2_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_ADC2_CLK_DISABLE();
-
-    /**ADC2 GPIO Configuration
-    PA3     ------> ADC2_IN3
-    */
-    HAL_GPIO_DeInit(OBS_DETECTOR_GPIO_Port, OBS_DETECTOR_Pin);
-
-    /* ADC2 interrupt Deinit */
-  /* USER CODE BEGIN ADC2:ADC_IRQn disable */
-    /**
-    * Uncomment the line below to disable the "ADC_IRQn" interrupt
-    * Be aware, disabling shared interrupt may affect other IPs
-    */
-    /* HAL_NVIC_DisableIRQ(ADC_IRQn); */
-  /* USER CODE END ADC2:ADC_IRQn disable */
-
-  /* USER CODE BEGIN ADC2_MspDeInit 1 */
-
-  /* USER CODE END ADC2_MspDeInit 1 */
   }
   else if(adcHandle->Instance==ADC3)
   {

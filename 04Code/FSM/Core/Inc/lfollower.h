@@ -35,12 +35,7 @@ uint8_t lfollower_rotate(move_dir_e dir);
 /******************************************************************************
 Debug Functions
 ******************************************************************************/
-#ifdef _DEBUG_
-#include "usart.h"
-#include <stdio.h>
-
 // print line follower sensors values
 void lfollower_print_sens(void);
-#endif // !_DEBUG_
 
 #endif // !__LFOLLOWER_H__

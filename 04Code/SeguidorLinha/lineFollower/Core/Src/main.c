@@ -106,7 +106,7 @@ int main(void)
 
   // inits motors, PID and DMA to sensors
   //lfollower_start();
-
+  lfollower_start();
    while (1)
   {
 	   //lfollower_start();
@@ -123,9 +123,9 @@ int main(void)
 
 	   //lfollower_stop();
 
-	   test_lfollower(MOVE_RIGHT);
+	   //test_lfollower(MOVE_RIGHT);
 
-	  break;
+	  //break;
 
     /* USER CODE END WHILE */
 

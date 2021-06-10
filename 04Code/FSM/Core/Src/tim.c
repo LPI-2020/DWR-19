@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "lfollower.h"
+#include "stop_sensors.h"
 
 uint8_t num_timeout_2sec = 0;
 
@@ -392,11 +393,41 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc)
 	__HAL_TIM_SET_COMPARE(htim, channel, dc);
 }
 
+// start counting Timeouts
+void timeout_start(void)
+{
+	// reset number of 2second Timeouts
+	num_timeout_2sec = 0;
+
+	// start timeout Timer
+	HAL_TIM_Base_Start_IT(&TIM_TIMEOUTS);
+}
+
+// stop counting Timeouts
+void timeout_stop(void)
+{
+	// stop Rotate_Timeout
+	HAL_TIM_Base_Stop_IT(&TIM_TIMEOUTS);
+}
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	if(htim == &htim6)
-	{
+	{// enters every 10ms
+
+		// line follower PID
 		lfollower_pid();
+
+		// stop detector ISR
+		//isr_stop_detector();
+	}
+	else if(htim == &TIM_TIMEOUTS)
+	{// enters every 2sec
+
+		// count 2sec cycle
+		num_timeout_2sec++;
+		// toggle LED GREEN
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
 	}
 }
 /* USER CODE END 1 */

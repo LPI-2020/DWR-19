@@ -29,6 +29,8 @@ Motor Kill
 void motor_kill(motor_st *m)
 {
 	HAL_TIM_PWM_Stop(&PWM_TIM_INSTANCE, m->pwm_channel);
+	// disable IN pins
+	motor_control(m,  0, MOTOR_STOP);
 }
 
 /******************************************************************************
