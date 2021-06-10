@@ -32,6 +32,7 @@
 /* USER CODE END 1 */
 
 /** Configure pins
+     PC0   ------> ADCx_IN10
 */
 void MX_GPIO_Init(void)
 {
@@ -56,6 +57,12 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI3_RSET_GPIO_Port, SPI3_RSET_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = SENSOR1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SENSOR1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PAPin PAPin */
   GPIO_InitStruct.Pin = IN2_RIGHT_Pin|IN1_LEFT_Pin;

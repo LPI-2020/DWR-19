@@ -8,7 +8,7 @@ QTR Peripherals
 ******************************************************************************/
 #include "adc.h"
 // ADC-DMA that stores QTR sensor values
-#define ADC_QTR_DMA		(hadc1)
+#define ADC_QTR_DMA		(hadc3)
 
 /******************************************************************************
 QTR struct

@@ -39,11 +39,8 @@ Test lineFollower module
 ******************************************************************************/
 void test_print_qtr(void)
 {
-	while(1)
-	{
-		lfollower_print_sens();
-		HAL_Delay(300);
-	}
+	lfollower_print_sens();
+	HAL_Delay(300);
 }
 
 void test_lfollower_rotate(move_dir_e dir)
@@ -60,20 +57,15 @@ void test_lfollower_rotate(move_dir_e dir)
 /******************************************************************************
 Test stop sensors module
 ******************************************************************************/
-void test_stop_sensor(void)
+void test_stop_sensor(uint8_t val)
 {
-	// init stop sensors
-	//stop_sensors_init();
+	uint8_t err = 0;
 
-	// start moving forwards
-	move_forward(0.7);
-
-	// wait for extern interrupt
-	//while((!cross_found_flag) && (!room_found_flag))
-	//	;
+	while(err != val)
+		err = lfollower_control();
 
 	// stop movement
-	move_stop();
+	lfollower_stop();
 }
 
 /******************************************************************************
@@ -83,7 +75,9 @@ void test_modules(void)
 {
 	//test_move(0.7);
 	//test_lfollower_rotate(MOVE_RIGHT);
-	test_print_qtr();
-
+	//test_print_qtr();
 	//lfollower_start();
+
+	test_stop_sensor(E_ROOM_FOUND);
+	//test_stop_sensor(E_CROSS_FOUND);
 }
