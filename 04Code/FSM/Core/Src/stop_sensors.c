@@ -4,7 +4,6 @@
  *  Created on: May 5, 2021
  */
 #include "stop_sensors.h"
-#include "auxiliares.h"
 
 /******************************************************************************
 Define Test symbol
@@ -20,6 +19,10 @@ Stop Sensors Flags
 ******************************************************************************/
 // Obstacle Found Flag
 uint8_t obs_found_flag = 0;
+// Cross Found Flag
+uint8_t cross_found_flag = 0;
+// Room Found Flag
+uint8_t room_found_flag = 0;
 
 /******************************************************************************
 Obstacle Detector
@@ -76,25 +79,32 @@ void isr_obs_detector(void)
 #endif // !_DEBUG_
 }
 
-// Cross Found Flag
-//uint8_t cross_found_flag = 0;
-// Room Found Flag
-//uint8_t room_found_flag = 0;
 /******************************************************************************
-Stop mark Detector
+Cross Detector
+
+@brief 	Detects a cross if both sensors, SENSOR_R and SENSOR_L are over the line.
+		i.e, at logical state HIGH (GET_SENS_LOGVAL(SENSOR_x) == 1)
+@param	none
+@retval	Cross found flag
 ******************************************************************************/
-//void stop_detector_init(void)
-//{
-//	// start sampling stop sensors values
-////	HAL_TIM_Base_Start_IT(&STOP_DETECTOR_TIM);
-//	// start storing stop sensors values
-//	HAL_ADC_Start_DMA(&STOP_DETECTOR_ADC, st_sens, ST_SENS_NUM);
-//}
-//
-//void stop_detector_deInit(void)
-//{
-//	// stop storing stop sensors values
-//	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
-//	// stop sampling stop sensors values
-////	HAL_TIM_Base_Stop_IT(&STOP_DETECTOR_TIM);
-//}
+uint8_t cross_detector(void)
+{
+	// check if both sensors are above the line, at logical state HIGH
+	return (cross_found_flag = ((GET_SENS_LOGVAL(SENSOR_R) == 1) &&
+			(GET_SENS_LOGVAL(SENSOR_L) == 1)));
+}
+
+/******************************************************************************
+Cross Detector
+
+@brief 	Detects a room if only SENSOR_R is above the line, logical state HIGH
+		with SENSOR_L at logical state LOW.
+@param	none
+@retval	Room found flag
+******************************************************************************/
+uint8_t room_detector(void)
+{
+	// check if SENSOR_R is over the line (logical state HIGH) and SENSOR_L isnt.
+	return (room_found_flag = ((GET_SENS_LOGVAL(SENSOR_R) == 1) &&
+			(GET_SENS_LOGVAL(SENSOR_L) == 0)));
+}

@@ -57,7 +57,7 @@ void lfollower_start(void)
 	// start storing QTR Sensor values
 	qtr_init();
 	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_LFOLLOWER_PID);
+	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
 
 	// start movement
 	move_start();
@@ -81,7 +81,7 @@ void lfollower_stop(void)
 	// stop storing QTR sensor values
 	qtr_kill();
 	// stop sampling for PID application
-	HAL_TIM_Base_Stop_IT(&TIM_LFOLLOWER_PID);
+	HAL_TIM_Base_Stop_IT(&TIM_LF_PID);
 
 	// stop movement
 	move_stop();
@@ -133,8 +133,8 @@ void lfollower_pid(void)
 
 	// Apply PID to adjust motor PWM/velocity
 	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[SENSOR6]),
-						DIG_TO_ANALOG(qtr_sens[SENSOR3]));
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
+						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
 
 	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
 }
@@ -163,8 +163,8 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// dir is now 0 or 2
 	dir >>= 1;
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
-	// so, if: 	dir = 0 -> SENSOR1
-	//			dir = 1 -> SENSOR8
+	// so, if: 	dir = 0 					-> SENSOR1
+	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8
 	while(GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) && (num_timeout_2sec < TIMEOUT_4SEC))
 		;
 
@@ -196,10 +196,10 @@ uint8_t lfollower_control(void)
 		// start line follower
 		lfollower_start();
 
-	if(CROSS_DETECTED() == 1)
+	if(cross_detector() == 1)
 		// cross detected
 		err = E_CROSS_FOUND;
-	else if(ROOM_DETECTED() == 1)
+	else if(room_detector() == 1)
 		// room detected
 		err = E_ROOM_FOUND;
 	else if(obs_found_flag == 1)
@@ -226,6 +226,7 @@ void lfollower_print_sens(void)
 {
 	char str[32];
 
+	// enable QTR readings
 	qtr_init();
 
 	snprintf(str, sizeof(str), "S1[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR1]));
@@ -246,5 +247,6 @@ void lfollower_print_sens(void)
 	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR8]));
 	UART_puts(str);
 
+	// stop QTR readings
 	qtr_kill();
 }
