@@ -105,7 +105,7 @@ void TM_MFRC522_WriteRegister(uint8_t addr, uint8_t val) {
 
 uint8_t TM_MFRC522_ReadRegister(uint8_t addr) {
 	uint8_t val = 0x00;
-	uint8_t retval = 0x00;
+	//uint8_t retval = 0x00;
 	//CS low
 	TM_MFRC522_CS_Write(GPIO_PIN_RESET);
 
@@ -350,7 +350,7 @@ TM_MFRC522_Status_t TM_MFRC522_CalculateCRC(uint8_t*  pIndata, uint8_t len, uint
 TM_MFRC522_Status_t TM_MFRC522_SelectTag(uint8_t* serNum, uint8_t* type) {
 	uint8_t i;
 	TM_MFRC522_Status_t status;
-	uint8_t size;
+//	uint8_t size;
 	uint16_t recvBits;
 	uint8_t buffer[9];
 	uint8_t sak[3] = {0};
@@ -369,11 +369,11 @@ TM_MFRC522_Status_t TM_MFRC522_SelectTag(uint8_t* serNum, uint8_t* type) {
 
 	status = TM_MFRC522_ToCard(PCD_TRANSCEIVE, buffer, 9, sak, &recvBits);
 
-	if ((status == MI_OK) && (recvBits == 0x18)) {
-		size = buffer[0];
-	} else {
-		size = 0;
-	}
+//	if ((status == MI_OK) && (recvBits == 0x18)) {
+//		size = buffer[0];
+//	} else {
+//		size = 0;
+//	}
 
 	if (recvBits != 24) { // SAK must be exactly 24 bits (1 byte + CRC_A).
 		return MI_ERR;

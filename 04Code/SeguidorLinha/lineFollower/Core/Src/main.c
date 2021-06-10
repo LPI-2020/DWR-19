@@ -96,6 +96,7 @@ int main(void)
   MX_TIM3_Init();
   MX_USART3_UART_Init();
   MX_ADC3_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -104,15 +105,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   // inits motors, PID and DMA to sensors
-  lfollower_start();
+  //lfollower_start();
 
    while (1)
   {
-	   lfollower_start();
+	   //lfollower_start();
 	   //move_forward(0.7);
 
 		//  ------ test move module ------
-		// test_move(0.7);
+		//test_move(0.9);
 		// test saturation
 		// test_move(-1);
 
@@ -120,9 +121,11 @@ int main(void)
 	  //lfollower_pid();
 	  //HAL_Delay(1000);
 
-	  //lfollower_stop();
+	   //lfollower_stop();
 
-	  //break;
+	   test_lfollower(MOVE_RIGHT);
+
+	  break;
 
     /* USER CODE END WHILE */
 

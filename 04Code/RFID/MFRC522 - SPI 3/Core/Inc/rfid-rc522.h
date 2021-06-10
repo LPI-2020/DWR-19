@@ -224,4 +224,32 @@ extern void bin_to_strhex(unsigned char *bin, unsigned int binsz, char **result)
 //#define SPI_IS_BUSY(SPIx) (((SPIx)->SR & (SPI_SR_TXE | SPI_SR_RXNE)) == 0 || ((SPIx)->SR & SPI_SR_BSY))
 //#define SPI_WAIT(SPIx)            while (SPI_IS_BUSY(SPIx))
 
+/* Definition for SPIx clock resources */
+#define SPIx                             SPI3
+#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI3_CLK_ENABLE()
+#define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
+#define SPIx_NSS_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
+#define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE()
+#define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE()
+#define SPIx_CS_GPIO_CLK_ENABLE()                __HAL_RCC_GPIOF_CLK_ENABLE()
+
+#define SPIx_FORCE_RESET()               __HAL_RCC_SPI3_FORCE_RESET()
+#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI3_RELEASE_RESET()
+
+/* Definition for SPIx Pins */
+#define SPIx_SCK_PIN                     GPIO_PIN_10 // A5 -> PC10
+#define SPIx_SCK_GPIO_PORT               GPIOC
+#define SPIx_SCK_AF                      GPIO_AF6_SPI3
+#define SPIx_MISO_PIN                    GPIO_PIN_11 // A6 -> PC11
+#define SPIx_MISO_GPIO_PORT              GPIOC
+#define SPIx_MISO_AF                     GPIO_AF6_SPI3
+#define SPIx_MOSI_PIN                    GPIO_PIN_12 // A7 -> PC12
+#define SPIx_MOSI_GPIO_PORT              GPIOC
+#define SPIx_MOSI_AF                     GPIO_AF6_SPI3
+#define SPIx_NSS_PIN                                         GPIO_PIN_11 // A11
+#define SPIx_NSS_GPIO_PORT                           GPIOA
+#define SPIx_NSS_AF                                          GPIO_AF5_SPI1
+#define SPIx_CS_PIN                      GPIO_PIN_1 // F1
+#define SPIx_CS_GPIO_PORT                GPIOF
+
 #endif

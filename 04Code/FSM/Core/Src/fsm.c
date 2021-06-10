@@ -9,13 +9,13 @@
 
 #include "fsm.h"
 
-#include "../../../StopSensors/Core/Inc/stop_sensors.h"
+#include "stop_sensors.h"
 
-#include "../../../SeguidorLinha/lineFollower/Core/Inc/lfollower.h"
-#include "../../../SeguidorLinha/lineFollower/Core/Inc/move.h"
+#include "lfollower.h"
+#include "move.h"
 
 //#include "spi.h"
-#include "../../../RFID/MFRC522 - SPI 3/Core/Inc/rfid-rc522.h"
+#include "rfid-rc522.h"
 
 
 /******************************************************************************
@@ -212,15 +212,15 @@ State Rotate
 ******************************************************************************/
 static void s_rotate(void)
 {
-	uint8_t turn_cmplt = 0;
+//	uint8_t turn_cmplt = 0;
 	// rotate to 'next_move_dir' with speed ROTATE_SPEED
 	move_rotate(next_move_dir, ROTATE_SPEED);
 
 	// if rotate RIGHT, stop rotate when right sensor is over the line.
 	// if rotate LEFT, stop rotate when left sensor is over the line.
 
-	while(!rotate_timeout && !turn_cmplt)
-		turn_cmplt = lf_rotate(next_move_dir);
+	//while(!rotate_timeout && !turn_cmplt)
+	//	turn_cmplt = lf_rotate(next_move_dir);
 
 	if(rotate_timeout)
 		// rotate not successfull

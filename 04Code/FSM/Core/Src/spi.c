@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 
+SPI_HandleTypeDef hspi1;
+
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi3;

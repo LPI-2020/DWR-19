@@ -1,0 +1,30 @@
+--------------- TIMERS ---------------
+TIM3 -	Obstacle detector ADC trigger
+	(Timebase 0.5s)
+	(Symbol OBS_DETECTOR_TIM at stop_sensors.h)
+
+TIM4 -	PWM Generator
+
+TIM6 -	Sampling Period PID  _AND_ Debounce
+	(Timebase 10ms)
+	(Symbol TIM_LF_SENS_PID at lfollower.h)
+
+TIM7 -	Timeout Timer
+	(Timebase 2sec)
+	(Symbol TIM_TIMEOUTS at tim.h)
+
+--------------- ADCs ---------------
+ADC1 -	Stop Sensors S1, S8
+ADC2 -	Obstacle Detector
+ADC3 -	Line Follower Sensors S3, S4, S5, S6
+
+---------------
+SP3  -	SPI interface to RFID
+
+---------------
+USART1	Bluetooth Interface
+USART3	PC-Terminal Interface (Debug)
+
+--------------- GPIO ---------------
+IN1, IN2	Output to Motors Driver
+USER_BTN	User button
