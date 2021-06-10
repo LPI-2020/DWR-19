@@ -40,159 +40,10 @@ Define Move Speeds (from 0 to 1)
 *******************************************************************************
 Define Type of Speed Calculus
 ******************************************************************************/
-#define _CALC_SPEED1_
-/*****************************************************************************/
-
-// calculate speed no.1
-#ifdef _CALC_SPEED1_
-
-	#define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
-
-#endif // !_CALC_SPEED1_
-// calculate speed no.2 - with extra speed on the straights
-#ifdef _CALC_SPEED2_
-
-	#define GET_SPEED(_u_, _extra_) (FORWARD_SPEED * (1 - (_extra_)) +			\
-									(_u_)*(1 - FORWARD_SPEED*(1 - (_extra_))))
-
-#endif // !_CALC_SPEED2_
-// calculate speed no.3 - with extra speed on the straights
-#ifdef _CALC_SPEED3_
-
-	#define GET_SPEED_P(_u_, _extra_) (FORWARD_SPEED + (1 - FORWARD_SPEED) * 	\
-									(1 - fabs(_extra_)) + (1 - FORWARD_SPEED -	\
-									(1 - FORWARD_SPEED)*(1 - fabs(_extra_)))*	\
-									(_u_))
-
-#endif // !_CALC_SPEED3_
+#define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
 
 // line follower status (enabled 1 or disabled 0)
 uint8_t lfollower_status = 0;
-
-/******************************************************************************
-Define PID parameters to be used
-******************************************************************************/
-#define KP (float) (1.05)
-#define KI (float) (0.35)
-#define KD (float) (0.013)
-
-static pid_st pid = {
-	.kp_h 		= KP,
-	.ki_h 		= KI * TIMER6_PERIOD,
-	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
-
-	.error 		= 0,
-	.prev_error = 0,
-	.sum_errors = 0,
-
-	.u_d 		= 0,
-	.prev_u_d 	= 0,
-
-	.u			= 0,
-	.u_sat_a	= +1.0,
-	.u_sat_b	= -1.0
-};
-
-//static pid_st pid = {
-//	.y 			= 0,	// <----
-//	.prev_y 	= 0, 	// <------
-//	.kp_h 		= KP,
-//	.ki_h 		= KI * TIMER6_PERIOD,
-//	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
-//	.error 		= 0,
-//	.sum_errors = 0,
-//	.prev_error = 0,
-//	.u 			= 0,
-//	.u_d 		= 0,
-//	.prev_u_d 	= 0
-//};
-
-// Define array of LAST_ERRORS_SIZE elements, of pid->error
-#define LAST_ERRORS_SIZE (8)
-static float last_errors[LAST_ERRORS_SIZE] = {0};
-
-/******************************************************************************
-Line Follower PID
-
-@brief	Applies PID algorithm to obtain movement speed required to follow the
-		line.
-@param	none
-@retval	none
-******************************************************************************/
-void lfollower_pid(void)
-{
-	// is line follower disabled?
-	if(lfollower_status == 0)
-		return;
-
-	// Apply PID to adjust motor PWM/velocity
-	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[SENSOR6]),
-						DIG_TO_ANALOG(qtr_sens[SENSOR3]));
-
-#ifdef _DEBUG_
-//	sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-//	sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n",
-//							DIG_TO_ANALOG(lf_sens[SENSOR6]),
-//							DIG_TO_ANALOG(lf_sens[SENSOR3]));
-//	transmit_string(Tx_buffer);
-#endif // !_DEBUG_
-
-	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
-	// command var. LEFT is equal to (+pid.u)
-	// command var. RIGHT is equal to (-pid.u)
-#ifdef _CALC_SPEED1_
-	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-#endif // !_CALC_SPEED1_
-#ifdef _CALC_SPEED2_
-	static float mean_err;
-
-	// calculates mean of the last PID errors
-	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
-	move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
-#endif // !_CALC_SPEED2_
-}
-
-/******************************************************************************
-Line Follower Stop
-
-@brief 	Stops line follower process.
-@param	none
-@retval	none
-******************************************************************************/
-
-uint8_t lfollower_rotate(move_dir_e dir)
-{
-	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
-	move_rotate(dir, TURN_SPEED);
-
-	// start rotate_timeout
-	timeout_start();
-
-	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
-	// if dir == MOVE_LEFT, check when SENSOR8 is over the line
-
-	// dir can be -1 (MOVE_RIGHT) or +1 (MOVE_LEFT)
-	dir += 1;
-	// dir is now 0 or 2
-	dir >>= 1;
-	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
-	// so, if: 	dir = 0 -> SENSOR1
-	//			dir = 1 -> SENSOR8
-	while(GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) && (num_timeout_2sec < TIMEOUT_4SEC))
-		;
-
-	// stop Rotate_Timeout
-	timeout_stop();
-
-	// stop rotating
-	move_stop();
-
-	// if timeout didnt occurred then rotate was completed -> Return 0
-	// if timeout occured, then we must return an error code, signaling a
-	// non successful rotate -> return 1
-	return !(num_timeout_2sec < TIMEOUT_4SEC);
-}
 
 /******************************************************************************
 Line Follower Start
@@ -243,6 +94,128 @@ void lfollower_stop(void)
 }
 
 /******************************************************************************
+Line Follower PID
+
+@brief	Applies PID algorithm to obtain movement speed required to follow the
+		line.
+@param	none
+@retval	none
+******************************************************************************/
+/******************************************************************************
+Define PID parameters to be used
+******************************************************************************/
+#define KP (float) (1.05)
+#define KI (float) (0.35)
+#define KD (float) (0.013)
+
+static pid_st pid = {
+	.kp_h 		= KP,
+	.ki_h 		= KI * TIMER6_PERIOD,
+	.kd_h 		= KD * (1 - A_PID) / TIMER6_PERIOD,
+
+	.error 		= 0,
+	.prev_error = 0,
+	.sum_errors = 0,
+
+	.u_d 		= 0,
+	.prev_u_d 	= 0,
+
+	.u			= 0,
+	.u_sat_a	= +1.0,
+	.u_sat_b	= -1.0
+};
+
+void lfollower_pid(void)
+{
+	// is line follower disabled?
+	if(lfollower_status == 0)
+		return;
+
+	// Apply PID to adjust motor PWM/velocity
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[SENSOR6]),
+						DIG_TO_ANALOG(qtr_sens[SENSOR3]));
+
+	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+}
+
+/******************************************************************************
+Line Follower Stop
+
+@brief 	Stops line follower process.
+@param	none
+@retval	none
+******************************************************************************/
+
+uint8_t lfollower_rotate(move_dir_e dir)
+{
+	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
+	move_rotate(dir, TURN_SPEED);
+
+	// start rotate_timeout
+	timeout_start();
+
+	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
+	// if dir == MOVE_LEFT, check when SENSOR8 is over the line
+
+	// dir can be -1 (MOVE_RIGHT) or +1 (MOVE_LEFT)
+	dir += 1;
+	// dir is now 0 or 2
+	dir >>= 1;
+	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
+	// so, if: 	dir = 0 -> SENSOR1
+	//			dir = 1 -> SENSOR8
+	while(GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) && (num_timeout_2sec < TIMEOUT_4SEC))
+		;
+
+	// stop Rotate_Timeout
+	timeout_stop();
+
+	// stop rotating
+	move_stop();
+
+	// if timeout didnt occurred then rotate was completed -> Return 0
+	// if timeout occured, then we must return an error code, signaling a
+	// non successful rotate -> return 1
+	return !(num_timeout_2sec < TIMEOUT_4SEC);
+}
+
+/******************************************************************************
+Line Follower Control
+
+@brief
+@param	none
+@retval	none
+******************************************************************************/
+uint8_t lfollower_control(void)
+{
+	uint8_t err = EXIT_SUCCESS;
+
+	// line follower already started?
+	if(lfollower_status == 0)
+		// start line follower
+		lfollower_start();
+
+	if(CROSS_DETECTED() == 1)
+		// cross detected
+		err = E_CROSS_FOUND;
+	else if(ROOM_DETECTED() == 1)
+		// room detected
+		err = E_ROOM_FOUND;
+	else if(obs_found_flag == 1)
+		// obstacle found
+		err = E_OBS_FOUND;
+
+	// error found?
+	if(err)
+		// stop line follower
+		lfollower_stop();
+
+	// return error code
+	return err;
+}
+
+/******************************************************************************
 Debug Functions
 
 @brief 	Prints Line Follower Sensors Values
@@ -274,40 +247,4 @@ void lfollower_print_sens(void)
 	UART_puts(str);
 
 	qtr_kill();
-}
-
-/******************************************************************************
-Debug Functions
-
-@brief 	Prints Line Follower Sensors Values
-@param	none
-@retval	none
-******************************************************************************/
-
-uint8_t lfollower_control(void)
-{
-	uint8_t err = EXIT_SUCCESS;
-
-	// line follower already started?
-	if(lfollower_status == 0)
-		// start line follower
-		lfollower_start();
-
-	if(CROSS_DETECTED() == 1)
-		// cross detected
-		err = E_CROSS_FOUND;
-	else if(ROOM_DETECTED() == 1)
-		// room detected
-		err = E_ROOM_FOUND;
-	else if(obs_found_flag == 1)
-		// obstacle found
-		err = E_OBS_FOUND;
-
-	// error found?
-	if(err)
-		// stop line follower
-		lfollower_stop();
-
-	// return error code
-	return err;
 }

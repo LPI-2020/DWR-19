@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  00020234  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0001ecc3  00000000  00000000  00020262  2**0
+ 12 .debug_info   0001ec0c  00000000  00000000  00020262  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00004135  00000000  00000000  0003ef25  2**0
+ 13 .debug_abbrev 000040b2  00000000  00000000  0003ee6e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001488  00000000  00000000  00043060  2**3
+ 14 .debug_aranges 00001488  00000000  00000000  00042f20  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000012b0  00000000  00000000  000444e8  2**3
+ 15 .debug_ranges 000012b0  00000000  00000000  000443a8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002c630  00000000  00000000  00045798  2**0
+ 16 .debug_macro  0002c5ec  00000000  00000000  00045658  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001ad19  00000000  00000000  00071dc8  2**0
+ 17 .debug_line   0001acbf  00000000  00000000  00071c44  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0010644a  00000000  00000000  0008cae1  2**0
+ 18 .debug_str    001063bc  00000000  00000000  0008c903  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  00192f2b  2**0
+ 19 .comment      00000053  00000000  00000000  00192cbf  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000061cc  00000000  00000000  00192f80  2**2
+ 20 .debug_frame  000061d0  00000000  00000000  00192d14  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1343,10 +1343,10 @@ void MX_GPIO_Init(void)
  8000b9c:	00000000 	.word	0x00000000
 
 08000ba0 <lfollower_pid>:
-		line.
-@param	none
-@retval	none
-******************************************************************************/
+	.u_sat_a	= +1.0,
+	.u_sat_b	= -1.0
+};
+
 void lfollower_pid(void)
 {
  8000ba0:	b580      	push	{r7, lr}
@@ -1387,10 +1387,6 @@ void lfollower_pid(void)
  8000bf4:	4818      	ldr	r0, [pc, #96]	; (8000c58 <lfollower_pid+0xb8>)
  8000bf6:	f000 fa7d 	bl	80010f4 <pid_calcule>
 
-	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
-	// command var. LEFT is equal to (+pid.u)
-	// command var. RIGHT is equal to (-pid.u)
-#ifdef _CALC_SPEED1_
 	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
  8000bfa:	4b17      	ldr	r3, [pc, #92]	; (8000c58 <lfollower_pid+0xb8>)
  8000bfc:	edd3 7a09 	vldr	s15, [r3, #36]	; 0x24
@@ -1411,11 +1407,6 @@ void lfollower_pid(void)
  8000c36:	e000      	b.n	8000c3a <lfollower_pid+0x9a>
 		return;
  8000c38:	bf00      	nop
-
-	// calculates mean of the last PID errors
-	mean_err = mean_window(pid.error, last_errors, LAST_ERRORS_SIZE);
-	move_control(GET_SPEED_P(-pid.u, mean_err), GET_SPEED_P(+pid.u, mean_err));
-#endif // !_CALC_SPEED2_
 }
  8000c3a:	bd80      	pop	{r7, pc}
  8000c3c:	f3af 8000 	nop.w

@@ -14,13 +14,10 @@ Define Peripherals in Use
 ******************************************************************************/
 #include "adc.h"
 #include "tim.h"
-#include "gpio.h"
 
 #define OBS_DETECTOR_TIM (htim3)
 #define OBS_DETECTOR_ADC (hadc3)
 
-#define STOP_DETECTOR_ADC (hadc1)
-#define STOP_DETECTOR_TIM (htim6)
 /******************************************************************************
 Define Parameters
 ******************************************************************************/
@@ -33,10 +30,10 @@ Stop Sensors Flags
 // Obstacle Found Flag
 extern uint8_t obs_found_flag;
 
-// Cross Found Flag
-extern uint8_t cross_found_flag;
-// Room Found Flag
-extern uint8_t room_found_flag;
+//// Cross Found Flag
+//extern uint8_t cross_found_flag;
+//// Room Found Flag
+//extern uint8_t room_found_flag;
 
 /******************************************************************************
 Stop Sensors Functions
@@ -46,7 +43,6 @@ Stop Sensors Functions
 
 void obs_detector_init(void);
 void obs_detector_deInit(void);
-
 void isr_obs_detector(void);
 
 #endif /* !_STOP_SENSORS_H_ */
