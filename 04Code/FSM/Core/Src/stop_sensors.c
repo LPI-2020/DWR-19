@@ -21,9 +21,9 @@ Stop Sensors Flags
 // Obstacle Found Flag
 uint8_t obs_found_flag = 0;
 // Cross Found Flag
-uint8_t cross_found_flag = 0;
+//uint8_t cross_found_flag = 0;
 // Room Found Flag
-uint8_t room_found_flag = 0;
+//uint8_t room_found_flag = 0;
 
 //uint8_t sensor1_val = 0;
 //uint8_t sensor8_val = 0;

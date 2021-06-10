@@ -7,6 +7,8 @@
 #ifndef _STOP_SENSORS_H_
 #define _STOP_SENSORS_H_
 
+#include "qtr.h"
+
 /******************************************************************************
 Define Peripherals in Use
 ******************************************************************************/
@@ -14,9 +16,6 @@ Define Peripherals in Use
 #include "tim.h"
 #include "gpio.h"
 
-/******************************************************************************
-Peripherals used to detect obstacles
-******************************************************************************/
 #define OBS_DETECTOR_TIM (htim3)
 #define OBS_DETECTOR_ADC (hadc3)
 
@@ -48,6 +47,9 @@ extern uint32_t st_sens[ST_SENS_NUM];
 /******************************************************************************
 Stop Sensors Functions
 ******************************************************************************/
+#define CROSS_DETECTED(void) ((GET_SENS_LOGVAL(SENSOR1) == 1) && (GET_SENS_LOGVAL(SENSOR8) == 1))
+#define ROOM_DETECTED(void)	((GET_SENS_LOGVAL(SENSOR1) == 1) && (GET_SENS_LOGVAL(SENSOR8) == 0))
+
 void obs_detector_init(void);
 void obs_detector_deInit(void);
 

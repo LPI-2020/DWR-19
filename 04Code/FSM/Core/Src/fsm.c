@@ -121,31 +121,50 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-	// obstacle detected?
-	if(obs_found_flag)
+	uint8_t err;
+
+//	// obstacle detected?
+//	if(obs_found_flag)
+//	{
+//		// enables timer counting OBS_TIM seconds
+//		// ....
+//		nstate = S_STOPPED;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+//
+//	if(cross_found_flag)
+//	{
+//		// Cross Found
+//		nstate = S_RD_RFID;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+//	if(room_found_flag)
+//	{
+//		// Room Found
+//		nstate = S_NEXT_MOV;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+
+	err = lfollower_control();
+
+	switch(err)
 	{
-		// enables timer counting OBS_TIM seconds
-		// ....
-		nstate = S_STOPPED;
-		// stop line follower
-		lfollower_stop();
+		case E_CROSS_FOUND:
+			nstate = S_RD_RFID;
+			break;
+		case E_ROOM_FOUND:
+			nstate = S_NEXT_MOV;
+			break;
+		case E_OBS_FOUND:
+			nstate = S_STOPPED;
+			break;
+		default:
+			break;
 	}
-	if(cross_found_flag)
-	{
-		// Cross Found
-		nstate = S_RD_RFID;
-		// stop line follower
-		lfollower_stop();
-		// enable RFID reader
-		RFID_RC522_Init();
-	}
-	if(room_found_flag)
-	{
-		// Room Found
-		nstate = S_NEXT_MOV;
-		// stop line follower
-		lfollower_stop();
-	}
+
 }
 
 /******************************************************************************
@@ -162,6 +181,9 @@ uint8_t read_RFID(void)
 
   	// return val: initialized as return not successfull
   	uint8_t retval = 1;
+
+  	// enable RFID reader
+  	RFID_RC522_Init();
 
 	do
 	{

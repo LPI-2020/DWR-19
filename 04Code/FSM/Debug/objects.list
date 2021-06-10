@@ -8,6 +8,7 @@
 "Core/Src/motor.o"
 "Core/Src/move.o"
 "Core/Src/pid.o"
+"Core/Src/qtr.o"
 "Core/Src/rfid-rc522.o"
 "Core/Src/spi.o"
 "Core/Src/stm32f7xx_hal_msp.o"

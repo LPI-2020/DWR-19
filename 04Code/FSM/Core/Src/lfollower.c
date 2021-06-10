@@ -77,12 +77,12 @@ static uint32_t lf_sens[LF_SENS_NUM];
 //static uint32_t st_sens[ST_SENS_NUM];
 
 // Sensor elements
-typedef enum {
-	SENSOR3,	// Line Follower RIGHT Sensor
-	SENSOR4,	// Rotate RIGHT Sensor
-	SENSOR5,	// Rotate LEFT Sensor
-	SENSOR6		// Line Follower LEFT Sensor
-} sensor_e;
+//typedef enum {
+//	SENSOR3,	// Line Follower RIGHT Sensor
+//	SENSOR4,	// Rotate RIGHT Sensor
+//	SENSOR5,	// Rotate LEFT Sensor
+//	SENSOR6		// Line Follower LEFT Sensor
+//} sensor_e;
 
 // line follower status (enabled 1 or disabled 0)
 uint8_t lfollower_status = 0;
@@ -230,8 +230,14 @@ void lfollower_start(void)
 	HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
 	// start sampling for PID application
 	HAL_TIM_Base_Start_IT(&TIM_LF_SENS_PID);
+
 	// start movement
 	move_start();
+
+	// start stop mark detectors
+	obs_detector_init();
+	stop_detector_init();
+
 	// mark line follower is enabled
 	lfollower_status = 1;
 }
@@ -249,8 +255,14 @@ void lfollower_stop(void)
 	HAL_ADC_Stop_DMA(&ADC_LF_SENS_DMA);
 	// stop sampling for PID application
 	HAL_TIM_Base_Stop_IT(&TIM_LF_SENS_PID);
+
 	// stop movement
 	move_stop();
+
+	// stop stop mark detectores
+	obs_detector_deInit();
+	stop_detector_deInit();
+
 	// mark line follower is disabled
 	lfollower_status = 0;
 }
@@ -290,3 +302,47 @@ void lfollower_print_sens(void)
 	HAL_ADC_Stop_DMA(&ADC_LF_SENS_DMA);
 	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
 }
+
+/******************************************************************************
+Debug Functions
+
+@brief 	Prints Line Follower Sensors Values
+@param	none
+@retval	none
+******************************************************************************/
+
+uint8_t lfollower_control(void)
+{
+	uint8_t err = EXIT_SUCCESS;
+
+	// line follower already started?
+	if(lfollower_status == 0)
+		// start line follower
+		lfollower_start();
+
+	if(CROSS_DETECTED() == 1)
+		// cross detected
+		err = E_CROSS_FOUND;
+	else if(ROOM_DETECTED() == 1)
+		// room detected
+		err = E_ROOM_FOUND;
+	else if(obs_found_flag == 1)
+		// obstacle found
+		err = E_OBS_FOUND;
+
+	// error found?
+	if(err)
+		// stop line follower
+		lfollower_stop();
+
+	// return error code
+	return err;
+}
+
+
+
+
+
+
+
+
