@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  00020234  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0001ec0c  00000000  00000000  00020262  2**0
+ 12 .debug_info   0001ec8b  00000000  00000000  00020262  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000040b2  00000000  00000000  0003ee6e  2**0
+ 13 .debug_abbrev 000040ca  00000000  00000000  0003eeed  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001488  00000000  00000000  00042f20  2**3
+ 14 .debug_aranges 00001488  00000000  00000000  00042fb8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000012b0  00000000  00000000  000443a8  2**3
+ 15 .debug_ranges 000012b0  00000000  00000000  00044440  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002c5ec  00000000  00000000  00045658  2**0
+ 16 .debug_macro  0002c68b  00000000  00000000  000456f0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001acbf  00000000  00000000  00071c44  2**0
+ 17 .debug_line   0001ace5  00000000  00000000  00071d7b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    001063bc  00000000  00000000  0008c903  2**0
+ 18 .debug_str    00106348  00000000  00000000  0008ca60  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  00192cbf  2**0
+ 19 .comment      00000053  00000000  00000000  00192da8  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000061d0  00000000  00000000  00192d14  2**2
+ 20 .debug_frame  000061d0  00000000  00000000  00192dfc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1361,7 +1361,7 @@ void lfollower_pid(void)
 
 	// Apply PID to adjust motor PWM/velocity
 	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[SENSOR6]),
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
  8000bac:	4b29      	ldr	r3, [pc, #164]	; (8000c54 <lfollower_pid+0xb4>)
  8000bae:	691b      	ldr	r3, [r3, #16]
  8000bb0:	ee07 3a90 	vmov	s15, r3
@@ -1371,7 +1371,7 @@ void lfollower_pid(void)
  8000bc0:	ed9f 5b21 	vldr	d5, [pc, #132]	; 8000c48 <lfollower_pid+0xa8>
  8000bc4:	ee86 7b05 	vdiv.f64	d7, d6, d5
  8000bc8:	eef7 4bc7 	vcvt.f32.f64	s9, d7
-						DIG_TO_ANALOG(qtr_sens[SENSOR3]));
+						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
  8000bcc:	4b21      	ldr	r3, [pc, #132]	; (8000c54 <lfollower_pid+0xb4>)
  8000bce:	685b      	ldr	r3, [r3, #4]
  8000bd0:	ee07 3a90 	vmov	s15, r3
@@ -1380,7 +1380,7 @@ void lfollower_pid(void)
  8000bdc:	ee27 6b06 	vmul.f64	d6, d7, d6
  8000be0:	ed9f 5b19 	vldr	d5, [pc, #100]	; 8000c48 <lfollower_pid+0xa8>
  8000be4:	ee86 7b05 	vdiv.f64	d7, d6, d5
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[SENSOR6]),
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
  8000be8:	eef7 7bc7 	vcvt.f32.f64	s15, d7
  8000bec:	eef0 0a67 	vmov.f32	s1, s15
  8000bf0:	eeb0 0a64 	vmov.f32	s0, s9
@@ -1433,6 +1433,7 @@ void lfollower_print_sens(void)
  8000c6c:	af02      	add	r7, sp, #8
 	char str[32];
 
+	// enable QTR readings
 	qtr_init();
  8000c6e:	f000 facd 	bl	800120c <qtr_init>
 
@@ -1556,6 +1557,7 @@ void lfollower_print_sens(void)
  8000da4:	4618      	mov	r0, r3
  8000da6:	f001 f801 	bl	8001dac <UART_puts>
 
+	// stop QTR readings
 	qtr_kill();
  8000daa:	f000 fa3d 	bl	8001228 <qtr_kill>
 }

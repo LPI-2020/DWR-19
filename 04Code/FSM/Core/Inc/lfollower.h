@@ -17,9 +17,19 @@ Define Peripherals INSTANCES in use
 #include "tim.h"
 
 // used to sample values from Line Follower Sensors to PID
-#define TIM_LFOLLOWER_PID 			(htim6)
+#define TIM_LF_PID 			(htim6)
 // used to timeout lfollower rotate
-#define TIM_LFOLLOWER_ROTATE		(TIM_TIMEOUTS)
+//#define TIM_LF_ROTATE		(TIM_TIMEOUTS)
+
+/******************************************************************************
+Define Line Follower Sensors
+******************************************************************************/
+#include "qtr.h"
+
+// Line Follower RIGHT sensor
+#define LF_SENSOR_R 	(SENSOR3)
+// Line Follower LEFT sensor
+#define LF_SENSOR_L 	(SENSOR6)
 
 /******************************************************************************
 Line Follower Error Codes

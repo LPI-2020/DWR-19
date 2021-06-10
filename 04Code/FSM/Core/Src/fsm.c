@@ -52,7 +52,6 @@ uint8_t state = 0;
 // Next FSM state
 uint8_t nstate = 0;
 
-uint8_t stop_err = 0;
 
 // Route finished flag
 uint8_t route_finished = 0;
@@ -115,18 +114,17 @@ static void s_flw_line(void)
 {
 	uint8_t err;
 
+	// execute line follower
 	err = lfollower_control();
 
 	switch(err)
 	{
 		case E_CROSS_FOUND:
 			// Cross Found
-			stop_err = E_CROSS_FOUND;
 			nstate = S_RD_RFID;
 			break;
 		case E_ROOM_FOUND:
 			// Room Found
-			stop_err = E_ROOM_FOUND;
 			nstate = S_NEXT_MOV;
 			break;
 		case E_OBS_FOUND:
@@ -176,7 +174,7 @@ static void s_rd_rfid(void)
 	// start movement
 	move_forward(RD_RFID_SPEED);
 
-	// wait for RFID read or 'read_rfid_timeout'
+	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
 	err = read_RFID();
 	// stop movement
 	move_stop();
@@ -190,36 +188,48 @@ static void s_rd_rfid(void)
 		nstate = S_ERROR;
 }
 
+/******************************************************************************
+State Next Movement
+******************************************************************************/
 uint8_t cross_found_func(void)
 {
-	stop_err = 0;
+	// clear cross found flag
+	cross_found_flag = 0;
 
-	//... do something next_move_dir = ...
+	// calculate next direction of movement
+	//next_move_dir = ...
 
 	return S_ROTATE;
 }
 
 uint8_t room_found_func(void)
 {
-	stop_err = 0;
+	// clear room found flag
+	room_found_flag = 0;
 
+	// check if robot needs to stop in this room
 	// if (quarto paragem)
+		// stop at this room
 		// return S_STOPPED;
 	//else
+		// continue to the next rooms
 		return S_FLW_LINE;
 }
 
+// Next move function pointer
 uint8_t (*next_move_func[])(void) = {
 		cross_found_func,
 		room_found_func
 };
 
-/******************************************************************************
-State Next Movement
-******************************************************************************/
 static void s_next_mov(void)
 {
-	nstate = next_move_func[(stop_err - 1) & 0x01]();
+	// This state only gets executed if cross_found_flag or room_found_flag are
+	// activated. Therefore, we can determine which next_move_func has to be
+	// executed using the value of only one flag, p.e, room_found_flag.
+	// Keep in mind that next_move_func must be set allowing that if
+	// room_found_flag is 1, next_move_func points to room_found_func.
+	nstate = next_move_func[room_found_flag & 0x01]();
 }
 
 /******************************************************************************
@@ -229,7 +239,7 @@ static void s_rotate(void)
 {
 	uint8_t rotate_err;
 
-	// rotate to direction 'next_move_dir'
+	// rotate to direction 'next_move_dir' (POLLING MODE)
 	rotate_err = lfollower_rotate(next_move_dir);
 
 	// rotate was returned error? (Due to timeout)
@@ -237,12 +247,8 @@ static void s_rotate(void)
 		// rotate was not successfull
 		nstate = S_ERROR;
 	else
-	{
 		// turn completed. Restart following line
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 }
 
 /******************************************************************************
