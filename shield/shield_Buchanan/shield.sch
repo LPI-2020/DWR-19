@@ -939,19 +939,19 @@ F 3 "~" H 6750 3950 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Text GLabel 7200 3850 2    50   Input ~ 0
-PE7
+PB1
 Wire Wire Line
 	7200 3850 6950 3850
 Text GLabel 7200 3950 2    50   Input ~ 0
-GND
+PC2
 Wire Wire Line
 	7200 3950 6950 3950
 Text GLabel 7200 4050 2    50   Input ~ 0
-PE10
+PF4
 Wire Wire Line
 	7200 4050 6950 4050
 Text GLabel 7200 4150 2    50   Input ~ 0
-PE12
+PA0
 Wire Wire Line
 	7200 4150 6950 4150
 Text GLabel 1450 3400 0    50   Input ~ 0
