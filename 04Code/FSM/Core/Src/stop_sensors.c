@@ -20,10 +20,6 @@ Stop Sensors Flags
 ******************************************************************************/
 // Obstacle Found Flag
 uint8_t obs_found_flag = 0;
-// Cross Found Flag
-//uint8_t cross_found_flag = 0;
-// Room Found Flag
-//uint8_t room_found_flag = 0;
 
 /******************************************************************************
 Obstacle Detector
@@ -80,6 +76,10 @@ void isr_obs_detector(void)
 #endif // !_DEBUG_
 }
 
+// Cross Found Flag
+//uint8_t cross_found_flag = 0;
+// Room Found Flag
+//uint8_t room_found_flag = 0;
 /******************************************************************************
 Stop mark Detector
 ******************************************************************************/
@@ -97,45 +97,4 @@ Stop mark Detector
 //	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
 //	// stop sampling stop sensors values
 ////	HAL_TIM_Base_Stop_IT(&STOP_DETECTOR_TIM);
-//}
-
-/******************************************************************************
-Stop mark detector ISR
-
-- Used in gpio.c at void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-******************************************************************************/
-
-//typedef enum{
-//	SENSOR1 = 0,
-//	SENSOR8
-//} st_sensor_e;
-//
-//
-//
-//void isr_stop_detector(void)
-//{
-//	// get stop sensors pin value (0 or 1)
-//	sensor1_val = (DIG_TO_ANALOG(st_sens[SENSOR1]) > ANALOG_STOP_VOLT);
-//	sensor8_val = (DIG_TO_ANALOG(st_sens[SENSOR8]) > ANALOG_STOP_VOLT);
-//
-//#ifdef _DEBUG_
-//	char str[32];
-//	snprintf(str, sizeof(str), "S1[%f]\n\rS8[%f]\n\r\n\r", DIG_TO_ANALOG(st_sens[0]),
-//														   DIG_TO_ANALOG(st_sens[1]));
-//	//snprintf(str, sizeof(str), "S1_val[%d]\n\rS8_val[%d]\n\r\n\r", sensor1_val, sensor8_val);
-//
-//	UART_puts(str);
-//#endif //!_DEBUG_
-//
-//	// set stop sensors flags
-//	// cross_found -> both stop sensors over the line (pin val = 1)
-//	cross_found_flag = (sensor1_val & sensor8_val);
-//	// room_found -> only one sensor over the line
-//	room_found_flag = (sensor1_val);
-//}
-
-//void isr_stop_detector(void)
-//{
-//	(DIG_TO_ANALOG(st_sens[dir & 0x01]) < ANALOG_STOP_VOLT)
-//
 //}

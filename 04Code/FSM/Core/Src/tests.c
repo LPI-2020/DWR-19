@@ -69,8 +69,8 @@ void test_stop_sensor(void)
 	move_forward(0.7);
 
 	// wait for extern interrupt
-	while((!cross_found_flag) && (!room_found_flag))
-		;
+	//while((!cross_found_flag) && (!room_found_flag))
+	//	;
 
 	// stop movement
 	move_stop();

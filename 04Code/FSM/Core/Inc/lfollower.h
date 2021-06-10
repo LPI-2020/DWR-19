@@ -37,7 +37,6 @@ void lfollower_stop(void);
 
 void lfollower_pid(void);
 uint8_t lfollower_rotate(move_dir_e dir);
-
 uint8_t lfollower_control(void);
 
 /******************************************************************************

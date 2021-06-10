@@ -10,13 +10,11 @@
 #include "fsm.h"
 
 #include "stop_sensors.h"
-
 #include "lfollower.h"
 #include "move.h"
 
 //#include "spi.h"
 #include "rfid-rc522.h"
-
 
 /******************************************************************************
 FSM state functions
@@ -81,13 +79,9 @@ static void s_stopped(void)
 		nstate = S_RECEIVE;
 
 	else if((!obs_found_flag) && (!obs_found_timeout))
-	{
 		// obstacle is not there anymore and timer not finished
 		// restart movement
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 
 	else if(obs_found_timeout)
 		// obstacle has been there for too long
@@ -95,13 +89,9 @@ static void s_stopped(void)
 		nstate = S_ERROR;
 
 	else if((!route_finished) && (user_btn || pick_up_timeout))
-	{
 		// Route not finished and User button pressed or robot has been waiting
 		// too much time for user to pick up his goods. Restart movement.
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 
 	// Else, continue in S_STOPPED
 }
@@ -125,50 +115,25 @@ static void s_flw_line(void)
 {
 	uint8_t err;
 
-//	// obstacle detected?
-//	if(obs_found_flag)
-//	{
-//		// enables timer counting OBS_TIM seconds
-//		// ....
-//		nstate = S_STOPPED;
-//		// stop line follower
-//		lfollower_stop();
-//	}
-//
-//	if(cross_found_flag)
-//	{
-//		// Cross Found
-//		nstate = S_RD_RFID;
-//		// stop line follower
-//		lfollower_stop();
-//	}
-//	if(room_found_flag)
-//	{
-//		// Room Found
-//		nstate = S_NEXT_MOV;
-//		// stop line follower
-//		lfollower_stop();
-//	}
-
 	err = lfollower_control();
 
 	switch(err)
 	{
 		case E_CROSS_FOUND:
+			// Cross Found
 			stop_err = E_CROSS_FOUND;
 			nstate = S_RD_RFID;
 			break;
 		case E_ROOM_FOUND:
+			// Room Found
 			stop_err = E_ROOM_FOUND;
 			nstate = S_NEXT_MOV;
 			break;
 		case E_OBS_FOUND:
+			// Obstacle Found
 			nstate = S_STOPPED;
 			break;
-		default:
-			break;
 	}
-
 }
 
 /******************************************************************************
