@@ -1,0 +1,11 @@
+#include "auxiliares.h"
+
+void sliding_window(float val, float* window, uint8_t w_size)
+{
+
+}
+
+float mean_window()
+{
+
+}

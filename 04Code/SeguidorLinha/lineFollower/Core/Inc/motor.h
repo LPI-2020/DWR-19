@@ -1,14 +1,12 @@
 /*
  * motor.h
  *
+ * Motor control module
+ *
  *  Created on: May 5, 2021
  */
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
-
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
 
 /******************************************************************************
 Define PWM TIM Instance and Channels to be used
@@ -39,7 +37,11 @@ typedef struct
 /******************************************************************************
 Motor Directions Enum
 ******************************************************************************/
-typedef enum { MOTOR_STOP, MOTOR_FORWARD, MOTOR_BACKWARD} motor_dir_e;
+typedef enum {
+	MOTOR_BACKWARD,
+	MOTOR_FORWARD,
+	MOTOR_STOP
+} motor_dir_e;
 
 /******************************************************************************
 Motor Functions
@@ -56,7 +58,4 @@ Motor Control on each direction
 #define motor_forward(_m_, _dc_) 	motor_control((motor_st *)(_m_), (uint8_t)(_dc_), MOTOR_FORWARD)
 #define motor_backward(_m_, _dc_) 	motor_control((motor_st *)(_m_), (uint8_t)(_dc_), MOTOR_BACKWARD)
 
-//#ifdef __cplusplus
-//}
-//#endif
 #endif /* !__MOTOR_H__ */

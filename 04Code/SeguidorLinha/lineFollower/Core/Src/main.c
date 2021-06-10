@@ -27,7 +27,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "tests.h"
+
 #include "move.h"
+#include "lfollower.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -91,22 +95,38 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM3_Init();
   MX_USART3_UART_Init();
+  MX_ADC3_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start_IT(&htim6);			// <---------------------------------------------------------------------
-  //HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);	// <---------------------------------------------------------------------
-  //HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);	// <---------------------------------------------------------------------
-  HAL_ADC_Start_DMA(&hadc1, lf_sens, 2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  move_start();
 
-  while (1)
+  // inits motors, PID and DMA to sensors
+  //lfollower_start();
+
+   while (1)
   {
-	  //move_rotate(MOVE_RIGHT);
-	  //move_rotate(MOVE_LEFT);
-	  //HAL_Delay(500);
+	   //lfollower_start();
+	   //move_forward(0.7);
+
+		//  ------ test move module ------
+		//test_move(0.9);
+		// test saturation
+		// test_move(-1);
+
+	  // ------- test line follower module -------
+	  //lfollower_pid();
+	  //HAL_Delay(1000);
+
+	   //lfollower_stop();
+
+	   test_lfollower(MOVE_RIGHT);
+
+	  break;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

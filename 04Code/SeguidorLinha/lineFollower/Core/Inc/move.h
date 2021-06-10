@@ -1,26 +1,20 @@
 /*
  * move.h
  *
+ * Movement control module
+ *
  *  Created on: May 5, 2021
  */
 #ifndef __MOVE_H__
 #define __MOVE_H__
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
-
-#include <stdint.h> // using uint32_t
-
 /******************************************************************************
 Move Directions Enum
 ******************************************************************************/
-typedef enum { MOVE_RIGHT, MOVE_LEFT } move_dir_e;
-
-/******************************************************************************
-Line Follower Sensor
-******************************************************************************/
-extern uint32_t lf_sens[2];
+typedef enum {
+	MOVE_RIGHT = -1,
+	MOVE_LEFT = 1
+} move_dir_e;
 
 /******************************************************************************
 Move Functions
@@ -28,10 +22,13 @@ Move Functions
 void move_start(void);
 void move_stop(void);
 
-void move_forward(void);
-void move_rotate(move_dir_e direction);
+void move_control(float speedL, float speedR);
 
-//#ifdef __cplusplus
-//}
-//#endif
+/******************************************************************************
+Move in each direction
+******************************************************************************/
+#define move_forward(_speed_) 		(move_control(_speed_, _speed_))
+#define move_backwards(_speed_)		(move_control(-(_speed_), -(_speed_)))
+#define move_rotate(_dir_, _speed_) (move_control(-(_dir_) * (_speed_), (_dir_) * (_speed_)))
+
 #endif /*__MOVE_H__ */

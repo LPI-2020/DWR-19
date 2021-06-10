@@ -25,7 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fifo.h"
-
+#include "ucmd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,13 +57,22 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 	
-	extern ST_FIFO RxFifo;
-	extern ST_FIFO TxFifo;
-	static uint8_t Rx_Buffer[BUFFER_SIZE];
-	static uint8_t Tx_Buffer[BUFFER_SIZE];
+	extern ST_FIFO RxFifo_UART3;
+	extern ST_FIFO TxFifo_UART3;
+	extern ST_FIFO RxFifo_UART1;
+	extern ST_FIFO TxFifo_UART1;
+	
+	static uint8_t Rx_Buffer_UART3[BUFFER_SIZE];
+	static uint8_t Tx_Buffer_UART3[BUFFER_SIZE];
+	static uint8_t Rx_Buffer_UART1[BUFFER_SIZE];
+	static uint8_t Tx_Buffer_UART1[BUFFER_SIZE];
+  
 	extern int Rx_string_processing;
 	extern int Tx_string_transmitting;
+	
 	extern uint8_t Message[BUFFER_SIZE];
+	
+	extern Command my_cmd_list;
 /* USER CODE END 0 */
 
 /**
@@ -84,13 +93,20 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 	
-	RxFifo.fifo = Rx_Buffer;
-	TxFifo.fifo = Tx_Buffer;
-	RxFifo.fifo_len = RBUFF_SIZE;
-	TxFifo.fifo_len = TBUFF_SIZE;
-	fifo_init(&RxFifo);
-	fifo_init(&TxFifo);
-
+	RxFifo_UART3.fifo = Rx_Buffer_UART3;
+	TxFifo_UART3.fifo = Tx_Buffer_UART3;
+	RxFifo_UART1.fifo = Rx_Buffer_UART1;
+	TxFifo_UART1.fifo = Tx_Buffer_UART1;
+	
+	RxFifo_UART3.fifo_len = RBUFF_SIZE;
+	TxFifo_UART3.fifo_len = TBUFF_SIZE;
+	RxFifo_UART1.fifo_len = RBUFF_SIZE;
+	TxFifo_UART1.fifo_len = TBUFF_SIZE;
+	
+	fifo_init(&RxFifo_UART3);
+	fifo_init(&TxFifo_UART3);
+	fifo_init(&RxFifo_UART1);
+	fifo_init(&TxFifo_UART1);
 	
 	Rx_string_processing=0;
 	Tx_string_transmitting=0;
@@ -111,16 +127,19 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	init_UART3();
 	init_UART1();
-	printmsg(HelloMessage);
+	printmsg(HelloMessage, 3);
+	printmsg(HelloMessage, 1);
   /* USER CODE END 2 */
-
+	
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		while(!Rx_string_processing)
-			;
-		Rx_string_processing = 0;
+		if(Rx_string_processing)
+		{
+			ucmd_parse(&my_cmd_list," ",(char*) Message);
+			Rx_string_processing = 0;
+		}
     /* USER CODE END WHILE */
 		
     /* USER CODE BEGIN 3 */

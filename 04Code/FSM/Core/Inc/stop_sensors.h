@@ -15,15 +15,15 @@ Define Peripherals in Use
 #include "gpio.h"
 
 // Peripherals used to detect obstacles
-#define OBS_DETECTOR_TIM (htim6)
-#define OBS_DETECTOR_ADC (hadc1)
+#define OBS_DETECTOR_TIM (htim3)
+#define OBS_DETECTOR_ADC (hadc2)
 
 // Pins used to detect stop marks
-#define PIN_A 		(PinA_Pin)
-#define PIN_A_PORT 	(PinA_GPIO_Port)
+#define PIN_A 		(SENSOR1_Pin)
+#define PIN_A_PORT 	(SENSOR1_GPIO_Port)
 
-#define PIN_B 		(PinB_Pin)
-#define PIN_B_PORT	(PinB_GPIO_Port)
+#define PIN_B 		(SENSOR8_Pin)
+#define PIN_B_PORT	(SENSOR8_GPIO_Port)
 
 /******************************************************************************
 Define Parameters

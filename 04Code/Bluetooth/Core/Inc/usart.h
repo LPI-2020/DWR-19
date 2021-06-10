@@ -26,7 +26,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "fifo.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -46,9 +46,9 @@ void init_UART3(void);
 
 void init_UART1(void);
 
-void printmsg(char* ptr);
+void printmsg(char* ptr, uint8_t);
 
-void newMessage(void);
+void newMessage(ST_FIFO* stfifo);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

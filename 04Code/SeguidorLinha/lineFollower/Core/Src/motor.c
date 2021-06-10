@@ -1,22 +1,11 @@
 /*
  * motor.c
  *
+ * Motor control module
+ *
  *  Created on: May 5, 2021
  */
 #include "motor.h"
-
-/******************************************************************************
-Define motor GPIO Pins config according to each direction
-******************************************************************************/
-static const GPIO_PinState motor_pin_config[3][2] =
-{
-		// Motor STOP
-		{GPIO_PIN_RESET, GPIO_PIN_RESET},
-		// Motor FORWARD
-		{GPIO_PIN_SET, GPIO_PIN_RESET},
-		// Motor BACKWARD
-		{GPIO_PIN_RESET, GPIO_PIN_SET}
-};
 
 /******************************************************************************
 Motor Init
@@ -41,6 +30,19 @@ void motor_kill(motor_st *m)
 {
 	HAL_TIM_PWM_Stop(&PWM_TIM_INSTANCE, m->pwm_channel);
 }
+
+/******************************************************************************
+Define motor GPIO Pins config according to each direction
+******************************************************************************/
+static const GPIO_PinState motor_pin_config[3][2] =
+{
+		// Motor BACKWARD
+		{GPIO_PIN_RESET, GPIO_PIN_SET},
+		// Motor FORWARD
+		{GPIO_PIN_SET, GPIO_PIN_RESET},
+		// Motor STOP
+		{GPIO_PIN_RESET, GPIO_PIN_RESET}
+};
 
 /******************************************************************************
 Motor control

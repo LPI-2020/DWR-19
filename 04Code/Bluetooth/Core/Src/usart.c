@@ -30,8 +30,13 @@
 #define DollarSign 0x24
 #define ESC 0x1b
 
-ST_FIFO RxFifo;
-ST_FIFO TxFifo;
+#define UART1 1
+#define UART3 3
+
+ST_FIFO RxFifo_UART3;
+ST_FIFO TxFifo_UART3;
+ST_FIFO RxFifo_UART1;
+ST_FIFO TxFifo_UART1;
 
 uint8_t Message[BUFFER_SIZE];
 
@@ -228,27 +233,50 @@ void init_UART1(){
 	HAL_UART_Receive_IT(&huart1, (uint8_t*)&char_received , 1);
 }
 
-void printmsg(char* ptr)
+void printmsg(char* ptr,uint8_t uart)
 {
+	ST_FIFO stfifo;
 	while (Tx_string_transmitting)
 		;
-	while(*ptr!='\0')
-	{
-		fifo_push(&TxFifo,*ptr);
-		ptr++;
+	if(uart == 1){
+		//stfifo = TxFifo_UART1;
+		while(*ptr!='\0')
+		{
+			fifo_push(&TxFifo_UART1,*ptr);
+			ptr++;
+		}
 	}
-	__HAL_UART_ENABLE_IT(&huart3, UART_IT_TC);
+		
+	if(uart == 3){
+		//stfifo = TxFifo_UART3;
+		while(*ptr!='\0')
+		{
+			fifo_push(&TxFifo_UART3,*ptr);
+			ptr++;
+		}
+	
+	}
+	/*while(*ptr!='\0')
+	{
+		fifo_push(&stfifo,*ptr);
+		ptr++;
+	}*/
+
+	if(uart == 1)
+		__HAL_UART_ENABLE_IT(&huart1, UART_IT_TC);
+	if(uart == 3)
+		__HAL_UART_ENABLE_IT(&huart3, UART_IT_TC);
 }
 
 
-void newMessage()
+void newMessage(ST_FIFO* stfifo)
 {
 	uint8_t local_index = 0;
 	uint8_t local_char;
 	
-	while (fifo_size(&RxFifo) != 0)
+	while (fifo_size(stfifo) != 0)
 	{
-	local_char = fifo_pop(&RxFifo);
+	local_char = fifo_pop(stfifo);
 	
 	Message[local_index] = local_char;
 	local_index++;
@@ -274,8 +302,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 		if(char_received == CR)
 		{
 			HAL_UART_Transmit_IT(&huart3,(uint8_t*) &char_received,1);   	//Echoes char received
-			fifo_push(&RxFifo, char_received);
-			newMessage();                                      						//Copies string received to Message[] array
+			fifo_push(&RxFifo_UART3, char_received);
+			newMessage(&RxFifo_UART3);                                      						//Copies string received to Message[] array
 			init_UART3();
 			return;
 		}
@@ -283,10 +311,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 		
 		if(char_received == BCKSP)
 		{
-			if(fifo_size(&RxFifo) != 0)
+			if(fifo_size(&RxFifo_UART3) != 0)
 			{
 				HAL_UART_Transmit_IT(&huart3, (uint8_t*)&char_received,1);   					//Echoes char received
-				fifo_pop_last(&RxFifo);
+				fifo_pop_last(&RxFifo_UART3);
 				init_UART3();
 				return;
 			}
@@ -303,7 +331,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 			uint8_t index = 0;
 			
 			
-			while(fifo_pop(&RxFifo) != ENODATA)
+			while(fifo_pop(&RxFifo_UART3) != ENODATA)
 			{																					
 				str[index] = BCKSP;																		//removes all chars from Rxfifo
 				index++;
@@ -314,9 +342,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 			
 			if(char_received == DollarSign)
 			{
-				fifo_push(&RxFifo, DollarSign);                          								//push char '$'
-				fifo_push(&RxFifo, CR);                            											//push char CR
-				newMessage();																														// sends command "$\r" to parser 
+				fifo_push(&RxFifo_UART3, DollarSign);                          								//push char '$'
+				fifo_push(&RxFifo_UART3, CR);                            											//push char CR
+				newMessage(&RxFifo_UART3);																														// sends command "$\r" to parser 
 				init_UART3();
 				return;
 			}
@@ -329,12 +357,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 			{
 					HAL_UART_Transmit_IT(&huart3,(uint8_t*) &char_received,1);       //Echoes char received
 									
-					while(fifo_pop(&RxFifo) != ENODATA)
+					while(fifo_pop(&RxFifo_UART3) != ENODATA)
 					;
 					
-					fifo_push(&RxFifo, char_received);
-					fifo_push(&RxFifo, CR);
-					newMessage();                                                              //Copies string received to Message[] array
+					fifo_push(&RxFifo_UART3, char_received);
+					fifo_push(&RxFifo_UART3, CR);
+					newMessage(&RxFifo_UART3);                                                              //Copies string received to Message[] array
 					init_UART3();
 					return;
 			}
@@ -343,21 +371,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 			{
 					HAL_UART_Transmit_IT(&huart3,(uint8_t*) &char_received,1);       //Echoes char received
 									
-					while(fifo_pop(&RxFifo) != ENODATA)
+					while(fifo_pop(&RxFifo_UART3) != ENODATA)
 					;
 					
-					fifo_push(&RxFifo, char_received);
-					fifo_push(&RxFifo, CR);
+					fifo_push(&RxFifo_UART3, char_received);
+					fifo_push(&RxFifo_UART3, CR);
 					
-					newMessage();                                                              //Copies string received to Message[] array
+					newMessage(&RxFifo_UART3);                                                              //Copies string received to Message[] array
 					init_UART3();
 					return;
 			}
 		
-		if(fifo_size(&RxFifo) != BUFFER_SIZE)										//if Rx buffer not full it pushes the char. If its full char is discarded
+		if(fifo_size(&RxFifo_UART3) != BUFFER_SIZE)										//if Rx buffer not full it pushes the char. If its full char is discarded
 		{
 			HAL_UART_Transmit_IT(&huart3,(uint8_t*)&char_received,1);
-			fifo_push(&RxFifo, char_received);
+			fifo_push(&RxFifo_UART3, char_received);
 			init_UART3();
 			return;
 		}
@@ -369,7 +397,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 		
 		HAL_UART_Receive_IT(&huart1, (uint8_t*)&char_received , 1); 
 		HAL_UART_Transmit_IT(&huart3,(uint8_t*)&char_received,1);
+		//HAL_UART_Transmit_IT(&huart1,(uint8_t*)&char_received, 1);
 		
+		if(char_received == CR)
+		{
+			fifo_push(&RxFifo_UART1, char_received);
+			newMessage(&RxFifo_UART1);                                      						//Copies string received to Message[] array
+			init_UART1();
+			return;
+		}
+		if(fifo_size(&RxFifo_UART1) != BUFFER_SIZE)										//if Rx buffer not full it pushes the char. If its full char is discarded
+		{
+			fifo_push(&RxFifo_UART1, char_received);
+			init_UART1();
+			return;
+		}
 	}
 		
 }
@@ -377,22 +419,36 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart){
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart){
 	
 	uint8_t local_char;
-	
+	//UART3
 	if(huart->Instance == USART3){
 		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);              //blink Red LED
 		
-		if(fifo_size(&TxFifo) == 0)													
+		if(fifo_size(&TxFifo_UART3) == 0)													
 		{
 			Tx_string_transmitting = 0;
 			return;
 		}
 		
 		Tx_string_transmitting = 1;												 	//tells system that a string is being trasmitted
-		local_char = fifo_pop(&TxFifo);											//pops char from TxFifo
+		local_char = fifo_pop(&TxFifo_UART3);											//pops char from TxFifo
 		HAL_UART_Transmit_IT(&huart3, &local_char, 1);			//transmits char
 		return;
 	}	
+	//UART1
+	if(huart->Instance == USART1){
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);              
 		
+		if(fifo_size(&TxFifo_UART1) == 0)													
+		{
+			Tx_string_transmitting = 0;
+			return;
+		}
+		
+		Tx_string_transmitting = 1;												 	
+		local_char = fifo_pop(&TxFifo_UART1);										
+		HAL_UART_Transmit_IT(&huart1, &local_char, 1);			
+		return;
+	}		
 }
 
 /* USER CODE END 1 */

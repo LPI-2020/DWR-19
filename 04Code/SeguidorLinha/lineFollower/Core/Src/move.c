@@ -1,25 +1,22 @@
 /*
  * move.c
  *
+ * Movement control module
+ *
  *  Created on: May 5, 2021
  */
 #include "move.h"
-#include "pid.h"
 #include "motor.h"
-/******************************************************************************
-Define Move Speeds
-******************************************************************************/
-#define FORWARD_SPEED 	(float)(0.78)
-#define TURN_SPEED 		(float)(0.7)
+
+#include <math.h> // using fabs()
 
 /******************************************************************************
-Define Sensors in use
+Private variables
 ******************************************************************************/
-// Line Follower Sensor
-uint32_t lf_sens[2];
+// Module flag. Indicates state of movement
+// Equals 1 if its moving, and 0 if its stop
+static uint8_t move_flag = 0;
 
-// Sensor elements
-typedef enum { SENSOR_RIGHT, SENSOR_LEFT } sensor_e;
 /******************************************************************************
 Define Motors in use
 ******************************************************************************/
@@ -33,6 +30,7 @@ static motor_st motor_right = {
 	.GPIO_port_IN2 	= IN2_RIGHT_GPIO_Port,
 	.GPIO_pin_IN2 	= IN2_RIGHT_Pin
 };
+
 // Left Motor Struct
 static motor_st motor_left = {
 	.pwm_channel 	= PWM_L_TIM_CHANNEL,
@@ -41,27 +39,7 @@ static motor_st motor_left = {
 	.GPIO_pin_IN1 	= IN1_LEFT_Pin,
 
 	.GPIO_port_IN2 	= IN2_LEFT_GPIO_Port,
-	.GPIO_pin_IN2 	=  IN2_LEFT_Pin
-};
-
-// List of motors
-static motor_st* motors[] = { &motor_right, &motor_left };
-
-/******************************************************************************
-Define PID algorithm to be used
-******************************************************************************/
-static pid_st pid = {
-	.y 			= 0,	// <----
-	.prev_y 	= 0, 	// <------
-	.kp_h 		= KP,
-	.ki_h 		= KI * TIMER6_PERIOD,
-	.kd_h 		= KD * (1 - a_pid) / TIMER6_PERIOD,
-	.error 		= 0,
-	.sum_errors = 0,
-	.prev_error = 0,
-	.u 			= 0,
-	.u_d 		= 0,
-	.prev_u_d 	= 0
+	.GPIO_pin_IN2 	= IN2_LEFT_Pin
 };
 
 /******************************************************************************
@@ -75,6 +53,8 @@ void move_start(void)
 {
 	motor_init(&motor_right);
 	motor_init(&motor_left);
+	// indicate to the module that motors have been enabled
+	move_flag = 1;
 }
 
 /******************************************************************************
@@ -88,39 +68,34 @@ void move_stop(void)
 {
 	motor_kill(&motor_right);
 	motor_kill(&motor_left);
+	// indicate to the module that motors have been disable
+	move_flag = 0;
 }
 
 /******************************************************************************
-Move Forward
+Move Control
 
-@brief	Set both motors to FORWARD with base speed equal to FORWARD_SPEED (%)
-		>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> explain (FORWARD_SPEED - pid.u * (1 - FORWARD_SPEED))!!!
-@param	none
+@brief	Controls movement, setting speeds on each motor.
+@param	Left and right motor speeds, respectively
 @retval none
 ******************************************************************************/
-void move_forward(void)
+void move_control(float speedL, float speedR)
 {
-	// Apply PID to adjust motor PWM/velocity
-	pid_calcule(&pid, (lf_sens[SENSOR_RIGHT] * 3.3 / 4095), (lf_sens[SENSOR_LEFT] * 3.3 / 4095));
+	if(move_flag == 0)
+		// move_start hasn't occurred
+		move_start();
 
-	// Set both motors to Forward
-	motor_forward(&motor_right, (FORWARD_SPEED - pid.u * (1 - FORWARD_SPEED)) * 100);
-	motor_forward(&motor_left, 	(FORWARD_SPEED + pid.u * (1 - FORWARD_SPEED)) * 100);
-}
+	// speedL and speedR are PWM values, from -1 to +1
+	// since dirL and dirR are uint8_t, speed values are truncated
+	// so, by adding 0.99 (number less than 1) we get:
+	// dirX = 0 if speedX is negative
+	// dirX = 1 if speedX is positive
+	uint8_t dirL = 0.99 + speedL;
+	uint8_t dirR = 0.99 + speedR;
 
-/******************************************************************************
-Move Rotate
-
-@brief	Set motor to FORWARD, in the opposite position to the one in which it
-		will turn.
-		i.e: 	Rotate right: set motor LEFT to FORWARD and STOP motor RIGHT
-				Rotate left: set motor RIGHT to FORWARD and STOP motor LEFT
-@param	none
-@retval none
-******************************************************************************/
-void move_rotate(move_dir_e direction)
-{
-	// Set motor to forward with speed TURN_SPEED (%)
-	motor_forward(motors[1 - (direction & 0x01)], TURN_SPEED * 100);
-	motor_stop(motors[direction & 0x01]);
+	// dirL and dirR (motor_dir_e) are:
+	// 0 -> motor moving BACKWARDS (MOTOR_BACKWARD)
+	// 1 -> motor moving FORWARD (MOTOR_FORWARD)
+	motor_control(&motor_right, fabs(speedR) * 100, (motor_dir_e)(dirR & 0x01));
+	motor_control(&motor_left, fabs(speedL) * 100, (motor_dir_e)(dirL & 0x01));
 }
