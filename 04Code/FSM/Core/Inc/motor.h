@@ -12,13 +12,13 @@
 Define PWM TIM Instance and Channels to be used
 ******************************************************************************/
 #include "tim.h"
-#define PWM_TIM_INSTANCE 	(htim3)
+#define PWM_TIM_INSTANCE 	(htim4)
 
 // Define Right Motor PWM TIM channel
-#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_1)
+#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_3)
 
 // Define Left Motor PWM TIM channel
-#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_2)
+#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_4)
 
 /******************************************************************************
 Motor Struct

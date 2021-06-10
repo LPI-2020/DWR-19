@@ -96,8 +96,13 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI3_Init();
   MX_USART3_UART_Init();
-  MX_TIM3_Init();
   MX_TIM6_Init();
+  MX_ADC3_Init();
+  MX_ADC2_Init();
+  MX_TIM4_Init();
+  MX_USART1_UART_Init();
+  MX_TIM3_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -169,7 +174,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_USART3;
+  PeriphClkInitStruct.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
   PeriphClkInitStruct.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
