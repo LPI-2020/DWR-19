@@ -54,6 +54,8 @@ uint8_t state = 0;
 // Next FSM state
 uint8_t nstate = 0;
 
+uint8_t stop_err = 0;
+
 // Route finished flag
 uint8_t route_finished = 0;
 // New route incoming flag
@@ -153,9 +155,11 @@ static void s_flw_line(void)
 	switch(err)
 	{
 		case E_CROSS_FOUND:
+			stop_err = E_CROSS_FOUND;
 			nstate = S_RD_RFID;
 			break;
 		case E_ROOM_FOUND:
+			stop_err = E_ROOM_FOUND;
 			nstate = S_NEXT_MOV;
 			break;
 		case E_OBS_FOUND:
@@ -192,7 +196,7 @@ uint8_t read_RFID(void)
 		if (status == MI_OK)
 		{
 			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
-			// return successfull
+			// return successful
 			retval = 0;
 		}
 	} while((status != MI_OK) && (!read_rfid_timeout));
@@ -221,14 +225,36 @@ static void s_rd_rfid(void)
 		nstate = S_ERROR;
 }
 
+uint8_t cross_found_func(void)
+{
+	stop_err = 0;
+
+	//... do something next_move_dir = ...
+
+	return S_ROTATE;
+}
+
+uint8_t room_found_func(void)
+{
+	stop_err = 0;
+
+	// if (quarto paragem)
+		// return S_STOPPED;
+	//else
+		return S_FLW_LINE;
+}
+
+uint8_t (*next_move_func[])(void) = {
+		cross_found_func,
+		room_found_func
+};
+
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
 static void s_next_mov(void)
 {
-
-	// next_move_dir = ...
-	nstate = S_FLW_LINE;
+	nstate = next_move_func[(stop_err - 1) & 0x01]();
 }
 
 /******************************************************************************

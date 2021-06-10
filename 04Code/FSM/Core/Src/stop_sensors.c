@@ -25,11 +25,6 @@ uint8_t obs_found_flag = 0;
 // Room Found Flag
 //uint8_t room_found_flag = 0;
 
-//uint8_t sensor1_val = 0;
-//uint8_t sensor8_val = 0;
-
-uint32_t st_sens[ST_SENS_NUM];
-
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
@@ -88,21 +83,21 @@ void isr_obs_detector(void)
 /******************************************************************************
 Stop mark Detector
 ******************************************************************************/
-void stop_detector_init(void)
-{
-	// start sampling stop sensors values
-//	HAL_TIM_Base_Start_IT(&STOP_DETECTOR_TIM);
-	// start storing stop sensors values
-	HAL_ADC_Start_DMA(&STOP_DETECTOR_ADC, st_sens, ST_SENS_NUM);
-}
-
-void stop_detector_deInit(void)
-{
-	// stop storing stop sensors values
-	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
-	// stop sampling stop sensors values
-//	HAL_TIM_Base_Stop_IT(&STOP_DETECTOR_TIM);
-}
+//void stop_detector_init(void)
+//{
+//	// start sampling stop sensors values
+////	HAL_TIM_Base_Start_IT(&STOP_DETECTOR_TIM);
+//	// start storing stop sensors values
+//	HAL_ADC_Start_DMA(&STOP_DETECTOR_ADC, st_sens, ST_SENS_NUM);
+//}
+//
+//void stop_detector_deInit(void)
+//{
+//	// stop storing stop sensors values
+//	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
+//	// stop sampling stop sensors values
+////	HAL_TIM_Base_Stop_IT(&STOP_DETECTOR_TIM);
+//}
 
 /******************************************************************************
 Stop mark detector ISR

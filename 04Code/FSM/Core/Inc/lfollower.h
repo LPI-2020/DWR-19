@@ -16,12 +16,10 @@ Define Peripherals INSTANCES in use
 #include "adc.h"
 #include "tim.h"
 
-// ADC DMA linked to Line Follower Sensors
-#define ADC_LF_SENS_DMA 	(hadc3)
 // used to sample values from Line Follower Sensors to PID
-#define TIM_LF_SENS_PID 	(htim6)
+#define TIM_LFOLLOWER_PID 			(htim6)
 // used to timeout lfollower rotate
-#define TIM_LF_ROTATE		(TIM_TIMEOUTS)
+#define TIM_LFOLLOWER_ROTATE		(TIM_TIMEOUTS)
 
 /******************************************************************************
 Line Follower Error Codes
