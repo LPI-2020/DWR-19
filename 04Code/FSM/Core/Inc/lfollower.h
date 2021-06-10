@@ -24,6 +24,14 @@ Define Peripherals INSTANCES in use
 #define TIM_LF_ROTATE		(TIM_TIMEOUTS)
 
 /******************************************************************************
+Line Follower Error Codes
+******************************************************************************/
+#define EXIT_SUCCESS	0
+#define E_CROSS_FOUND	1
+#define E_ROOM_FOUND	2
+#define E_OBS_FOUND		3
+
+/******************************************************************************
 Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
@@ -32,15 +40,12 @@ void lfollower_stop(void);
 void lfollower_pid(void);
 uint8_t lfollower_rotate(move_dir_e dir);
 
+uint8_t lfollower_control(void);
+
 /******************************************************************************
 Debug Functions
 ******************************************************************************/
-#ifdef _DEBUG_
-#include "usart.h"
-#include <stdio.h>
-
 // print line follower sensors values
 void lfollower_print_sens(void);
-#endif // !_DEBUG_
 
 #endif // !__LFOLLOWER_H__

@@ -4,7 +4,9 @@
 
 #include "stm32f7xx_hal.h"
 
-// Test move module functionalities
+/******************************************************************************
+Test Move module
+******************************************************************************/
 void test_move(float speed)
 {
 	  // test FORWARD movement
@@ -32,10 +34,36 @@ void test_move(float speed)
 	  HAL_Delay(2000);
 }
 
+/******************************************************************************
+Test lineFollower module
+******************************************************************************/
+void test_print_qtr(void)
+{
+	while(1)
+	{
+		lfollower_print_sens();
+		HAL_Delay(300);
+	}
+}
+
+void test_lfollower_rotate(move_dir_e dir)
+{
+	uint8_t err;
+
+	// rotate to direction dir
+	err = lfollower_rotate(dir);
+
+	// write LED RED pin if rotate is not completed
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+}
+
+/******************************************************************************
+Test stop sensors module
+******************************************************************************/
 void test_stop_sensor(void)
 {
 	// init stop sensors
-	stop_sensors_init();
+	//stop_sensors_init();
 
 	// start moving forwards
 	move_forward(0.7);
@@ -48,14 +76,14 @@ void test_stop_sensor(void)
 	move_stop();
 }
 
-void test_lfollower(move_dir_e dir)
+/******************************************************************************
+Test modules functions
+******************************************************************************/
+void test_modules(void)
 {
-	uint8_t err;
+	//test_move(0.7);
+	//test_lfollower_rotate(MOVE_RIGHT);
+	test_print_qtr();
 
-	// rotate to direction dir
-	err = lfollower_rotate(dir);
-
-	// write pin if rotate is not completed
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, err & 0x01);
+	//lfollower_start();
 }
-

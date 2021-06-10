@@ -121,31 +121,50 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-	// obstacle detected?
-	if(obs_found_flag)
+	uint8_t err;
+
+//	// obstacle detected?
+//	if(obs_found_flag)
+//	{
+//		// enables timer counting OBS_TIM seconds
+//		// ....
+//		nstate = S_STOPPED;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+//
+//	if(cross_found_flag)
+//	{
+//		// Cross Found
+//		nstate = S_RD_RFID;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+//	if(room_found_flag)
+//	{
+//		// Room Found
+//		nstate = S_NEXT_MOV;
+//		// stop line follower
+//		lfollower_stop();
+//	}
+
+	err = lfollower_control();
+
+	switch(err)
 	{
-		// enables timer counting OBS_TIM seconds
-		// ....
-		nstate = S_STOPPED;
-		// stop line follower
-		lfollower_stop();
+		case E_CROSS_FOUND:
+			nstate = S_RD_RFID;
+			break;
+		case E_ROOM_FOUND:
+			nstate = S_NEXT_MOV;
+			break;
+		case E_OBS_FOUND:
+			nstate = S_STOPPED;
+			break;
+		default:
+			break;
 	}
-	if(cross_found_flag)
-	{
-		// Cross Found
-		nstate = S_RD_RFID;
-		// stop line follower
-		lfollower_stop();
-		// enable RFID reader
-		RFID_RC522_Init();
-	}
-	if(room_found_flag)
-	{
-		// Room Found
-		nstate = S_NEXT_MOV;
-		// stop line follower
-		lfollower_stop();
-	}
+
 }
 
 /******************************************************************************
@@ -153,6 +172,7 @@ State Read RFID
 ******************************************************************************/
 uint8_t read_RFID(void)
 {
+	// RFID status reading
 	int status;
 
 	uint8_t CardID[4];
@@ -161,6 +181,9 @@ uint8_t read_RFID(void)
 
   	// return val: initialized as return not successfull
   	uint8_t retval = 1;
+
+  	// enable RFID reader
+  	RFID_RC522_Init();
 
 	do
 	{
@@ -183,6 +206,7 @@ static void s_rd_rfid(void)
 
 	// start movement
 	move_forward(RD_RFID_SPEED);
+
 	// wait for RFID read or 'read_rfid_timeout'
 	err = read_RFID();
 	// stop movement
@@ -212,18 +236,14 @@ State Rotate
 ******************************************************************************/
 static void s_rotate(void)
 {
-//	uint8_t turn_cmplt = 0;
-	// rotate to 'next_move_dir' with speed ROTATE_SPEED
-	move_rotate(next_move_dir, ROTATE_SPEED);
+	uint8_t rotate_err;
 
-	// if rotate RIGHT, stop rotate when right sensor is over the line.
-	// if rotate LEFT, stop rotate when left sensor is over the line.
+	// rotate to direction 'next_move_dir'
+	rotate_err = lfollower_rotate(next_move_dir);
 
-	//while(!rotate_timeout && !turn_cmplt)
-	//	turn_cmplt = lf_rotate(next_move_dir);
-
-	if(rotate_timeout)
-		// rotate not successfull
+	// rotate was returned error? (Due to timeout)
+	if(rotate_err)
+		// rotate was not successfull
 		nstate = S_ERROR;
 	else
 	{

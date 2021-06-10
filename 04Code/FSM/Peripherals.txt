@@ -5,7 +5,10 @@ TIM3 -	Obstacle detector ADC trigger
 
 TIM4 -	PWM Generator
 
-TIM6 -	Sampling Period PID  _AND_ Debounce
+TIM6 -	Sampling Period PID AND 
+	Debounce AND
+	Stop detector
+
 	(Timebase 10ms)
 	(Symbol TIM_LF_SENS_PID at lfollower.h)
 

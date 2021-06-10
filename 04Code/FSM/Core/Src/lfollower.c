@@ -13,6 +13,11 @@
 
 #include <math.h> // using fabs()
 
+#include "usart.h" // debug
+#include <stdio.h>
+
+#define _DEBUG_
+
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
@@ -68,17 +73,19 @@ Define Line Follower Sensors in use
 #define LF_SENS_NUM (4)
 static uint32_t lf_sens[LF_SENS_NUM];
 
-#define ST_SENS_NUM	(2)
-static uint32_t st_sens[ST_SENS_NUM];
+//#define ST_SENS_NUM	(2)
+//static uint32_t st_sens[ST_SENS_NUM];
 
 // Sensor elements
-typedef enum {
-	SENSOR3,	// Line Follower RIGHT Sensor
-	SENSOR4,	// Rotate RIGHT Sensor
-	SENSOR5,	// Rotate LEFT Sensor
-	SENSOR6		// Line Follower LEFT Sensor
-} sensor_e;
+//typedef enum {
+//	SENSOR3,	// Line Follower RIGHT Sensor
+//	SENSOR4,	// Rotate RIGHT Sensor
+//	SENSOR5,	// Rotate LEFT Sensor
+//	SENSOR6		// Line Follower LEFT Sensor
+//} sensor_e;
 
+// line follower status (enabled 1 or disabled 0)
+uint8_t lfollower_status = 0;
 /******************************************************************************
 Define PID parameters to be used
 ******************************************************************************/
@@ -131,6 +138,9 @@ Line Follower PID
 ******************************************************************************/
 void lfollower_pid(void)
 {
+	// is line follower disabled?
+	if(lfollower_status == 0)
+		return;
 
 	// Apply PID to adjust motor PWM/velocity
 	// error = S_LEFT_VAL - S_RIGHT_VAL
@@ -138,11 +148,11 @@ void lfollower_pid(void)
 						DIG_TO_ANALOG(lf_sens[SENSOR3]));
 
 #ifdef _DEBUG_
-	sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-	sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n",
-							DIG_TO_ANALOG(lf_sens[SENSOR6]),
-							DIG_TO_ANALOG(lf_sens[SENSOR3]));
-	transmit_string(Tx_buffer);
+//	sprintf(Tx_buffer, "left %f   right %f\r\n", GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+//	sprintf(Tx_buffer, "sensor left %f\r\nsensor right %f\r\n",
+//							DIG_TO_ANALOG(lf_sens[SENSOR6]),
+//							DIG_TO_ANALOG(lf_sens[SENSOR3]));
+//	transmit_string(Tx_buffer);
 #endif // !_DEBUG_
 
 	// according to calculated error = S_LEFT_VAL - S_RIGHT_VAL:
@@ -168,13 +178,17 @@ Line Follower Stop
 @retval	none
 ******************************************************************************/
 
+#define ANALOG_STOP_VOLT (float)(2.45)
+
 uint8_t lfollower_rotate(move_dir_e dir)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 
-	// start storing
-	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC, st_sens, ST_SENS_NUM);
+	// start storing stop sensors values
+	stop_detector_init();
+	// start rotate_timeout
+	timeout_start();
 
 	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
 	// if dir == MOVE_LEFT, check when SENSOR8 is over the line
@@ -184,21 +198,18 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// dir is now 0 or 2
 	dir >>= 1;
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
-
-	// reset number of 2second Timeouts
-	num_timeout_2sec = 0;
-	// start Rotate_Timeout
-	HAL_TIM_Base_Start_IT(&TIM_LF_ROTATE);
-
-	// while Sensor is not over the line and timeout has not occurred
-	while((DIG_TO_ANALOG(st_sens[1 + (dir & 0x01)]) < (2.0)) && (num_timeout_2sec < TIMEOUT_4SEC))
+	// so, if: 	dir = 0 -> SENSOR1
+	//			dir = 1 -> SENSOR8
+	while((DIG_TO_ANALOG(st_sens[dir & 0x01]) < ANALOG_STOP_VOLT) && (num_timeout_2sec < TIMEOUT_4SEC))
 		;
+
+	// stop Rotate_Timeout
+	timeout_stop();
+	// stop storing stop sensors values
+	stop_detector_deInit();
 
 	// stop rotating
 	move_stop();
-
-	// stop Rotate_Timeout
-	HAL_TIM_Base_Stop_IT(&TIM_LF_ROTATE);
 
 	// if timeout didnt occurred then rotate was completed -> Return 0
 	// if timeout occured, then we must return an error code, signaling a
@@ -219,8 +230,16 @@ void lfollower_start(void)
 	HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
 	// start sampling for PID application
 	HAL_TIM_Base_Start_IT(&TIM_LF_SENS_PID);
+
 	// start movement
 	move_start();
+
+	// start stop mark detectors
+	obs_detector_init();
+	stop_detector_init();
+
+	// mark line follower is enabled
+	lfollower_status = 1;
 }
 
 /******************************************************************************
@@ -236,8 +255,16 @@ void lfollower_stop(void)
 	HAL_ADC_Stop_DMA(&ADC_LF_SENS_DMA);
 	// stop sampling for PID application
 	HAL_TIM_Base_Stop_IT(&TIM_LF_SENS_PID);
+
 	// stop movement
 	move_stop();
+
+	// stop stop mark detectores
+	obs_detector_deInit();
+	stop_detector_deInit();
+
+	// mark line follower is disabled
+	lfollower_status = 0;
 }
 
 /******************************************************************************
@@ -247,33 +274,75 @@ Debug Functions
 @param	none
 @retval	none
 ******************************************************************************/
-#ifdef _DEBUG_
-
 void lfollower_print_sens(void)
 {
-	sprintf(Tx_buffer, "Sensor 1: %ld\r\n", st_sens[0]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
+	char str[32];
 
-	sprintf(Tx_buffer, "Sensor 3: %ld\r\n", lf_sens[0]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
+	HAL_ADC_Start_DMA(&ADC_LF_SENS_DMA, lf_sens, LF_SENS_NUM);
+	HAL_ADC_Start_DMA(&STOP_DETECTOR_ADC, st_sens, ST_SENS_NUM);
 
-	sprintf(Tx_buffer, "Sensor 4: %ld\r\n", lf_sens[1]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
+	snprintf(str, sizeof(str), "S1[%f]\n\r", DIG_TO_ANALOG(st_sens[0]));
+	UART_puts(str);
 
-	sprintf(Tx_buffer, "Sensor 5: %ld\r\n", lf_sens[2]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
+	snprintf(str, sizeof(str), "S3[%f]\n\r", DIG_TO_ANALOG(lf_sens[SENSOR3]));
+	UART_puts(str);
 
-	sprintf(Tx_buffer, "Sensor 6: %ld\r\n", lf_sens[3]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
+	snprintf(str, sizeof(str), "S4[%f]\n\r", DIG_TO_ANALOG(lf_sens[SENSOR4]));
+	UART_puts(str);
 
-	sprintf(Tx_buffer, "Sensor 8: %ld\r\n", st_sens[1]);
-	transmit_string(Tx_buffer);
-	HAL_Delay(100);
-	HAL_Delay(1000);
+	snprintf(str, sizeof(str), "S5[%f]\n\r", DIG_TO_ANALOG(lf_sens[SENSOR5]));
+	UART_puts(str);
+
+	snprintf(str, sizeof(str), "S6[%f]\n\r", DIG_TO_ANALOG(lf_sens[SENSOR6]));
+	UART_puts(str);
+
+	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", DIG_TO_ANALOG(st_sens[1]));
+	UART_puts(str);
+
+	HAL_ADC_Stop_DMA(&ADC_LF_SENS_DMA);
+	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
 }
-#endif // !_DEBUG_
+
+/******************************************************************************
+Debug Functions
+
+@brief 	Prints Line Follower Sensors Values
+@param	none
+@retval	none
+******************************************************************************/
+
+uint8_t lfollower_control(void)
+{
+	uint8_t err = EXIT_SUCCESS;
+
+	// line follower already started?
+	if(lfollower_status == 0)
+		// start line follower
+		lfollower_start();
+
+	if(CROSS_DETECTED() == 1)
+		// cross detected
+		err = E_CROSS_FOUND;
+	else if(ROOM_DETECTED() == 1)
+		// room detected
+		err = E_ROOM_FOUND;
+	else if(obs_found_flag == 1)
+		// obstacle found
+		err = E_OBS_FOUND;
+
+	// error found?
+	if(err)
+		// stop line follower
+		lfollower_stop();
+
+	// return error code
+	return err;
+}
+
+
+
+
+
+
+
+
