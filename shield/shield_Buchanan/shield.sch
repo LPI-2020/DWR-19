@@ -148,7 +148,7 @@ PF8
 Wire Wire Line
 	3500 4100 3300 4100
 Text GLabel 3300 4200 0    50   Input ~ 0
-PF7´
+PF7
 Wire Wire Line
 	3500 4200 3300 4200
 Text GLabel 3300 4300 0    50   Input ~ 0
@@ -577,7 +577,7 @@ F 3 "~" H 1900 1750 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Text GLabel 1450 2650 0    50   Input ~ 0
-PA7
+PF8
 Wire Wire Line
 	1450 2650 1700 2650
 Text GLabel 1450 1550 0    50   Input ~ 0
@@ -738,22 +738,22 @@ F 3 "~" H 1900 4400 50  0001 C CNN
 	1    1900 4400
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 3700 0    50   Input ~ 0
+Text GLabel 1450 3900 0    50   Input ~ 0
 PE6
 Wire Wire Line
-	1450 3700 1700 3700
-Text GLabel 1450 3900 0    50   Input ~ 0
+	1450 3900 1700 3900
+Text GLabel 1450 4100 0    50   Input ~ 0
 PE3
 Wire Wire Line
-	1450 3900 1700 3900
-Text GLabel 1450 3800 0    50   Input ~ 0
+	1450 4100 1700 4100
+Text GLabel 1450 4000 0    50   Input ~ 0
 PF0
 Wire Wire Line
-	1450 3800 1700 3800
-Text GLabel 1450 4000 0    50   Input ~ 0
+	1450 4000 1700 4000
+Text GLabel 1450 4200 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1450 4000 1700 4000
+	1450 4200 1700 4200
 $Comp
 L Connector:Screw_Terminal_01x04 J9
 U 1 1 60F94F21
@@ -765,22 +765,18 @@ F 3 "~" H 1900 4000 50  0001 C CNN
 	1    1900 4000
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4100 0    50   Input ~ 0
-PF8
-Wire Wire Line
-	1450 4100 1700 4100
-Text GLabel 1450 4200 0    50   Input ~ 0
-PD0
-Wire Wire Line
-	1450 4200 1700 4200
 Text GLabel 1450 4300 0    50   Input ~ 0
-PF7
+PD0
 Wire Wire Line
 	1450 4300 1700 4300
 Text GLabel 1450 4400 0    50   Input ~ 0
-PD1
+PF7
 Wire Wire Line
 	1450 4400 1700 4400
+Text GLabel 1450 4500 0    50   Input ~ 0
+PD1
+Wire Wire Line
+	1450 4500 1700 4500
 $Comp
 L Connector:Screw_Terminal_01x04 J8
 U 1 1 60F94F2F
@@ -792,22 +788,22 @@ F 3 "~" H 1900 3600 50  0001 C CNN
 	1    1900 3600
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4500 0    50   Input ~ 0
+Text GLabel 1450 4600 0    50   Input ~ 0
 PF9
 Wire Wire Line
-	1450 4500 1700 4500
-Text GLabel 1450 3400 0    50   Input ~ 0
+	1450 4600 1700 4600
+Text GLabel 1450 3600 0    50   Input ~ 0
 PF2
 Wire Wire Line
-	1450 3400 1700 3400
-Text GLabel 1450 3500 0    50   Input ~ 0
+	1450 3600 1700 3600
+Text GLabel 1450 3700 0    50   Input ~ 0
 PE5
 Wire Wire Line
-	1450 3500 1700 3500
-Text GLabel 1450 3600 0    50   Input ~ 0
+	1450 3700 1700 3700
+Text GLabel 1450 3800 0    50   Input ~ 0
 PF1
 Wire Wire Line
-	1450 3600 1700 3600
+	1450 3800 1700 3800
 $Comp
 L Connector:Screw_Terminal_01x04 J11
 U 1 1 60FA1358
@@ -819,14 +815,14 @@ F 3 "~" H 1900 4800 50  0001 C CNN
 	1    1900 4800
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4600 0    50   Input ~ 0
+Text GLabel 1450 4700 0    50   Input ~ 0
 PG0
 Wire Wire Line
-	1450 4600 1700 4600
-Text GLabel 1450 4700 0    50   Input ~ 0
+	1450 4700 1700 4700
+Text GLabel 1450 4800 0    50   Input ~ 0
 PG1
 Wire Wire Line
-	1450 4700 1700 4700
+	1450 4800 1700 4800
 $Comp
 L Device:C C_SLINHA1
 U 1 1 60FDE443
@@ -958,4 +954,12 @@ Text GLabel 7200 4150 2    50   Input ~ 0
 PE12
 Wire Wire Line
 	7200 4150 6950 4150
+Text GLabel 1450 3400 0    50   Input ~ 0
+PA7
+Wire Wire Line
+	1450 3400 1700 3400
+Text GLabel 1450 3500 0    50   Input ~ 0
+PE4
+Wire Wire Line
+	1450 3500 1700 3500
 $EndSCHEMATC
