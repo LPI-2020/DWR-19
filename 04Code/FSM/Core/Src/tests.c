@@ -52,7 +52,27 @@ void test_lfollower_rotate(move_dir_e dir)
 	err = lfollower_rotate(dir);
 
 	// write LED RED pin if rotate is not completed
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+}
+
+void test_lfollower_and_rotate(void)
+{
+	uint8_t err = 0;
+
+	while(err == 0)
+		err = lfollower_control();
+
+	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+
+	move_forward(0.7);
+	HAL_Delay(1000);
+
+	// rotate to direction dir
+	err = lfollower_rotate(MOVE_LEFT);
+
+	// write LED RED pin if rotate is not completed
+	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
 }
 
 /******************************************************************************
@@ -80,20 +100,20 @@ Test RFID module
 ******************************************************************************/
 void test_rfid(void)
 {
-	uint8_t status;
+	uint8_t status = -1;
 
 	// follow line
-	lfollower_start();
+	//lfollower_start();
 
 	// detect cross
-//	while (!cross_found_flag)
+	while (!cross_found_flag)
 //		;
 
 	// stop following line
-	lfollower_stop();
+	//lfollower_stop();
 
 	// moves forward until read the rfid card
-	move_forward(0.7);
+	//move_forward(0.7);
 
 	while (status != MI_OK)
 	{
@@ -101,7 +121,10 @@ void test_rfid(void)
 	}
 
 	// stop movement
-	move_stop();
+	//move_stop();
+
+	// write LED RED pin if rotate is not completed
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
 }
 
 /******************************************************************************
@@ -111,11 +134,15 @@ void test_modules(void)
 {
 	//test_move(0.7);
 	//test_lfollower_rotate(MOVE_RIGHT);
-	//test_print_qtr();
 	
+	//while(1)
+		//test_print_qtr();
+
 	//test_stop_sensor(E_ROOM_FOUND);
 	//test_stop_sensor(E_CROSS_FOUND);
 	//lfollower_start();
 
 	//test_rfid();
+
+	test_lfollower_and_rotate();
 }

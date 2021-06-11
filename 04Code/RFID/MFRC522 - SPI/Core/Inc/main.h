@@ -89,18 +89,18 @@ void Error_Handler(void);
 #define SPIx_RELEASE_RESET()             __HAL_RCC_SPI1_RELEASE_RESET()
 
 /* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_5 // A5
-#define SPIx_SCK_GPIO_PORT               GPIOA
-#define SPIx_SCK_AF                      GPIO_AF5_SPI1
-#define SPIx_MISO_PIN                    GPIO_PIN_6 // A6
-#define SPIx_MISO_GPIO_PORT              GPIOA
-#define SPIx_MISO_AF                     GPIO_AF5_SPI1
-#define SPIx_MOSI_PIN                    GPIO_PIN_7 // A7
-#define SPIx_MOSI_GPIO_PORT              GPIOA
-#define SPIx_MOSI_AF                     GPIO_AF5_SPI1
-#define SPIx_NSS_PIN					 					 GPIO_PIN_11 // A11
-#define SPIx_NSS_GPIO_PORT							 GPIOA
-#define SPIx_NSS_AF						 					 GPIO_AF5_SPI1
+//#define SPIx_SCK_PIN                     GPIO_PIN_5 // A5
+//#define SPIx_SCK_GPIO_PORT               GPIOA
+//#define SPIx_SCK_AF                      GPIO_AF5_SPI1
+//#define SPIx_MISO_PIN                    GPIO_PIN_6 // A6
+//#define SPIx_MISO_GPIO_PORT              GPIOA
+//#define SPIx_MISO_AF                     GPIO_AF5_SPI1
+//#define SPIx_MOSI_PIN                    GPIO_PIN_7 // A7
+//#define SPIx_MOSI_GPIO_PORT              GPIOA
+//#define SPIx_MOSI_AF                     GPIO_AF5_SPI1
+//#define SPIx_NSS_PIN					 					 GPIO_PIN_11 // A11
+//#define SPIx_NSS_GPIO_PORT							 GPIOA
+//#define SPIx_NSS_AF						 					 GPIO_AF5_SPI1
 #define SPIx_CS_PIN                      GPIO_PIN_1 // F1
 #define SPIx_CS_GPIO_PORT                GPIOF
 
