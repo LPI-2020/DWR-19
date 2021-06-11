@@ -30,6 +30,7 @@
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
 #include "tests.h"
+#include "lfollower.h"
 
 /* USER CODE END Includes */
 
@@ -111,6 +112,7 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
+  //lfollower_start();
   while (1)
   {
 	  test_modules();

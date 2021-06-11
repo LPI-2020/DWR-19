@@ -36,7 +36,7 @@ QTR functions
 ******************************************************************************/
 #define ANALOG_HI_VOLT (2.45)	// In Volts. Minimum (analog) value of a digital
 								// value (0 or 1).
-
+//#define ANALOG_HI_VOLT 2.8
 // Get sensor logical value Macro
 #define GET_SENS_LOGVAL(_sens_)  (DIG_TO_ANALOG(qtr_sens[_sens_]) > ANALOG_HI_VOLT)
 

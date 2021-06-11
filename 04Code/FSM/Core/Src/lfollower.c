@@ -140,13 +140,12 @@ void lfollower_pid(void)
 }
 
 /******************************************************************************
-Line Follower Stop
+Line Follower Rotate
 
-@brief 	Stops line follower process.
-@param	none
-@retval	none
+@brief 	Rotates the robot to 'dir' direction, stopping when sensor founds the line
+@param	dir - direction to rotate
+@retval '1' if timeout occured
 ******************************************************************************/
-
 uint8_t lfollower_rotate(move_dir_e dir)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
@@ -154,6 +153,8 @@ uint8_t lfollower_rotate(move_dir_e dir)
 
 	// start rotate_timeout
 	timeout_start();
+
+	qtr_init();
 
 	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
 	// if dir == MOVE_LEFT, check when SENSOR8 is over the line
@@ -165,15 +166,21 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
 	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8
-	while(GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) && (num_timeout_2sec < TIMEOUT_4SEC))
+
+	while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
+	//while(num_timeout_2sec < TIMEOUT_4SEC)
+	//while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0))
+//	while((GET_SENS_LOGVAL(SENSOR1) == 0))
 		;
 
+	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
 	// stop Rotate_Timeout
 	timeout_stop();
 
 	// stop rotating
 	move_stop();
 
+	qtr_kill();
 	// if timeout didnt occurred then rotate was completed -> Return 0
 	// if timeout occured, then we must return an error code, signaling a
 	// non successful rotate -> return 1
@@ -183,9 +190,12 @@ uint8_t lfollower_rotate(move_dir_e dir)
 /******************************************************************************
 Line Follower Control
 
-@brief
+@brief	Follows line and stops if detects a cross, room or obstacle
 @param	none
-@retval	none
+@retval	err - error code can be: EXIT_SUCCESS - nothing detected;
+					  	  	  	 E_CROSS_FOUND - cross detected;
+					  	  	  	 E_ROOM_FOUND - room detected;
+					  	  	  	 E_OBS_FOUND - obstacle detected.
 ******************************************************************************/
 uint8_t lfollower_control(void)
 {
@@ -207,7 +217,7 @@ uint8_t lfollower_control(void)
 		err = E_OBS_FOUND;
 
 	// error found?
-	if(err)
+	if(err != EXIT_SUCCESS)
 		// stop line follower
 		lfollower_stop();
 
