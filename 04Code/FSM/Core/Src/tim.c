@@ -427,7 +427,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	}
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 2sec
-
 		// count 2sec cycle
 		num_timeout_2sec++;
 		// toggle LED GREEN

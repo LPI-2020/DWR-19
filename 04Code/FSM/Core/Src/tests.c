@@ -65,12 +65,17 @@ void test_lfollower_and_rotate(void)
 	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
 
-	move_forward(0.7);
-	HAL_Delay(1000);
+	lfollower_start();
+	HAL_Delay(500);
+	lfollower_stop();
 
 	// rotate to direction dir
 	err = lfollower_rotate(MOVE_LEFT);
 
+	while(err == 0)
+			err = lfollower_control();
+
+	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
 	// write LED RED pin if rotate is not completed
 	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
 }
