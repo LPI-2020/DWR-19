@@ -107,6 +107,14 @@ int main(void)
 		if (status == MI_OK) {
 			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
 		}
+				else {
+        if (status == MI_TIMEOUT) {
+            str = "timeout";
+        }
+        if (status == MI_ERR) {
+            str = "error";
+        }
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
