@@ -45,6 +45,15 @@ void (*fsm_func_ptr[])(void) = {
 };
 
 /******************************************************************************
+RFID struct
+******************************************************************************/
+rfid_t rfid = {
+		.CardID = {0},
+		.result = 0,
+		.type = 0
+};
+
+/******************************************************************************
 FSM flags
 ******************************************************************************/
 // Current FSM state
@@ -134,39 +143,6 @@ static void s_flw_line(void)
 	}
 }
 
-/******************************************************************************
-State Read RFID
-******************************************************************************/
-uint8_t read_RFID(void)
-{
-	// RFID status reading
-	int status;
-
-	uint8_t CardID[4];
-	uint8_t type;
-  	char *result;
-
-  	// return val: initialized as return not successfull
-  	uint8_t retval = 1;
-
-  	// enable RFID reader
-  	RFID_RC522_Init();
-
-	do
-	{
-		status = TM_MFRC522_Check(CardID, &type);
-
-		if (status == MI_OK)
-		{
-			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
-			// return successful
-			retval = 0;
-		}
-	} while((status != MI_OK) && (!read_rfid_timeout));
-
-	return retval;
-}
-
 static void s_rd_rfid(void)
 {
 	uint8_t err;
@@ -175,12 +151,12 @@ static void s_rd_rfid(void)
 	move_forward(RD_RFID_SPEED);
 
 	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
-	err = read_RFID();
+	err = read_RFID(rfid);
 	// stop movement
 	move_stop();
 
 	// read RFID correctly?
-	if(err == 0)
+	if(err == MI_OK)
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
 	else

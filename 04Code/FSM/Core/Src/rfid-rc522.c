@@ -41,6 +41,37 @@ void RFID_RC522_Init(void) {
 	TM_MFRC522_AntennaOn();		//Open the antenna
 }
 
+/******************************************************************************
+Read RFID
+
+@brief 	Reads RFID card
+@para 	rfid struct
+@retval rfid status
+******************************************************************************/
+uint8_t read_RFID(rfid_t rfid)
+{
+	// RFID status reading
+	int status;
+
+  	// enable RFID reader
+  	RFID_RC522_Init();
+
+	do
+	{
+		// check if rfid was read
+		status = TM_MFRC522_Check(rfid.CardID, &rfid.type);
+
+		if (status == MI_OK)
+			// rfid read
+			// converts CardID to an hexadecimal string
+			bin_to_strhex((unsigned char *)rfid.CardID, sizeof(rfid.CardID), &rfid.result);
+
+	} while(status != MI_OK); // && (!read_rfid_timeout));
+
+	return status;
+}
+
+
 TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 	TM_MFRC522_Status_t status;
 	//Find cards, return card type

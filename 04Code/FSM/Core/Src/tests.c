@@ -1,6 +1,7 @@
 #include "tests.h"
 #include "stop_sensors.h"
 #include "lfollower.h"
+#include "rfid-rc522.h"
 
 #include "stm32f7xx_hal.h"
 
@@ -68,6 +69,41 @@ void test_stop_sensor(uint8_t val)
 	lfollower_stop();
 }
 
+rfid_t rfid_test = {
+			.CardID = {0},
+			.result = 0,
+			.type = 0
+};
+
+/******************************************************************************
+Test RFID module
+******************************************************************************/
+void test_rfid(void)
+{
+	uint8_t status;
+
+	// follow line
+	lfollower_start();
+
+	// detect cross
+//	while (!cross_found_flag)
+//		;
+
+	// stop following line
+	lfollower_stop();
+
+	// moves forward until read the rfid card
+	move_forward(0.7);
+
+	while (status != MI_OK)
+	{
+		status = read_RFID(rfid_test);
+	}
+
+	// stop movement
+	move_stop();
+}
+
 /******************************************************************************
 Test modules functions
 ******************************************************************************/
@@ -76,8 +112,10 @@ void test_modules(void)
 	//test_move(0.7);
 	//test_lfollower_rotate(MOVE_RIGHT);
 	//test_print_qtr();
+	
+	//test_stop_sensor(E_ROOM_FOUND);
+	//test_stop_sensor(E_CROSS_FOUND);
 	//lfollower_start();
 
-	test_stop_sensor(E_ROOM_FOUND);
-	//test_stop_sensor(E_CROSS_FOUND);
+	//test_rfid();
 }
