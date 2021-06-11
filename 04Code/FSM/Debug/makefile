@@ -61,8 +61,8 @@ all: main-build
 main-build: fsm.elf secondary-outputs
 
 # Tool invocations
-fsm.elf: $(OBJS) $(USER_OBJS) C:\Users\diogo\OneDrive\Documentos\MEEIC\3Ano\2Semestre\LPI\DWR-19\04Code\FSM\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "fsm.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\diogo\OneDrive\Documentos\MEEIC\3Ano\2Semestre\LPI\DWR-19\04Code\FSM\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fsm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+fsm.elf: $(OBJS) $(USER_OBJS) C:\02Sem\LPI\DWR-19\04Code\FSM\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "fsm.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\02Sem\LPI\DWR-19\04Code\FSM\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fsm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

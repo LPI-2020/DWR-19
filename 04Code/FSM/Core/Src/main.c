@@ -31,6 +31,9 @@
 #include "fsm.h"
 #include "tests.h"
 
+#include "lfollower.h"
+#include "stop_sensors.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -111,10 +114,14 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
+  //lfollower_start();
+  //timeout_start();
+  obs_detector_init();
+
   while (1)
   {
-	  test_modules();
-	  break;
+	  //test_modules();
+	  //break;
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;

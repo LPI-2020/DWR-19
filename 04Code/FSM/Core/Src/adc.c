@@ -325,8 +325,14 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	if(hadc == &OBS_DETECTOR_ADC)
+	{
+		// triggered by OBS_DETECTOR_TIM
+		// enters every 500ms
+
 		// obstacle detector ISR
 		isr_obs_detector();
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+	}
 }
 /* USER CODE END 1 */
 
