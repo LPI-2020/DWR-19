@@ -116,12 +116,29 @@ int main(void)
 
   //lfollower_start();
   //timeout_start();
-  obs_detector_init();
+  //obs_detector_init();
+
+  int err = 0;
 
   while (1)
   {
+
 	  //test_modules();
-	  //break;
+
+	  err = test_modules();
+
+	  switch(err)
+	  {
+		  case 0:
+			  // all ok
+			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
+			  return 0;
+
+		  default:
+			  // signal error
+			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+			  return 1;
+	  }
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;

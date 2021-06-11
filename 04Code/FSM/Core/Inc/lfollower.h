@@ -36,6 +36,7 @@ Line Follower Error Codes
 #define E_CROSS_FOUND	1
 #define E_ROOM_FOUND	2
 #define E_OBS_FOUND		3
+#define E_LF_TIMEOUT	4
 
 /******************************************************************************
 Line Follower Functions
@@ -45,6 +46,7 @@ void lfollower_stop(void);
 
 void lfollower_pid(void);
 uint8_t lfollower_rotate(move_dir_e dir);
+
 uint8_t lfollower_control(void);
 
 /******************************************************************************

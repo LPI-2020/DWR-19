@@ -421,16 +421,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	if(htim == &htim3)
 	{// enters every 10ms
-
 		// line follower PID
 		lfollower_pid();
+		lfollower_control();
 	}
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 2sec
 		// count 2sec cycle
 		num_timeout_2sec++;
-		// toggle LED GREEN
-		//HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
 	}
 }
 /* USER CODE END 1 */

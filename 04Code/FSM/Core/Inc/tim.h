@@ -45,7 +45,7 @@ extern uint8_t num_timeout_2sec;
 #define TIM_TIMEOUTS	(htim7)
 // timeout 4 seconds == (num_timeout_2sec = 2)
 #define TIMEOUT_4SEC	(3)
-
+#define TIMEOUT_2SEC	(2)
 
 #define TIMER6_PERIOD (float) 0.01
 /* USER CODE END Private defines */

@@ -88,12 +88,12 @@ void Error_Handler(void);
 #define PWM_LEFT_GPIO_Port GPIOD
 #define USER_BTN_Pin GPIO_PIN_8
 #define USER_BTN_GPIO_Port GPIOC
-#define SPI3_RSET_Pin GPIO_PIN_9
-#define SPI3_RSET_GPIO_Port GPIOC
 #define SPI3_SDA_Pin GPIO_PIN_2
 #define SPI3_SDA_GPIO_Port GPIOD
 #define BLUET_TX_Pin GPIO_PIN_6
 #define BLUET_TX_GPIO_Port GPIOB
+#define DEBUG_LBLUE_Pin GPIO_PIN_7
+#define DEBUG_LBLUE_GPIO_Port GPIOB
 #define PWM_RIGHT_Pin GPIO_PIN_8
 #define PWM_RIGHT_GPIO_Port GPIOB
 #define IN1_RIGHT_Pin GPIO_PIN_9

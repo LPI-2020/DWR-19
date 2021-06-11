@@ -331,7 +331,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 
 		// obstacle detector ISR
 		isr_obs_detector();
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
 	}
 }
 /* USER CODE END 1 */

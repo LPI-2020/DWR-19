@@ -51,7 +51,8 @@ void isr_obs_detector(void);
 /******************************************************************************
 Cross and Room Detectors Functions
 ******************************************************************************/
-uint8_t cross_detector(void);
-uint8_t room_detector(void);
+//uint8_t cross_detector(void);
+//uint8_t room_detector(void);
+void stop_detector(void);
 
 #endif /* !_STOP_SENSORS_H_ */

@@ -24,6 +24,8 @@ Define Move Speeds (from 0 to 1)
 #define FORWARD_SPEED 	(float)(0.65)
 #define TURN_SPEED 		(float)(0.75)
 
+#define TIMEOUT_50MS	1
+
 /******************************************************************************
  * GET_SPEED macro
  *
@@ -136,7 +138,7 @@ void lfollower_pid(void)
 	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
 						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
 
-	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	//move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
 }
 
 /******************************************************************************
@@ -150,10 +152,9 @@ uint8_t lfollower_rotate(move_dir_e dir)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
-
 	// start rotate_timeout
 	timeout_start();
-
+	// start storing QTR sensor values
 	qtr_init();
 
 	// if dir == MOVE_RIGHT, check when SENSOR1 is over the line
@@ -166,25 +167,23 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
 	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8
-
 	while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
-	//while(num_timeout_2sec < TIMEOUT_4SEC)
-	//while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0))
-//	while((GET_SENS_LOGVAL(SENSOR1) == 0))
 		;
 
-	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
 	// stop Rotate_Timeout
 	timeout_stop();
-
 	// stop rotating
 	move_stop();
-
+	// stop storing QTR sensor values
 	qtr_kill();
-	// if timeout didnt occurred then rotate was completed -> Return 0
+
 	// if timeout occured, then we must return an error code, signaling a
-	// non successful rotate -> return 1
-	return !(num_timeout_2sec < TIMEOUT_4SEC);
+	// non successful rotate
+	if(num_timeout_2sec < TIMEOUT_4SEC)
+		return E_LF_TIMEOUT;
+
+	// if timeout didnt occurred then rotate was completed
+	return EXIT_SUCCESS;
 }
 
 /******************************************************************************
@@ -197,31 +196,62 @@ Line Follower Control
 					  	  	  	 E_ROOM_FOUND - room detected;
 					  	  	  	 E_OBS_FOUND - obstacle detected.
 ******************************************************************************/
+//uint8_t lfollower_control(void)
+//{
+//	uint8_t err = EXIT_SUCCESS;
+//
+//	// line follower already started?
+//	if(lfollower_status == 0)
+//		// start line follower
+//		lfollower_start();
+//
+//	if(cross_detector() == 1)
+//		// cross detected
+//		err = E_CROSS_FOUND;
+//	else if(room_detector() == 1)
+//		// room detected
+//		err = E_ROOM_FOUND;
+//	else if(obs_found_flag == 1)
+//		// obstacle found
+//		err = E_OBS_FOUND;
+//
+//	// error found?
+//	if(err != EXIT_SUCCESS)
+//		// stop line follower
+//		lfollower_stop();
+//	else
+//		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+//
+//	// return error code
+//	return err;
+//}
+
 uint8_t lfollower_control(void)
 {
-	uint8_t err = EXIT_SUCCESS;
+	uint8_t err = 0;
+	static uint8_t num_timeout_10ms = 0;
 
-	// line follower already started?
-	if(lfollower_status == 0)
-		// start line follower
-		lfollower_start();
+	num_timeout_10ms++;
 
-	if(cross_detector() == 1)
-		// cross detected
-		err = E_CROSS_FOUND;
-	else if(room_detector() == 1)
-		// room detected
-		err = E_ROOM_FOUND;
-	else if(obs_found_flag == 1)
-		// obstacle found
-		err = E_OBS_FOUND;
+	// check stop sensors
+	//	cross_detector();
+	//	room_detector();
+	if(num_timeout_10ms == TIMEOUT_50MS)
+		stop_detector();
 
-	// error found?
-	if(err != EXIT_SUCCESS)
+	// no error if none flag is active
+	err = (obs_found_flag + room_found_flag + cross_found_flag);
+
+	// check for none flag active
+	if(err == 0)
+		// no error
+		// continue to follow line, using PID calculated value
+		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	else
+		// obstacle/stop mark found
 		// stop line follower
 		lfollower_stop();
 
-	// return error code
 	return err;
 }
 

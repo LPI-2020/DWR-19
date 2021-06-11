@@ -45,15 +45,6 @@ void (*fsm_func_ptr[])(void) = {
 };
 
 /******************************************************************************
-RFID struct
-******************************************************************************/
-rfid_t rfid = {
-		.CardID = {0},
-		.result = 0,
-		.type = 0
-};
-
-/******************************************************************************
 FSM flags
 ******************************************************************************/
 // Current FSM state
@@ -70,8 +61,8 @@ uint8_t new_route_incoming = 0;
 // Timeout flags
 uint8_t pick_up_timeout = 0;
 uint8_t obs_found_timeout = 0;
-uint8_t rotate_timeout = 0;
-uint8_t read_rfid_timeout = 0;
+//uint8_t rotate_timeout = 0;
+//uint8_t read_rfid_timeout = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
@@ -121,45 +112,49 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-	uint8_t err;
+	// check stop sensors flags
+	if(cross_found_flag)
+		// Cross Found
+		nstate = S_RD_RFID;
 
-	// execute line follower
-	err = lfollower_control();
+	else if(room_found_flag)
+		// Room Found
+		nstate = S_NEXT_MOV;
 
-	switch(err)
-	{
-		case E_CROSS_FOUND:
-			// Cross Found
-			nstate = S_RD_RFID;
-			break;
-		case E_ROOM_FOUND:
-			// Room Found
-			nstate = S_NEXT_MOV;
-			break;
-		case E_OBS_FOUND:
-			// Obstacle Found
-			nstate = S_STOPPED;
-			break;
-	}
+	else if(obs_found_flag)
+		// obstacle found
+		nstate = S_STOPPED;
+
+	// Else, continue following line
 }
+
+/******************************************************************************
+State Read RFID
+******************************************************************************/
+// RFID struct
+static rfid_t rfid = {
+		.CardID = {0},
+		.result = 0,
+		.type = 0
+};
 
 static void s_rd_rfid(void)
 {
 	uint8_t err;
 
 	// start movement
-	move_forward(RD_RFID_SPEED);
-
+	lfollower_start();
 	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
-	err = read_RFID(rfid);
+	err = read_RFID(&rfid);
 	// stop movement
-	move_stop();
+	lfollower_stop();
 
 	// read RFID correctly?
 	if(err == MI_OK)
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
 	else
+		// RFID timeout
 		// continue to error state
 		nstate = S_ERROR;
 }
