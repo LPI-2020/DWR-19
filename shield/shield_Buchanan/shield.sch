@@ -460,18 +460,18 @@ Wire Wire Line
 $Comp
 L Connector:Screw_Terminal_01x04 J1
 U 1 1 60C495CA
-P 1900 2550
-F 0 "J1" H 1980 2496 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 1980 2451 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 2550 50  0001 C CNN
-F 3 "~" H 1900 2550 50  0001 C CNN
-	1    1900 2550
+P 2400 2700
+F 0 "J1" H 2480 2646 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 2480 2601 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 2700 50  0001 C CNN
+F 3 "~" H 2400 2700 50  0001 C CNN
+	1    2400 2700
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 1850 0    50   Input ~ 0
+Text GLabel 1950 2000 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1450 1850 1700 1850
+	1950 2000 2200 2000
 $Comp
 L Connector_Generic:Conn_02x03_Odd_Even PS_5V1
 U 1 1 60C5324B
@@ -526,72 +526,72 @@ Text GLabel 5850 1350 2    50   Input ~ 0
 +3V3
 Wire Wire Line
 	5850 1350 5600 1350
-Text GLabel 1450 2050 0    50   Input ~ 0
+Text GLabel 1950 2200 0    50   Input ~ 0
 +3V3
 Wire Wire Line
-	1450 2050 1700 2050
-Text GLabel 1450 1950 0    50   Input ~ 0
+	1950 2200 2200 2200
+Text GLabel 1950 2100 0    50   Input ~ 0
 +3V3
 Wire Wire Line
-	1450 1950 1700 1950
-Text GLabel 1450 2150 0    50   Input ~ 0
+	1950 2100 2200 2100
+Text GLabel 1950 2300 0    50   Input ~ 0
 PC0
 Wire Wire Line
-	1450 2150 1700 2150
+	1950 2300 2200 2300
 $Comp
 L Connector:Screw_Terminal_01x04 J2
 U 1 1 60C8F6BF
-P 1900 2150
-F 0 "J2" H 1980 2096 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 1980 2051 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 2150 50  0001 C CNN
-F 3 "~" H 1900 2150 50  0001 C CNN
-	1    1900 2150
+P 2400 2300
+F 0 "J2" H 2480 2246 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 2480 2201 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 2300 50  0001 C CNN
+F 3 "~" H 2400 2300 50  0001 C CNN
+	1    2400 2300
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 2250 0    50   Input ~ 0
+Text GLabel 1950 2400 0    50   Input ~ 0
 PC3
 Wire Wire Line
-	1450 2250 1700 2250
-Text GLabel 1450 2350 0    50   Input ~ 0
+	1950 2400 2200 2400
+Text GLabel 1950 2500 0    50   Input ~ 0
 PF3
 Wire Wire Line
-	1450 2350 1700 2350
-Text GLabel 1450 2450 0    50   Input ~ 0
+	1950 2500 2200 2500
+Text GLabel 1950 2600 0    50   Input ~ 0
 PF5
 Wire Wire Line
-	1450 2450 1700 2450
-Text GLabel 1450 2550 0    50   Input ~ 0
+	1950 2600 2200 2600
+Text GLabel 1950 2700 0    50   Input ~ 0
 PF10
 Wire Wire Line
-	1450 2550 1700 2550
+	1950 2700 2200 2700
 $Comp
 L Connector:Screw_Terminal_01x04 J3
 U 1 1 60C9EC34
-P 1900 1750
-F 0 "J3" H 1980 1696 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 1980 1651 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 1750 50  0001 C CNN
-F 3 "~" H 1900 1750 50  0001 C CNN
-	1    1900 1750
+P 2400 1900
+F 0 "J3" H 2480 1846 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 2480 1801 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 1900 50  0001 C CNN
+F 3 "~" H 2400 1900 50  0001 C CNN
+	1    2400 1900
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 2650 0    50   Input ~ 0
+Text GLabel 1950 2800 0    50   Input ~ 0
 PF8
 Wire Wire Line
-	1450 2650 1700 2650
-Text GLabel 1450 1550 0    50   Input ~ 0
+	1950 2800 2200 2800
+Text GLabel 1950 1700 0    50   Input ~ 0
 +5V
 Wire Wire Line
-	1450 1550 1700 1550
-Text GLabel 1450 1650 0    50   Input ~ 0
+	1950 1700 2200 1700
+Text GLabel 1950 1800 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1450 1650 1700 1650
-Text GLabel 1450 1750 0    50   Input ~ 0
+	1950 1800 2200 1800
+Text GLabel 1950 1900 0    50   Input ~ 0
 PA3
 Wire Wire Line
-	1450 1750 1700 1750
+	1950 1900 2200 1900
 $Comp
 L Connector:Screw_Terminal_01x04 J4
 U 1 1 60CB3F5F
@@ -730,158 +730,158 @@ PD2
 $Comp
 L Connector:Screw_Terminal_01x04 J10
 U 1 1 60F94F13
-P 1900 4400
-F 0 "J10" H 1818 4067 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 1980 4301 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 4400 50  0001 C CNN
-F 3 "~" H 1900 4400 50  0001 C CNN
-	1    1900 4400
+P 2400 4550
+F 0 "J10" H 2318 4217 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 2480 4451 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 4550 50  0001 C CNN
+F 3 "~" H 2400 4550 50  0001 C CNN
+	1    2400 4550
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 3900 0    50   Input ~ 0
+Text GLabel 1950 4050 0    50   Input ~ 0
 PE6
 Wire Wire Line
-	1450 3900 1700 3900
-Text GLabel 1450 4100 0    50   Input ~ 0
+	1950 4050 2200 4050
+Text GLabel 1950 4250 0    50   Input ~ 0
 PE3
 Wire Wire Line
-	1450 4100 1700 4100
-Text GLabel 1450 4000 0    50   Input ~ 0
+	1950 4250 2200 4250
+Text GLabel 1950 4150 0    50   Input ~ 0
 PF0
 Wire Wire Line
-	1450 4000 1700 4000
-Text GLabel 1450 4200 0    50   Input ~ 0
+	1950 4150 2200 4150
+Text GLabel 1950 4350 0    50   Input ~ 0
 GND
 Wire Wire Line
-	1450 4200 1700 4200
+	1950 4350 2200 4350
 $Comp
 L Connector:Screw_Terminal_01x04 J9
 U 1 1 60F94F21
-P 1900 4000
-F 0 "J9" H 1818 3667 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 1980 3901 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 4000 50  0001 C CNN
-F 3 "~" H 1900 4000 50  0001 C CNN
-	1    1900 4000
+P 2400 4150
+F 0 "J9" H 2318 3817 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 2480 4051 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 4150 50  0001 C CNN
+F 3 "~" H 2400 4150 50  0001 C CNN
+	1    2400 4150
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4300 0    50   Input ~ 0
+Text GLabel 1950 4450 0    50   Input ~ 0
 PD0
 Wire Wire Line
-	1450 4300 1700 4300
-Text GLabel 1450 4400 0    50   Input ~ 0
+	1950 4450 2200 4450
+Text GLabel 1950 4550 0    50   Input ~ 0
 PF7
 Wire Wire Line
-	1450 4400 1700 4400
-Text GLabel 1450 4500 0    50   Input ~ 0
+	1950 4550 2200 4550
+Text GLabel 1950 4650 0    50   Input ~ 0
 PD1
 Wire Wire Line
-	1450 4500 1700 4500
+	1950 4650 2200 4650
 $Comp
 L Connector:Screw_Terminal_01x04 J8
 U 1 1 60F94F2F
-P 1900 3600
-F 0 "J8" H 1818 3267 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 1980 3501 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 3600 50  0001 C CNN
-F 3 "~" H 1900 3600 50  0001 C CNN
-	1    1900 3600
+P 2400 3750
+F 0 "J8" H 2318 3417 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 2480 3651 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 3750 50  0001 C CNN
+F 3 "~" H 2400 3750 50  0001 C CNN
+	1    2400 3750
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4600 0    50   Input ~ 0
+Text GLabel 1950 4750 0    50   Input ~ 0
 PF9
 Wire Wire Line
-	1450 4600 1700 4600
-Text GLabel 1450 3600 0    50   Input ~ 0
+	1950 4750 2200 4750
+Text GLabel 1950 3750 0    50   Input ~ 0
 PF2
 Wire Wire Line
-	1450 3600 1700 3600
-Text GLabel 1450 3700 0    50   Input ~ 0
+	1950 3750 2200 3750
+Text GLabel 1950 3850 0    50   Input ~ 0
 PE5
 Wire Wire Line
-	1450 3700 1700 3700
-Text GLabel 1450 3800 0    50   Input ~ 0
+	1950 3850 2200 3850
+Text GLabel 1950 3950 0    50   Input ~ 0
 PF1
 Wire Wire Line
-	1450 3800 1700 3800
+	1950 3950 2200 3950
 $Comp
 L Connector:Screw_Terminal_01x04 J11
 U 1 1 60FA1358
-P 1900 4800
-F 0 "J11" H 1818 4467 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 1980 4701 50  0001 L CNN
-F 2 "Buchanan:TE_284513-4" H 1900 4800 50  0001 C CNN
-F 3 "~" H 1900 4800 50  0001 C CNN
-	1    1900 4800
+P 2400 4950
+F 0 "J11" H 2318 4617 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 2480 4851 50  0001 L CNN
+F 2 "Buchanan:TE_284513-4" H 2400 4950 50  0001 C CNN
+F 3 "~" H 2400 4950 50  0001 C CNN
+	1    2400 4950
 	1    0    0    1   
 $EndComp
-Text GLabel 1450 4700 0    50   Input ~ 0
+Text GLabel 1950 4850 0    50   Input ~ 0
 PG0
 Wire Wire Line
-	1450 4700 1700 4700
-Text GLabel 1450 4800 0    50   Input ~ 0
+	1950 4850 2200 4850
+Text GLabel 1950 4950 0    50   Input ~ 0
 PG1
 Wire Wire Line
-	1450 4800 1700 4800
+	1950 4950 2200 4950
 $Comp
 L Device:C C_SLINHA1
 U 1 1 60FDE443
-P 7050 1250
-F 0 "C_SLINHA1" H 7165 1250 50  0000 L CNN
-F 1 "C" H 7165 1205 50  0001 L CNN
-F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 7088 1100 50  0001 C CNN
-F 3 "~" H 7050 1250 50  0001 C CNN
-	1    7050 1250
+P 6700 1550
+F 0 "C_SLINHA1" H 6815 1550 50  0000 L CNN
+F 1 "C" H 6815 1505 50  0001 L CNN
+F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 6738 1400 50  0001 C CNN
+F 3 "~" H 6700 1550 50  0001 C CNN
+	1    6700 1550
 	1    0    0    -1  
 $EndComp
-Text GLabel 7050 1400 3    50   Input ~ 0
+Text GLabel 6700 1700 3    50   Input ~ 0
 GND
-Text GLabel 7050 1100 1    50   Input ~ 0
+Text GLabel 6700 1400 1    50   Input ~ 0
 +3V3
 $Comp
 L Device:C C_RFID1
 U 1 1 60FE0561
-P 7450 1250
-F 0 "C_RFID1" H 7565 1250 50  0000 L CNN
-F 1 "C" H 7565 1205 50  0001 L CNN
-F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 7488 1100 50  0001 C CNN
-F 3 "~" H 7450 1250 50  0001 C CNN
-	1    7450 1250
+P 7100 1550
+F 0 "C_RFID1" H 7215 1550 50  0000 L CNN
+F 1 "C" H 7215 1505 50  0001 L CNN
+F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 7138 1400 50  0001 C CNN
+F 3 "~" H 7100 1550 50  0001 C CNN
+	1    7100 1550
 	1    0    0    -1  
 $EndComp
-Text GLabel 7450 1400 3    50   Input ~ 0
+Text GLabel 7100 1700 3    50   Input ~ 0
 GND
-Text GLabel 7450 1100 1    50   Input ~ 0
+Text GLabel 7100 1400 1    50   Input ~ 0
 +3V3
 $Comp
 L Device:C C_SOBST1
 U 1 1 61004928
-P 8000 1250
-F 0 "C_SOBST1" H 8115 1250 50  0000 L CNN
-F 1 "C" H 8115 1205 50  0001 L CNN
-F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 8038 1100 50  0001 C CNN
-F 3 "~" H 8000 1250 50  0001 C CNN
-	1    8000 1250
+P 7650 1550
+F 0 "C_SOBST1" H 7765 1550 50  0000 L CNN
+F 1 "C" H 7765 1505 50  0001 L CNN
+F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 7688 1400 50  0001 C CNN
+F 3 "~" H 7650 1550 50  0001 C CNN
+	1    7650 1550
 	1    0    0    -1  
 $EndComp
-Text GLabel 8000 1400 3    50   Input ~ 0
+Text GLabel 7650 1700 3    50   Input ~ 0
 GND
-Text GLabel 8000 1100 1    50   Input ~ 0
+Text GLabel 7650 1400 1    50   Input ~ 0
 +5V
 $Comp
 L Device:C C_BLUE1
 U 1 1 61004930
-P 8600 1250
-F 0 "C_BLUE1" H 8715 1250 50  0000 L CNN
-F 1 "C" H 8715 1205 50  0001 L CNN
-F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 8638 1100 50  0001 C CNN
-F 3 "~" H 8600 1250 50  0001 C CNN
-	1    8600 1250
+P 8250 1550
+F 0 "C_BLUE1" H 8365 1550 50  0000 L CNN
+F 1 "C" H 8365 1505 50  0001 L CNN
+F 2 "Capacitor_THT:C_Disc_D8.0mm_W2.5mm_P5.00mm" H 8288 1400 50  0001 C CNN
+F 3 "~" H 8250 1550 50  0001 C CNN
+	1    8250 1550
 	1    0    0    -1  
 $EndComp
-Text GLabel 8600 1400 3    50   Input ~ 0
+Text GLabel 8250 1700 3    50   Input ~ 0
 GND
-Text GLabel 8600 1100 1    50   Input ~ 0
+Text GLabel 8250 1400 1    50   Input ~ 0
 +5V
 $Comp
 L Mechanical:MountingHole H1
@@ -954,12 +954,12 @@ Text GLabel 7200 4150 2    50   Input ~ 0
 PA0
 Wire Wire Line
 	7200 4150 6950 4150
-Text GLabel 1450 3400 0    50   Input ~ 0
+Text GLabel 1950 3550 0    50   Input ~ 0
 PA7
 Wire Wire Line
-	1450 3400 1700 3400
-Text GLabel 1450 3500 0    50   Input ~ 0
+	1950 3550 2200 3550
+Text GLabel 1950 3650 0    50   Input ~ 0
 PE4
 Wire Wire Line
-	1450 3500 1700 3500
+	1950 3650 2200 3650
 $EndSCHEMATC
