@@ -6,16 +6,13 @@
  *  Created on: June 3, 2021
  *
  */
-
 #include "fsm.h"
 
-//#include "stop_sensors.h"
-//#include "lfollower.h"
-//#include "move.h"
 #include "motion.h"
+#include "timeout.h"
 
-//#include "spi.h"
-#include "rfid-rc522.h"
+#include "lfollower.h"	// using lfollower_rotate
+#include "rfid-rc522.h"	// using read_RFID
 
 /******************************************************************************
 FSM state functions
@@ -86,10 +83,11 @@ static void s_stopped(void)
 //		// restart movement
 //		nstate = S_FLW_LINE;
 //
-//	else if(obs_found_timeout)
-//		// obstacle has been there for too long
-//		// continue to error state
-//		nstate = S_ERROR;
+	//else if(obs_found_timeout)
+	else if(motion_status == MOT_HOLD)
+		// obstacle has been there for too long
+		// continue to error state
+		nstate = S_ERROR;
 
 	else if((!route_finished) && (user_btn || pick_up_timeout))
 		// Route not finished and User button pressed or robot has been waiting
@@ -121,17 +119,17 @@ static void s_flw_line(void)
 
 	switch((uint8_t)motion_status)
 	{
-	case MOT_CROSS_FOUND:
-		// Cross Found
-		nstate = S_RD_RFID;
-		break;
-	case MOT_ROOM_FOUND:
-		// Room Found
-		nstate = S_NEXT_MOV;
-		break;
-	case MOT_HOLD:
-		// obstacle found
-		nstate = S_STOPPED;
+		case MOT_CROSS_FOUND:
+			// Cross Found
+			nstate = S_RD_RFID;
+			break;
+		case MOT_ROOM_FOUND:
+			// Room Found
+			nstate = S_NEXT_MOV;
+			break;
+		case MOT_HOLD:
+			// obstacle found
+			nstate = S_STOPPED;
 	}
 
 	// Else, continue following line
@@ -153,7 +151,7 @@ static void s_rd_rfid(void)
 
 	// start movement
 	motion_start();
-	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
+	// wait for RFID read or timeout (POLLING MODE)
 	err = read_RFID(&rfid);
 	// stop movement
 	motion_stop();
@@ -173,9 +171,6 @@ State Next Movement
 ******************************************************************************/
 uint8_t cross_found_func(void)
 {
-	// clear cross found flag
-//	cross_found_flag = 0;
-
 	// calculate next direction of movement
 	//next_move_dir = ...
 
@@ -184,9 +179,6 @@ uint8_t cross_found_func(void)
 
 uint8_t room_found_func(void)
 {
-	// clear room found flag
-//	room_found_flag = 0;
-
 	// check if robot needs to stop in this room
 	// if (quarto paragem)
 		// stop at this room
@@ -209,7 +201,7 @@ static void s_next_mov(void)
 	// executed using the value of only one flag, p.e, room_found_flag.
 	// Keep in mind that next_move_func must be set allowing that if
 	// room_found_flag is 1, next_move_func points to room_found_func.
-//	nstate = next_move_func[room_found_flag & 0x01]();
+	//nstate = next_move_func[room_found_flag & 0x01]();
 }
 
 /******************************************************************************
@@ -217,19 +209,19 @@ State Rotate
 ******************************************************************************/
 static void s_rotate(void)
 {
-//	uint8_t err;
-//
-//	// rotate to direction 'next_move_dir' (POLLING MODE)
-//	err = lfollower_rotate(next_move_dir);
-//
-//	// rotate has returned error?
-//	if(err)
-//		// rotate TIMEOUT
-//		// rotate was not successfull
-//		nstate = S_ERROR;
-//	else
-//		// turn completed. Restart following line
-//		nstate = S_FLW_LINE;
+	uint8_t err;
+
+	// rotate to direction 'next_move_dir' (POLLING MODE)
+	err = lfollower_rotate(next_move_dir);
+
+	// rotate has returned error?
+	if(err)
+		// rotate TIMEOUT
+		// rotate was not successfull
+		nstate = S_ERROR;
+	else
+		// turn completed. Restart following line
+		nstate = S_FLW_LINE;
 }
 
 /******************************************************************************

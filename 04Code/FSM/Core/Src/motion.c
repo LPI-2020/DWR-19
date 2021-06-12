@@ -62,8 +62,9 @@ void motion_isr(void)
 	else
 	{
 		// obstacle/stop mark found
-		// stop line follower
-		lfollower_stop();
+		// stop movement
+		motion_stop();
+
 		// Signal that Motion is stopped due to Stop Mark/Obstacle
 		motion_status = err + (MOT_CROSS_FOUND - E_CROSS_FOUND);
 	}
