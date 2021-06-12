@@ -1,6 +1,8 @@
 /*
  * stop_sensors.h
  *
+ * Stop Sensors
+ *
  *  Created on: May 5, 2021
  */
 
@@ -8,13 +10,10 @@
 #define _STOP_SENSORS_H_
 
 /******************************************************************************
-Define Peripherals in Use
+Obstacle Detector Peripherals
 ******************************************************************************/
 #include "adc.h"
-//#include "tim.h"
-
-// Obstacle Detector Timer and ADC
-//#define OBS_DETECTOR_TIM 		(htim6)
+// define obstacle detector ADC DMA in use
 #define OBS_DETECTOR_ADC_DMA 	(hadc2)
 
 /******************************************************************************

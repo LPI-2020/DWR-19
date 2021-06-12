@@ -1,3 +1,10 @@
+/*
+ * motion.h
+ *
+ * Motion Module
+ *
+ *  Created on: June 12, 2021
+ */
 #ifndef __MOTION_H__
 #define __MOTION_H__
 

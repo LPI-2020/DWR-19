@@ -1,6 +1,8 @@
 /*
  * stop_sensors.c
  *
+ * Stop Sensors
+ *
  *  Created on: May 5, 2021
  */
 #include "stop_sensors.h"
@@ -31,16 +33,12 @@ Obstacle Detector
 ******************************************************************************/
 void stop_detector_init(void)
 {
-	// start Obstacle detector timer
-//	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
 	// start Obstacle detector ADC DMA
 	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &obs_distance, 1);
 }
 
 void stop_detector_deInit(void)
 {
-	// stop Obstacle detector timer
-//	HAL_TIM_Base_Stop(&OBS_DETECTOR_TIM);
 	// stop Obstacle detector ADC DMA
 	HAL_ADC_Stop_DMA(&OBS_DETECTOR_ADC_DMA);
 }

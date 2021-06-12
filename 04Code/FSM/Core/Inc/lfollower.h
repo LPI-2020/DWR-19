@@ -17,7 +17,7 @@ Define Peripherals INSTANCES in use
 #include "tim.h"
 
 // used to sample values from Line Follower Sensors to PID
-#define TIM_LF_PID 			(htim3)
+#define TIM_LF_PID 			(htim6)
 
 /******************************************************************************
 Define Line Follower Sensors (using QTR)

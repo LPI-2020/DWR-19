@@ -1,3 +1,10 @@
+/*
+ * motion.c
+ *
+ * Motion Module
+ *
+ *  Created on: June 12, 2021
+ */
 #include "motion.h"
 
 #include "lfollower.h"
