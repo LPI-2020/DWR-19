@@ -10,7 +10,7 @@ Motion Status
 motion_status_e motion_status = MOT_OFF;
 
 /******************************************************************************
-
+Motion Functions
 ******************************************************************************/
 void motion_start(void)
 {
@@ -22,7 +22,7 @@ void motion_start(void)
 	lfollower_start();
 	// enable Stop Detectors
 	stop_detector_init();
-	// motion OFF
+	// motion ON
 	motion_status = MOT_ON;
 }
 
@@ -36,7 +36,7 @@ void motion_stop(void)
 	lfollower_stop();
 	// disable Stop Detectors
 	stop_detector_deInit();
-	// motion ON
+	// motion OFF
 	motion_status = MOT_OFF;
 }
 
@@ -57,7 +57,7 @@ void motion_isr(void)
 		// obstacle/stop mark found
 		// stop line follower
 		lfollower_stop();
-		// Signal Motion stopped due to Stop Mark/Obstacle
+		// Signal that Motion is stopped due to Stop Mark/Obstacle
 		motion_status = err + (MOT_CROSS_FOUND - E_CROSS_FOUND);
 	}
 }

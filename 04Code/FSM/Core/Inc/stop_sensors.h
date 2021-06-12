@@ -22,11 +22,10 @@ Define Parameters
 ******************************************************************************/
 #include "qtr.h"
 
-// QTR Sensors used on cross and room detectors:
-// RIGHT sensor
-#define SENSOR_R		(SENSOR1)
-// LEFT sensor
-#define SENSOR_L		(SENSOR8)
+// Stop Detector RIGHT sensor
+#define ST_SENSOR_R		(SENSOR1)
+// Stop Detector LEFT sensor
+#define ST_SENSOR_L		(SENSOR8)
 
 // Obstacle Detector Limit = Digital value of 30 cm
 #define ADC_DISTANCE_LIMIT (1139)
@@ -35,9 +34,9 @@ Define Parameters
 Stop Sensors Errors
 ******************************************************************************/
 #define EXIT_SUCCESS	0
-#define E_CROSS_FOUND	1
-#define E_ROOM_FOUND	2
-#define E_OBS_FOUND		3
+#define E_CROSS_FOUND	1	// error cross found
+#define E_ROOM_FOUND	2	// error room found
+#define E_OBS_FOUND		3	// error obstacle found
 
 /******************************************************************************
 Obstacle Detector Functions

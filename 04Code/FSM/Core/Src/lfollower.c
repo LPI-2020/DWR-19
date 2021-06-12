@@ -16,7 +16,7 @@
 /******************************************************************************
 Define Debug Symbol
 ******************************************************************************/
-#define _DEBUG_
+//#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "usart.h" // debug
@@ -28,7 +28,7 @@ Define Move Speeds (from 0 to 1)
 #define FORWARD_SPEED 	(float)(0.65)
 #define TURN_SPEED 		(float)(0.75)
 
-#define TIMEOUT_50MS	1
+//#define TIMEOUT_50MS	1
 
 /******************************************************************************
  * GET_SPEED macro
@@ -49,7 +49,7 @@ Define Type of Speed Calculus
 #define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
 
 // line follower status (enabled 1 or disabled 0)
-uint8_t lfollower_status = 0;
+static uint8_t lfollower_status = 0;
 
 /******************************************************************************
 Line Follower Start
@@ -64,8 +64,6 @@ void lfollower_start(void)
 	qtr_init();
 	// start movement
 	move_start();
-	// start obstacle detectors
-//	obs_detector_init();
 
 	// start sampling for PID application
 	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
@@ -89,15 +87,13 @@ void lfollower_stop(void)
 	qtr_kill();
 	// stop movement
 	move_stop();
-	// stop obstacle detectors
-//	obs_detector_deInit();
 
 	// mark line follower is disabled
 	lfollower_status = 0;
 }
 
 /******************************************************************************
-Line Follower PID
+Line Follower ISR
 
 @brief	Applies PID algorithm to obtain movement speed required to follow the
 		line.
@@ -127,6 +123,17 @@ static pid_st pid = {
 	.u_sat_a	= +1.0,
 	.u_sat_b	= -1.0
 };
+
+void lfollower_isr(void)
+{
+	// use PID to obtain PWM values to use on motors
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
+						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
+
+	// Apply PID to adjust motor PWM/velocity
+	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+}
 
 /******************************************************************************
 Line Follower Rotate
@@ -174,30 +181,13 @@ uint8_t lfollower_rotate(move_dir_e dir)
 }
 
 /******************************************************************************
-Line Follower ISR
-
-@brief	Follows line
-@param	none
-@retval	none
-******************************************************************************/
-void lfollower_isr(void)
-{
-	// use PID to obtain PWM values to use on motors
-	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
-						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
-
-	// Apply PID to adjust motor PWM/velocity
-	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-}
-
-/******************************************************************************
 Debug Functions
 
 @brief 	Prints Line Follower Sensors Values
 @param	none
 @retval	none
 ******************************************************************************/
+#ifdef _DEBUG_
 void lfollower_print_sens(void)
 {
 	char str[32];
@@ -226,3 +216,4 @@ void lfollower_print_sens(void)
 	// stop QTR readings
 	qtr_kill();
 }
+#endif // !_DEBUG_

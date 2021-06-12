@@ -15,7 +15,6 @@ Define Test symbol
 	#include <stdio.h>
 #endif // !_DEBUG_
 
-
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
@@ -68,7 +67,7 @@ uint8_t stop_detector_isr()
 	// ***** Check Stop Marks Detector *****
 	// if SENSOR_L enabled sens = 0000 0001 (1)
 	// if SENSOR_L disabled sens = 0000 0000 (0)
-	sens = GET_SENS_LOGVAL(SENSOR_L);
+	sens = GET_SENS_LOGVAL(ST_SENSOR_L);
 
 	// rotate left one bit
 	// SENSOR_L enabled: sens = 0000 0010
@@ -78,15 +77,17 @@ uint8_t stop_detector_isr()
 	// SENSOR_L enabled:
 		// if SENSOR_R enabled sens = 0000 0011 (3)
 		// if SENSOR_R disabled sens = 0000 0010 (2)
-	sens += GET_SENS_LOGVAL(SENSOR_R);
+	sens += GET_SENS_LOGVAL(ST_SENSOR_R);
 
 	// both sensors enabled
 	if(sens == 3)
+		// return cross found error
 		return E_CROSS_FOUND;
 
 	// current sensors value equal to the previous sensor values
-	// 		and only one sensor enabled
+	// and only one sensor enabled
 	else if((sens == sens_prev) && (sens != 0))
+		// return room found error
 		return E_ROOM_FOUND;
 
 	// ***** Check Obstacle Detector *****
@@ -95,8 +96,6 @@ uint8_t stop_detector_isr()
 						(old_distance >= ADC_DISTANCE_LIMIT));
 
 #ifdef _DEBUG_
-	//HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // ## debug <- remove this pin
-
 	char str[32];
 	snprintf(str, sizeof(str), "Dist: %d, flag%d\n\r", (int)distance,
 														obs_found_flag);
@@ -107,8 +106,10 @@ uint8_t stop_detector_isr()
 	old_distance = distance;
 
 	if(obs_found_flag)
+		// return obstacle found error
 		return E_OBS_FOUND;
 
+	// update sensors value
 	sens_prev = sens;
 
 	return EXIT_SUCCESS;
