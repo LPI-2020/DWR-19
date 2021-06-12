@@ -21,7 +21,7 @@
 #include "adc.h"
 
 /* USER CODE BEGIN 0 */
-#include "stop_sensors.h"
+//#include "stop_sensors.h"
 
 /* USER CODE END 0 */
 
@@ -345,17 +345,17 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-//	if(hadc == &OBS_DETECTOR_ADC)
-//	{
-//		// triggered by OBS_DETECTOR_TIM
-//		// enters every 500ms
-//
-//		// obstacle detector ISR
-////		isr_obs_detector();
-//	}
-}
+//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+//{
+////	if(hadc == &OBS_DETECTOR_ADC)
+////	{
+////		// triggered by OBS_DETECTOR_TIM
+////		// enters every 500ms
+////
+////		// obstacle detector ISR
+//////		isr_obs_detector();
+////	}
+//}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -38,15 +38,6 @@ extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN Private defines */
 
-// number of 2second cycles, counted by interrupt
-extern uint8_t num_timeout_2sec;
-
-// Timer used to count 2sec timeouts
-#define TIM_TIMEOUTS	(htim7)
-// timeout 4 seconds == (num_timeout_2sec = 2)
-#define TIMEOUT_4SEC	(3)
-#define TIMEOUT_2SEC	(2)
-
 #define TIMER6_PERIOD (float) 0.01
 /* USER CODE END Private defines */
 
@@ -61,9 +52,6 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 // set PWM htim-channel duty cycle
 void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc);
-
-void timeout_start(void);
-void timeout_stop(void);
 
 /* USER CODE END Prototypes */
 

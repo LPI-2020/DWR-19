@@ -18,7 +18,13 @@ Define Test symbol
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
-static uint32_t distance = 0;
+// distance to
+static uint32_t obs_distance = 0;
+
+// returns true if obstacle is closer than ADC_DISTANCE_LIMIT -> obstacle found
+// receives CURRENT distance to obstacle and PREVIOUS distance do obstacle
+#define OBS_TOO_CLOSE(_dist_, _prev_dist_) (((_dist_) >= ADC_DISTANCE_LIMIT) &&		\
+											((_prev_dist_) >= ADC_DISTANCE_LIMIT))
 
 /******************************************************************************
 Obstacle Detector
@@ -28,7 +34,7 @@ void stop_detector_init(void)
 	// start Obstacle detector timer
 //	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
 	// start Obstacle detector ADC DMA
-	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &distance, 1);
+	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &obs_distance, 1);
 }
 
 void stop_detector_deInit(void)
@@ -59,7 +65,7 @@ uint8_t stop_detector_isr()
 	uint8_t sens = 0;
 
 	// Digital value of distance
-	static uint32_t old_distance = 0;
+	static uint32_t old_obs_distance = 0;
 	uint8_t obs_found_flag = 0;
 
 	// ***** Check Stop Marks Detector *****
@@ -90,18 +96,17 @@ uint8_t stop_detector_isr()
 
 	// ***** Check Obstacle Detector *****
 	// Obstacle found flag update
-	obs_found_flag = ((distance >= ADC_DISTANCE_LIMIT) &&
-						(old_distance >= ADC_DISTANCE_LIMIT));
+	obs_found_flag = OBS_TOO_CLOSE(obs_distance, old_obs_distance);
 
 #ifdef _DEBUG_
 	char str[32];
-	snprintf(str, sizeof(str), "Dist: %d, flag%d\n\r", (int)distance,
+	snprintf(str, sizeof(str), "Dist: %d, flag%d\n\r", (int)obs_distance,
 														obs_found_flag);
 	UART_puts(str);
 #endif // !_DEBUG_
 
 	// update old distance variable
-	old_distance = distance;
+	old_obs_distance = obs_distance;
 
 	if(obs_found_flag)
 		// return obstacle found error

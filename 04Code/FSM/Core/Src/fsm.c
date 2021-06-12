@@ -217,19 +217,19 @@ State Rotate
 ******************************************************************************/
 static void s_rotate(void)
 {
-	uint8_t err;
-
-	// rotate to direction 'next_move_dir' (POLLING MODE)
-	err = lfollower_rotate(next_move_dir);
-
-	// rotate has returned error?
-	if(err)
-		// rotate TIMEOUT
-		// rotate was not successfull
-		nstate = S_ERROR;
-	else
-		// turn completed. Restart following line
-		nstate = S_FLW_LINE;
+//	uint8_t err;
+//
+//	// rotate to direction 'next_move_dir' (POLLING MODE)
+//	err = lfollower_rotate(next_move_dir);
+//
+//	// rotate has returned error?
+//	if(err)
+//		// rotate TIMEOUT
+//		// rotate was not successfull
+//		nstate = S_ERROR;
+//	else
+//		// turn completed. Restart following line
+//		nstate = S_FLW_LINE;
 }
 
 /******************************************************************************

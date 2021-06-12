@@ -33,9 +33,6 @@ Define Line Follower Sensors (using QTR)
 Line Follower Error Codes
 ******************************************************************************/
 #define EXIT_SUCCESS	0
-////#define E_CROSS_FOUND	1
-////#define E_ROOM_FOUND	2
-////#define E_OBS_FOUND		3
 #define E_LF_TIMEOUT	4
 
 /******************************************************************************

@@ -22,8 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "motion.h"
-
-uint8_t num_timeout_2sec = 0;
+#include "timeout.h"
 
 /* USER CODE END 0 */
 
@@ -183,7 +182,7 @@ void MX_TIM7_Init(void)
   htim7.Instance = TIM7;
   htim7.Init.Prescaler = 10800-1;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 20000-1;
+  htim7.Init.Period = 10000-1;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -399,23 +398,6 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc)
 	__HAL_TIM_SET_COMPARE(htim, channel, dc);
 }
 
-// start counting Timeouts
-void timeout_start(void)
-{
-	// reset number of 2second Timeouts
-	num_timeout_2sec = 0;
-
-	// start timeout Timer
-	HAL_TIM_Base_Start_IT(&TIM_TIMEOUTS);
-}
-
-// stop counting Timeouts
-void timeout_stop(void)
-{
-	// stop Rotate_Timeout
-	HAL_TIM_Base_Stop_IT(&TIM_TIMEOUTS);
-}
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	if(htim == &htim3)
@@ -424,9 +406,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 		motion_isr();
 	}
 	else if(htim == &TIM_TIMEOUTS)
-	{// enters every 2sec
-		// count 2sec cycle
-		num_timeout_2sec++;
+	{// enters every 1sec
+		timeout_isr();
 	}
 }
 /* USER CODE END 1 */
