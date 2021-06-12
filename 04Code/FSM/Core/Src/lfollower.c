@@ -128,8 +128,9 @@ void lfollower_isr(void)
 {
 	// use PID to obtain PWM values to use on motors
 	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
-						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
+	//pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
+	//					DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
+	pid_calcule(&pid, qtr_get_analog(LF_SENSOR_L), qtr_get_analog(LF_SENSOR_R));
 
 	// Apply PID to adjust motor PWM/velocity
 	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
@@ -160,8 +161,9 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	dir >>= 1;
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
-	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8
-	while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
+	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8 (last sensor)
+	//while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
+	while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
 		;
 
 	// stop Rotate_Timeout

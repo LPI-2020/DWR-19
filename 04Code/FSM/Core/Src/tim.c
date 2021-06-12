@@ -21,8 +21,6 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-//#include "lfollower.h"
-//#include "stop_sensors.h"
 #include "motion.h"
 
 uint8_t num_timeout_2sec = 0;
@@ -422,9 +420,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	if(htim == &htim3)
 	{// enters every 10ms
-		// line follower PID
-//		lfollower_pid();
-//		lfollower_control();
+		// line follower PID and stop_sensors
 		motion_isr();
 	}
 	else if(htim == &TIM_TIMEOUTS)

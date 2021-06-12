@@ -11,11 +11,11 @@
 Define Peripherals in Use
 ******************************************************************************/
 #include "adc.h"
-#include "tim.h"
+//#include "tim.h"
 
 // Obstacle Detector Timer and ADC
-#define OBS_DETECTOR_TIM (htim6)
-#define OBS_DETECTOR_ADC (hadc2)
+//#define OBS_DETECTOR_TIM 		(htim6)
+#define OBS_DETECTOR_ADC_DMA 	(hadc2)
 
 /******************************************************************************
 Define Parameters

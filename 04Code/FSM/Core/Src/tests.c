@@ -76,9 +76,9 @@ int test_lfollower_and_rotate(void)
 //	while(err == 0)
 //			err = lfollower_control();
 
-	return 0;
 	// write LED RED pin if rotate is not completed
-	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+	return 0;
 }
 
 /******************************************************************************

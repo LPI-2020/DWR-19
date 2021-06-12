@@ -18,7 +18,7 @@ Define Test symbol
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
-static uint32_t distance = 0; // >>>>>>>>>>>>>>>>>>>>>>>>>> use DMA
+static uint32_t distance = 0;
 
 /******************************************************************************
 Obstacle Detector
@@ -26,23 +26,21 @@ Obstacle Detector
 void stop_detector_init(void)
 {
 	// start Obstacle detector timer
-	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
-	// start Obstacle detector ADC
-	//HAL_ADC_Start_IT(&OBS_DETECTOR_ADC);
-	// start DMA to obstacle detector>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><
+//	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
+	// start Obstacle detector ADC DMA
+	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &distance, 1);
 }
 
 void stop_detector_deInit(void)
 {
-	// start Obstacle detector timer
-	HAL_TIM_Base_Stop(&OBS_DETECTOR_TIM);
-	// start Obstacle detector ADC
-	//HAL_ADC_Stop_IT(&OBS_DETECTOR_ADC);
-	// stop DMA to obstacle detector>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><
+	// stop Obstacle detector timer
+//	HAL_TIM_Base_Stop(&OBS_DETECTOR_TIM);
+	// stop Obstacle detector ADC DMA
+	HAL_ADC_Stop_DMA(&OBS_DETECTOR_ADC_DMA);
 }
 
 /******************************************************************************
-Stop Detector
+Stop Detector ISR
 
 @brief 	Detects a cross if both sensors, SENSOR_R and SENSOR_L are over the line.
 		Detects a room if one of the sensors, SENSOR_R or SENSOR_L is over the line.
@@ -67,7 +65,7 @@ uint8_t stop_detector_isr()
 	// ***** Check Stop Marks Detector *****
 	// if SENSOR_L enabled sens = 0000 0001 (1)
 	// if SENSOR_L disabled sens = 0000 0000 (0)
-	sens = GET_SENS_LOGVAL(ST_SENSOR_L);
+	sens = qtr_get_digital(ST_SENSOR_L);
 
 	// rotate left one bit
 	// SENSOR_L enabled: sens = 0000 0010
@@ -77,7 +75,7 @@ uint8_t stop_detector_isr()
 	// SENSOR_L enabled:
 		// if SENSOR_R enabled sens = 0000 0011 (3)
 		// if SENSOR_R disabled sens = 0000 0010 (2)
-	sens += GET_SENS_LOGVAL(ST_SENSOR_R);
+	sens += qtr_get_digital(ST_SENSOR_R);
 
 	// both sensors enabled
 	if(sens == 3)
