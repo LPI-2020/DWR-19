@@ -9,7 +9,7 @@
 #include "pid.h"
 #include "auxiliares.h"
 
-#include "stop_sensors.h"
+//#include "stop_sensors.h"
 
 #include <math.h> // using fabs()
 
@@ -65,7 +65,7 @@ void lfollower_start(void)
 	// start movement
 	move_start();
 	// start obstacle detectors
-	obs_detector_init();
+//	obs_detector_init();
 
 	// start sampling for PID application
 	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
@@ -90,7 +90,7 @@ void lfollower_stop(void)
 	// stop movement
 	move_stop();
 	// stop obstacle detectors
-	obs_detector_deInit();
+//	obs_detector_deInit();
 
 	// mark line follower is disabled
 	lfollower_status = 0;
@@ -127,20 +127,6 @@ static pid_st pid = {
 	.u_sat_a	= +1.0,
 	.u_sat_b	= -1.0
 };
-
-void lfollower_pid(void)
-{
-	// is line follower disabled?
-	if(lfollower_status == 0)
-		return;
-
-	// Apply PID to adjust motor PWM/velocity
-	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
-						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
-
-	//move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-}
 
 /******************************************************************************
 Line Follower Rotate
@@ -188,74 +174,12 @@ uint8_t lfollower_rotate(move_dir_e dir)
 }
 
 /******************************************************************************
-Line Follower Control
+Line Follower ISR
 
-@brief	Follows line and stops if detects a cross, room or obstacle
+@brief	Follows line
 @param	none
-@retval	err - error code can be: EXIT_SUCCESS - nothing detected;
-					  	  	  	 E_CROSS_FOUND - cross detected;
-					  	  	  	 E_ROOM_FOUND - room detected;
-					  	  	  	 E_OBS_FOUND - obstacle detected.
+@retval	none
 ******************************************************************************/
-//uint8_t lfollower_control(void)
-//{
-//	uint8_t err = EXIT_SUCCESS;
-//
-//	// line follower already started?
-//	if(lfollower_status == 0)
-//		// start line follower
-//		lfollower_start();
-//
-//	if(cross_detector() == 1)
-//		// cross detected
-//		err = E_CROSS_FOUND;
-//	else if(room_detector() == 1)
-//		// room detected
-//		err = E_ROOM_FOUND;
-//	else if(obs_found_flag == 1)
-//		// obstacle found
-//		err = E_OBS_FOUND;
-//
-//	// error found?
-//	if(err != EXIT_SUCCESS)
-//		// stop line follower
-//		lfollower_stop();
-//	else
-//		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-//
-//	// return error code
-//	return err;
-//}
-
-uint8_t lfollower_control(void)
-{
-	uint8_t err = 0;
-	static uint8_t num_timeout_10ms = 0;
-
-	num_timeout_10ms++;
-
-	// check stop sensors
-	//	cross_detector();
-	//	room_detector();
-	if(num_timeout_10ms == TIMEOUT_50MS)
-		stop_detector();
-
-	// no error if none flag is active
-	err = (obs_found_flag + room_found_flag + cross_found_flag);
-
-	// check for none flag active
-	if(err == 0)
-		// no error
-		// continue to follow line, using PID calculated value
-		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-	else
-		// obstacle/stop mark found
-		// stop line follower
-		lfollower_stop();
-
-	return err;
-}
-
 void lfollower_isr(void)
 {
 	// use PID to obtain PWM values to use on motors

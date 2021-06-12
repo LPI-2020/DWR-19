@@ -14,6 +14,10 @@ motion_status_e motion_status = MOT_OFF;
 ******************************************************************************/
 void motion_start(void)
 {
+	if(motion_status == MOT_ON)
+		// already moving
+		return;
+
 	// enable Line Follower
 	lfollower_start();
 	// enable Stop Detectors
@@ -24,6 +28,10 @@ void motion_start(void)
 
 void motion_stop(void)
 {
+	if(motion_status == MOT_OFF)
+		// already stopped
+		return;
+
 	// disable Line Follower
 	lfollower_stop();
 	// disable Stop Detectors

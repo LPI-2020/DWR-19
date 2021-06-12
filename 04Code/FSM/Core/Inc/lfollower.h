@@ -43,13 +43,9 @@ Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
 void lfollower_stop(void);
-
-void lfollower_pid(void);
-uint8_t lfollower_rotate(move_dir_e dir);
-
-uint8_t lfollower_control(void);
-
 void lfollower_isr();
+
+uint8_t lfollower_rotate(move_dir_e dir);
 
 /******************************************************************************
 Debug Functions

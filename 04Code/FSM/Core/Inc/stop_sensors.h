@@ -32,15 +32,8 @@ Define Parameters
 #define ADC_DISTANCE_LIMIT (1139)
 
 /******************************************************************************
-Stop Sensors Flags
+Stop Sensors Errors
 ******************************************************************************/
-// Obstacle Found Flag
-extern uint8_t obs_found_flag;
-// Cross Found Flag
-extern uint8_t cross_found_flag;
-// Room Found Flag
-extern uint8_t room_found_flag;
-
 #define EXIT_SUCCESS	0
 #define E_CROSS_FOUND	1
 #define E_ROOM_FOUND	2
@@ -48,15 +41,6 @@ extern uint8_t room_found_flag;
 
 /******************************************************************************
 Obstacle Detector Functions
-******************************************************************************/
-void obs_detector_init(void);
-void obs_detector_deInit(void);
-void isr_obs_detector(void);
-
-
-void stop_detector(void);
-/******************************************************************************
-Cross and Room Detectors Functions
 ******************************************************************************/
 void stop_detector_init(void);
 void stop_detector_deInit(void);

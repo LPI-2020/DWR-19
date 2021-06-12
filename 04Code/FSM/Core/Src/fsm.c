@@ -9,9 +9,10 @@
 
 #include "fsm.h"
 
-#include "stop_sensors.h"
-#include "lfollower.h"
-#include "move.h"
+//#include "stop_sensors.h"
+//#include "lfollower.h"
+//#include "move.h"
+#include "motion.h"
 
 //#include "spi.h"
 #include "rfid-rc522.h"
@@ -73,19 +74,22 @@ State Stopped
 ******************************************************************************/
 static void s_stopped(void)
 {
+	// stop movement
+	motion_stop();
+
 	if(route_finished && new_route_incoming)
 		// route finished and receiving new route
 		nstate = S_RECEIVE;
 
-	else if((!obs_found_flag) && (!obs_found_timeout))
-		// obstacle is not there anymore and timer not finished
-		// restart movement
-		nstate = S_FLW_LINE;
-
-	else if(obs_found_timeout)
-		// obstacle has been there for too long
-		// continue to error state
-		nstate = S_ERROR;
+//	else if((!obs_found_flag) && (!obs_found_timeout))
+//		// obstacle is not there anymore and timer not finished
+//		// restart movement
+//		nstate = S_FLW_LINE;
+//
+//	else if(obs_found_timeout)
+//		// obstacle has been there for too long
+//		// continue to error state
+//		nstate = S_ERROR;
 
 	else if((!route_finished) && (user_btn || pick_up_timeout))
 		// Route not finished and User button pressed or robot has been waiting
@@ -112,18 +116,23 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-	// check stop sensors flags
-	if(cross_found_flag)
+	// start movement
+	motion_start();
+
+	switch((uint8_t)motion_status)
+	{
+	case MOT_CROSS_FOUND:
 		// Cross Found
 		nstate = S_RD_RFID;
-
-	else if(room_found_flag)
+		break;
+	case MOT_ROOM_FOUND:
 		// Room Found
 		nstate = S_NEXT_MOV;
-
-	else if(obs_found_flag)
+		break;
+	case MOT_HOLD:
 		// obstacle found
 		nstate = S_STOPPED;
+	}
 
 	// Else, continue following line
 }
@@ -143,11 +152,11 @@ static void s_rd_rfid(void)
 	uint8_t err;
 
 	// start movement
-	lfollower_start();
+	motion_start();
 	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
 	err = read_RFID(&rfid);
 	// stop movement
-	lfollower_stop();
+	motion_stop();
 
 	// read RFID correctly?
 	if(err == MI_OK)
@@ -165,7 +174,7 @@ State Next Movement
 uint8_t cross_found_func(void)
 {
 	// clear cross found flag
-	cross_found_flag = 0;
+//	cross_found_flag = 0;
 
 	// calculate next direction of movement
 	//next_move_dir = ...
@@ -176,7 +185,7 @@ uint8_t cross_found_func(void)
 uint8_t room_found_func(void)
 {
 	// clear room found flag
-	room_found_flag = 0;
+//	room_found_flag = 0;
 
 	// check if robot needs to stop in this room
 	// if (quarto paragem)
@@ -200,7 +209,7 @@ static void s_next_mov(void)
 	// executed using the value of only one flag, p.e, room_found_flag.
 	// Keep in mind that next_move_func must be set allowing that if
 	// room_found_flag is 1, next_move_func points to room_found_func.
-	nstate = next_move_func[room_found_flag & 0x01]();
+//	nstate = next_move_func[room_found_flag & 0x01]();
 }
 
 /******************************************************************************

@@ -422,8 +422,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	if(htim == &htim3)
 	{// enters every 10ms
 		// line follower PID
-		lfollower_pid();
-		lfollower_control();
+//		lfollower_pid();
+//		lfollower_control();
 	}
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 2sec

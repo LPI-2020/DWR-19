@@ -330,7 +330,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 		// enters every 500ms
 
 		// obstacle detector ISR
-		isr_obs_detector();
+//		isr_obs_detector();
 	}
 }
 /* USER CODE END 1 */
