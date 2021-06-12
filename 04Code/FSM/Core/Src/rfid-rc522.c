@@ -19,6 +19,7 @@
 #include "rfid-rc522.h"
 #include <stdlib.h>
 
+#include "tim.h"
 //SPI_HandleTypeDef SpiHandle = hspi1;
 
 void RFID_RC522_Init(void) {
@@ -39,6 +40,39 @@ void RFID_RC522_Init(void) {
 	TM_MFRC522_WriteRegister(ModeReg, 0x3D);
 
 	TM_MFRC522_AntennaOn();		//Open the antenna
+}
+
+/******************************************************************************
+Read RFID
+
+@brief 	Reads RFID card
+@para 	rfid struct
+@retval rfid status
+******************************************************************************/
+uint8_t read_RFID(rfid_t *rfid)
+{
+	// RFID status reading
+	uint8_t status = -1;
+
+  	// enable RFID reader
+  	RFID_RC522_Init();
+
+	do
+	{
+		// check if rfid was read
+		status = TM_MFRC522_Check(rfid->CardID, &rfid->type);
+
+		if(status == MI_OK)
+			// rfid read
+			// converts CardID to an hexadecimal string
+			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->result);
+
+	} while((status != MI_OK) && (num_timeout_2sec < TIMEOUT_2SEC));
+
+	if(num_timeout_2sec < TIMEOUT_4SEC)
+		return MI_TIMEOUT;
+
+	return status;
 }
 
 TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
@@ -105,7 +139,7 @@ void TM_MFRC522_WriteRegister(uint8_t addr, uint8_t val) {
 
 uint8_t TM_MFRC522_ReadRegister(uint8_t addr) {
 	uint8_t val = 0x00;
-	//uint8_t retval = 0x00;
+//	uint8_t retval = 0x00;
 	//CS low
 	TM_MFRC522_CS_Write(GPIO_PIN_RESET);
 

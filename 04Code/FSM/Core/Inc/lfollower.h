@@ -16,12 +16,18 @@ Define Peripherals INSTANCES in use
 #include "adc.h"
 #include "tim.h"
 
-// ADC DMA linked to Line Follower Sensors
-#define ADC_LF_SENS_DMA 	(hadc3)
 // used to sample values from Line Follower Sensors to PID
-#define TIM_LF_SENS_PID 	(htim6)
-// used to timeout lfollower rotate
-#define TIM_LF_ROTATE		(TIM_TIMEOUTS)
+#define TIM_LF_PID 			(htim3)
+
+/******************************************************************************
+Define Line Follower Sensors
+******************************************************************************/
+#include "qtr.h"
+
+// Line Follower RIGHT sensor
+#define LF_SENSOR_R 	(SENSOR3)
+// Line Follower LEFT sensor
+#define LF_SENSOR_L 	(SENSOR6)
 
 /******************************************************************************
 Line Follower Error Codes
@@ -30,6 +36,7 @@ Line Follower Error Codes
 #define E_CROSS_FOUND	1
 #define E_ROOM_FOUND	2
 #define E_OBS_FOUND		3
+#define E_LF_TIMEOUT	4
 
 /******************************************************************************
 Line Follower Functions

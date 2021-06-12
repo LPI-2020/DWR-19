@@ -31,6 +31,9 @@
 #include "fsm.h"
 #include "tests.h"
 
+#include "lfollower.h"
+#include "stop_sensors.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,7 +96,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_ADC1_Init();
   MX_SPI3_Init();
   MX_USART3_UART_Init();
   MX_TIM6_Init();
@@ -102,6 +104,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   MX_TIM7_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -111,10 +114,31 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
+  //lfollower_start();
+  //timeout_start();
+  //obs_detector_init();
+
+  int err = 0;
+
   while (1)
   {
-	  test_modules();
-	  break;
+
+	  //test_modules();
+
+	  err = test_modules();
+
+	  switch(err)
+	  {
+		  case 0:
+			  // all ok
+			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
+			  return 0;
+
+		  default:
+			  // signal error
+			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+			  return 1;
+	  }
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;

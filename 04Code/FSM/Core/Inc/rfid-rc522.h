@@ -62,6 +62,15 @@ typedef enum {
 	MI_TIMEOUT,
 } TM_MFRC522_Status_t;
 
+/*
+ * RFID structure
+ */
+typedef struct {
+	uint8_t CardID[4];
+	uint8_t type;
+	char *result;
+} rfid_t;
+
 /* MFRC522 Commands */
 #define PCD_IDLE						0x00   //NO action; Cancel the current command
 #define PCD_AUTHENT						0x0E   //Authentication Key
@@ -163,6 +172,11 @@ typedef enum {
 /**
  * Public functions
  */
+/******************************************************************************
+Read RFID
+******************************************************************************/
+extern uint8_t read_RFID(rfid_t *rfid);
+
 /**
  * Initialize MFRC522 RFID reader
  *
@@ -231,25 +245,25 @@ extern void bin_to_strhex(unsigned char *bin, unsigned int binsz, char **result)
 #define SPIx_NSS_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
 #define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE()
 #define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE()
-#define SPIx_CS_GPIO_CLK_ENABLE()				 __HAL_RCC_GPIOF_CLK_ENABLE()
+#define SPIx_CS_GPIO_CLK_ENABLE()                __HAL_RCC_GPIOD_CLK_ENABLE()
 
 #define SPIx_FORCE_RESET()               __HAL_RCC_SPI3_FORCE_RESET()
 #define SPIx_RELEASE_RESET()             __HAL_RCC_SPI3_RELEASE_RESET()
 
 /* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_10 // A5 -> PC10
-#define SPIx_SCK_GPIO_PORT               GPIOC
-#define SPIx_SCK_AF                      GPIO_AF6_SPI3
-#define SPIx_MISO_PIN                    GPIO_PIN_11 // A6 -> PC11
-#define SPIx_MISO_GPIO_PORT              GPIOC
-#define SPIx_MISO_AF                     GPIO_AF6_SPI3
-#define SPIx_MOSI_PIN                    GPIO_PIN_12 // A7 -> PC12
-#define SPIx_MOSI_GPIO_PORT              GPIOC
-#define SPIx_MOSI_AF                     GPIO_AF6_SPI3
-#define SPIx_NSS_PIN					 					 GPIO_PIN_11 // A11
-#define SPIx_NSS_GPIO_PORT							 GPIOA
-#define SPIx_NSS_AF						 					 GPIO_AF5_SPI1
-#define SPIx_CS_PIN                      GPIO_PIN_1 // F1
-#define SPIx_CS_GPIO_PORT                GPIOF
+//#define SPIx_SCK_PIN                     GPIO_PIN_10 // A5 -> PC10
+//#define SPIx_SCK_GPIO_PORT               GPIOC
+//#define SPIx_SCK_AF                      GPIO_AF6_SPI3
+//#define SPIx_MISO_PIN                    GPIO_PIN_11 // A6 -> PC11
+//#define SPIx_MISO_GPIO_PORT              GPIOC
+//#define SPIx_MISO_AF                     GPIO_AF6_SPI3
+//#define SPIx_MOSI_PIN                    GPIO_PIN_12 // A7 -> PC12
+//#define SPIx_MOSI_GPIO_PORT              GPIOC
+//#define SPIx_MOSI_AF                     GPIO_AF6_SPI3
+//#define SPIx_NSS_PIN                     GPIO_PIN_11 // A11
+//#define SPIx_NSS_GPIO_PORT                           GPIOA
+//#define SPIx_NSS_AF                                          GPIO_AF5_SPI1
+#define SPIx_CS_PIN                      GPIO_PIN_2 // D2
+#define SPIx_CS_GPIO_PORT                GPIOD
 
 #endif

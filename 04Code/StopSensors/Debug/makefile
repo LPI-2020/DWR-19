@@ -61,8 +61,8 @@ all: main-build
 main-build: sensors.elf secondary-outputs
 
 # Tool invocations
-sensors.elf: $(OBJS) $(USER_OBJS) C:\02Sem\LPI\DWR-19\04Code\StopSensors\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "sensors.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\02Sem\LPI\DWR-19\04Code\StopSensors\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="sensors.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+sensors.elf: $(OBJS) $(USER_OBJS) C:\Users\user\Desktop\DWR-19\04Code\StopSensors\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "sensors.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\user\Desktop\DWR-19\04Code\StopSensors\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="sensors.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

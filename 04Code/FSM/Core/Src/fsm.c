@@ -10,13 +10,11 @@
 #include "fsm.h"
 
 #include "stop_sensors.h"
-
 #include "lfollower.h"
 #include "move.h"
 
 //#include "spi.h"
 #include "rfid-rc522.h"
-
 
 /******************************************************************************
 FSM state functions
@@ -54,6 +52,7 @@ uint8_t state = 0;
 // Next FSM state
 uint8_t nstate = 0;
 
+
 // Route finished flag
 uint8_t route_finished = 0;
 // New route incoming flag
@@ -62,8 +61,8 @@ uint8_t new_route_incoming = 0;
 // Timeout flags
 uint8_t pick_up_timeout = 0;
 uint8_t obs_found_timeout = 0;
-uint8_t rotate_timeout = 0;
-uint8_t read_rfid_timeout = 0;
+//uint8_t rotate_timeout = 0;
+//uint8_t read_rfid_timeout = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
@@ -79,13 +78,9 @@ static void s_stopped(void)
 		nstate = S_RECEIVE;
 
 	else if((!obs_found_flag) && (!obs_found_timeout))
-	{
 		// obstacle is not there anymore and timer not finished
 		// restart movement
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 
 	else if(obs_found_timeout)
 		// obstacle has been there for too long
@@ -93,13 +88,9 @@ static void s_stopped(void)
 		nstate = S_ERROR;
 
 	else if((!route_finished) && (user_btn || pick_up_timeout))
-	{
 		// Route not finished and User button pressed or robot has been waiting
 		// too much time for user to pick up his goods. Restart movement.
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 
 	// Else, continue in S_STOPPED
 }
@@ -121,102 +112,49 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-	uint8_t err;
+	// check stop sensors flags
+	if(cross_found_flag)
+		// Cross Found
+		nstate = S_RD_RFID;
 
-//	// obstacle detected?
-//	if(obs_found_flag)
-//	{
-//		// enables timer counting OBS_TIM seconds
-//		// ....
-//		nstate = S_STOPPED;
-//		// stop line follower
-//		lfollower_stop();
-//	}
-//
-//	if(cross_found_flag)
-//	{
-//		// Cross Found
-//		nstate = S_RD_RFID;
-//		// stop line follower
-//		lfollower_stop();
-//	}
-//	if(room_found_flag)
-//	{
-//		// Room Found
-//		nstate = S_NEXT_MOV;
-//		// stop line follower
-//		lfollower_stop();
-//	}
+	else if(room_found_flag)
+		// Room Found
+		nstate = S_NEXT_MOV;
 
-	err = lfollower_control();
+	else if(obs_found_flag)
+		// obstacle found
+		nstate = S_STOPPED;
 
-	switch(err)
-	{
-		case E_CROSS_FOUND:
-			nstate = S_RD_RFID;
-			break;
-		case E_ROOM_FOUND:
-			nstate = S_NEXT_MOV;
-			break;
-		case E_OBS_FOUND:
-			nstate = S_STOPPED;
-			break;
-		default:
-			break;
-	}
-
+	// Else, continue following line
 }
 
 /******************************************************************************
 State Read RFID
 ******************************************************************************/
-uint8_t read_RFID(void)
-{
-	// RFID status reading
-	int status;
-
-	uint8_t CardID[4];
-	uint8_t type;
-  	char *result;
-
-  	// return val: initialized as return not successfull
-  	uint8_t retval = 1;
-
-  	// enable RFID reader
-  	RFID_RC522_Init();
-
-	do
-	{
-		status = TM_MFRC522_Check(CardID, &type);
-
-		if (status == MI_OK)
-		{
-			bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
-			// return successfull
-			retval = 0;
-		}
-	} while((status != MI_OK) && (!read_rfid_timeout));
-
-	return retval;
-}
+// RFID struct
+static rfid_t rfid = {
+		.CardID = {0},
+		.result = 0,
+		.type = 0
+};
 
 static void s_rd_rfid(void)
 {
 	uint8_t err;
 
 	// start movement
-	move_forward(RD_RFID_SPEED);
-
-	// wait for RFID read or 'read_rfid_timeout'
-	err = read_RFID();
+	lfollower_start();
+	// wait for RFID read or 'read_rfid_timeout' (POLLING MODE)
+	err = read_RFID(&rfid);
 	// stop movement
-	move_stop();
+	lfollower_stop();
 
 	// read RFID correctly?
-	if(err == 0)
+	if(err == MI_OK)
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
 	else
+		// RFID timeout
 		// continue to error state
 		nstate = S_ERROR;
 }
@@ -224,11 +162,45 @@ static void s_rd_rfid(void)
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
+uint8_t cross_found_func(void)
+{
+	// clear cross found flag
+	cross_found_flag = 0;
+
+	// calculate next direction of movement
+	//next_move_dir = ...
+
+	return S_ROTATE;
+}
+
+uint8_t room_found_func(void)
+{
+	// clear room found flag
+	room_found_flag = 0;
+
+	// check if robot needs to stop in this room
+	// if (quarto paragem)
+		// stop at this room
+		// return S_STOPPED;
+	//else
+		// continue to the next rooms
+		return S_FLW_LINE;
+}
+
+// Next move function pointer
+uint8_t (*next_move_func[])(void) = {
+		cross_found_func,
+		room_found_func
+};
+
 static void s_next_mov(void)
 {
-
-	// next_move_dir = ...
-	nstate = S_FLW_LINE;
+	// This state only gets executed if cross_found_flag or room_found_flag are
+	// activated. Therefore, we can determine which next_move_func has to be
+	// executed using the value of only one flag, p.e, room_found_flag.
+	// Keep in mind that next_move_func must be set allowing that if
+	// room_found_flag is 1, next_move_func points to room_found_func.
+	nstate = next_move_func[room_found_flag & 0x01]();
 }
 
 /******************************************************************************
@@ -238,7 +210,7 @@ static void s_rotate(void)
 {
 	uint8_t rotate_err;
 
-	// rotate to direction 'next_move_dir'
+	// rotate to direction 'next_move_dir' (POLLING MODE)
 	rotate_err = lfollower_rotate(next_move_dir);
 
 	// rotate was returned error? (Due to timeout)
@@ -246,12 +218,8 @@ static void s_rotate(void)
 		// rotate was not successfull
 		nstate = S_ERROR;
 	else
-	{
 		// turn completed. Restart following line
 		nstate = S_FLW_LINE;
-		// enable line follower
-		lfollower_start();
-	}
 }
 
 /******************************************************************************

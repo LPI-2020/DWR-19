@@ -4,7 +4,6 @@
  *  Created on: May 5, 2021
  */
 #include "stop_sensors.h"
-#include "auxiliares.h"
 
 /******************************************************************************
 Define Test symbol
@@ -21,14 +20,9 @@ Stop Sensors Flags
 // Obstacle Found Flag
 uint8_t obs_found_flag = 0;
 // Cross Found Flag
-//uint8_t cross_found_flag = 0;
+uint8_t cross_found_flag = 0;
 // Room Found Flag
-//uint8_t room_found_flag = 0;
-
-//uint8_t sensor1_val = 0;
-//uint8_t sensor8_val = 0;
-
-uint32_t st_sens[ST_SENS_NUM];
+uint8_t room_found_flag = 0;
 
 /******************************************************************************
 Obstacle Detector
@@ -86,61 +80,64 @@ void isr_obs_detector(void)
 }
 
 /******************************************************************************
-Stop mark Detector
+Stop Detector
+
+@brief 	Detects a cross if both sensors, SENSOR_R and SENSOR_L are over the line.
+		Detects a room if one of the sensors, SENSOR_R or SENSOR_L is over the line.
+		i.e, at logical state HIGH (GET_SENS_LOGVAL(SENSOR_x) == 1)
+		Sens value 8 bits in form '0000 00LR':
+		 	 - L (left sensor)
+		 	 - R (right sensor)
+@param	none
+@retval	none
 ******************************************************************************/
-void stop_detector_init(void)
+void stop_detector(void)
 {
-	// start sampling stop sensors values
-//	HAL_TIM_Base_Start_IT(&STOP_DETECTOR_TIM);
-	// start storing stop sensors values
-	HAL_ADC_Start_DMA(&STOP_DETECTOR_ADC, st_sens, ST_SENS_NUM);
+	// previous sensor values
+	static uint8_t sens_prev = 0;
+	// current sensor values
+	uint8_t sens = 0;
+
+	// if SENSOR_L enabled sens = 0000 0001 (1)
+	// if SENSOR_L disabled sens = 0000 0000 (0)
+	sens = GET_SENS_LOGVAL(SENSOR_L);
+
+	// rotate left one bit
+	// SENSOR_L enabled: sens = 0000 0010
+	// SENSOR_L disabled: sens = 0000 0000
+	sens = sens << 1;
+
+	// SENSOR_L enabled:
+		// if SENSOR_R enabled sens = 0000 0011 (3)
+		// if SENSOR_R disabled sens = 0000 0010 (2)
+	sens += GET_SENS_LOGVAL(SENSOR_R);
+
+	// both sensors enabled
+	if(sens == 3)
+		cross_found_flag = 1;
+
+	// current sensors value equal to the previous sensor values
+	// 		and only one sensor enabled
+	else if((sens == sens_prev) && (sens != 0))
+	{
+		room_found_flag = 1;
+		//sens_prev = 0;
+	}
+
+	sens_prev = sens;
 }
 
-void stop_detector_deInit(void)
-{
-	// stop storing stop sensors values
-	HAL_ADC_Stop_DMA(&STOP_DETECTOR_ADC);
-	// stop sampling stop sensors values
-//	HAL_TIM_Base_Stop_IT(&STOP_DETECTOR_TIM);
-}
-
-/******************************************************************************
-Stop mark detector ISR
-
-- Used in gpio.c at void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-******************************************************************************/
-
-//typedef enum{
-//	SENSOR1 = 0,
-//	SENSOR8
-//} st_sensor_e;
+///******************************************************************************
+//Cross Detector
 //
-//
-//
-//void isr_stop_detector(void)
+//@brief 	Detects a room if only SENSOR_R is above the line, logical state HIGH
+//		with SENSOR_L at logical state LOW.
+//@param	none
+//@retval	Room found flag
+//******************************************************************************/
+//uint8_t room_detector(void)
 //{
-//	// get stop sensors pin value (0 or 1)
-//	sensor1_val = (DIG_TO_ANALOG(st_sens[SENSOR1]) > ANALOG_STOP_VOLT);
-//	sensor8_val = (DIG_TO_ANALOG(st_sens[SENSOR8]) > ANALOG_STOP_VOLT);
-//
-//#ifdef _DEBUG_
-//	char str[32];
-//	snprintf(str, sizeof(str), "S1[%f]\n\rS8[%f]\n\r\n\r", DIG_TO_ANALOG(st_sens[0]),
-//														   DIG_TO_ANALOG(st_sens[1]));
-//	//snprintf(str, sizeof(str), "S1_val[%d]\n\rS8_val[%d]\n\r\n\r", sensor1_val, sensor8_val);
-//
-//	UART_puts(str);
-//#endif //!_DEBUG_
-//
-//	// set stop sensors flags
-//	// cross_found -> both stop sensors over the line (pin val = 1)
-//	cross_found_flag = (sensor1_val & sensor8_val);
-//	// room_found -> only one sensor over the line
-//	room_found_flag = (sensor1_val);
-//}
-
-//void isr_stop_detector(void)
-//{
-//	(DIG_TO_ANALOG(st_sens[dir & 0x01]) < ANALOG_STOP_VOLT)
-//
+//	// check if SENSOR_R is over the line (logical state HIGH) and SENSOR_L isnt.
+//	return (room_found_flag = ((GET_SENS_LOGVAL(SENSOR_R) == 1) &&
+//			(GET_SENS_LOGVAL(SENSOR_L) == 0)));
 //}
