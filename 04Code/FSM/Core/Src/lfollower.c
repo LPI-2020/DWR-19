@@ -13,11 +13,15 @@
 
 #include <math.h> // using fabs()
 
-#include "usart.h" // debug
-#include <stdio.h>
-
+/******************************************************************************
+Define Debug Symbol
+******************************************************************************/
 #define _DEBUG_
 
+#ifdef _DEBUG_
+#include "usart.h" // debug
+#include <stdio.h>
+#endif // !_DEBUG_
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
@@ -58,15 +62,13 @@ void lfollower_start(void)
 {
 	// start storing QTR Sensor values
 	qtr_init();
-	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
-
 	// start movement
 	move_start();
-
 	// start obstacle detectors
 	obs_detector_init();
 
+	// start sampling for PID application
+	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
 	// mark line follower is enabled
 	lfollower_status = 1;
 }
@@ -80,14 +82,13 @@ Line Follower Stop
 ******************************************************************************/
 void lfollower_stop(void)
 {
-	// stop storing QTR sensor values
-	qtr_kill();
 	// stop sampling for PID application
 	HAL_TIM_Base_Stop_IT(&TIM_LF_PID);
 
+	// stop storing QTR sensor values
+	qtr_kill();
 	// stop movement
 	move_stop();
-
 	// stop obstacle detectors
 	obs_detector_deInit();
 
@@ -253,6 +254,17 @@ uint8_t lfollower_control(void)
 		lfollower_stop();
 
 	return err;
+}
+
+void lfollower_isr(void)
+{
+	// use PID to obtain PWM values to use on motors
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
+						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
+
+	// Apply PID to adjust motor PWM/velocity
+	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
 }
 
 /******************************************************************************

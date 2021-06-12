@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  00020234  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0001fca9  00000000  00000000  00020262  2**0
+ 12 .debug_info   0001fd40  00000000  00000000  00020262  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000042ce  00000000  00000000  0003ff0b  2**0
+ 13 .debug_abbrev 00004306  00000000  00000000  0003ffa2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000014c8  00000000  00000000  000441e0  2**3
+ 14 .debug_aranges 000014e8  00000000  00000000  000442a8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000012e0  00000000  00000000  000456a8  2**3
+ 15 .debug_ranges 00001300  00000000  00000000  00045790  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002c923  00000000  00000000  00046988  2**0
+ 16 .debug_macro  0002c953  00000000  00000000  00046a90  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001b5f1  00000000  00000000  000732ab  2**0
+ 17 .debug_line   0001b6d2  00000000  00000000  000733e3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    001062c4  00000000  00000000  0008e89c  2**0
+ 18 .debug_str    00106301  00000000  00000000  0008eab5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  00194b60  2**0
+ 19 .comment      00000053  00000000  00000000  00194db6  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000060d4  00000000  00000000  00194bb4  2**2
+ 20 .debug_frame  00006150  00000000  00000000  00194e0c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1297,19 +1297,17 @@ void lfollower_start(void)
 	// start storing QTR Sensor values
 	qtr_init();
  8000b40:	f000 fb0c 	bl	800115c <qtr_init>
-	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
- 8000b44:	4805      	ldr	r0, [pc, #20]	; (8000b5c <lfollower_start+0x20>)
- 8000b46:	f004 fbc1 	bl	80052cc <HAL_TIM_Base_Start_IT>
-
 	// start movement
 	move_start();
- 8000b4a:	f000 f9e3 	bl	8000f14 <move_start>
-
+ 8000b44:	f000 f9e6 	bl	8000f14 <move_start>
 	// start obstacle detectors
 	obs_detector_init();
- 8000b4e:	f000 fc53 	bl	80013f8 <obs_detector_init>
+ 8000b48:	f000 fc56 	bl	80013f8 <obs_detector_init>
 
+	// start sampling for PID application
+	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
+ 8000b4c:	4803      	ldr	r0, [pc, #12]	; (8000b5c <lfollower_start+0x20>)
+ 8000b4e:	f004 fbbd 	bl	80052cc <HAL_TIM_Base_Start_IT>
 	// mark line follower is enabled
 	lfollower_status = 1;
  8000b52:	4b03      	ldr	r3, [pc, #12]	; (8000b60 <lfollower_start+0x24>)
@@ -1330,18 +1328,17 @@ void lfollower_stop(void)
 {
  8000b64:	b580      	push	{r7, lr}
  8000b66:	af00      	add	r7, sp, #0
-	// stop storing QTR sensor values
-	qtr_kill();
- 8000b68:	f000 fb06 	bl	8001178 <qtr_kill>
 	// stop sampling for PID application
 	HAL_TIM_Base_Stop_IT(&TIM_LF_PID);
- 8000b6c:	4805      	ldr	r0, [pc, #20]	; (8000b84 <lfollower_stop+0x20>)
- 8000b6e:	f004 fc25 	bl	80053bc <HAL_TIM_Base_Stop_IT>
+ 8000b68:	4806      	ldr	r0, [pc, #24]	; (8000b84 <lfollower_stop+0x20>)
+ 8000b6a:	f004 fc27 	bl	80053bc <HAL_TIM_Base_Stop_IT>
 
+	// stop storing QTR sensor values
+	qtr_kill();
+ 8000b6e:	f000 fb03 	bl	8001178 <qtr_kill>
 	// stop movement
 	move_stop();
  8000b72:	f000 f9e3 	bl	8000f3c <move_stop>
-
 	// stop obstacle detectors
 	obs_detector_deInit();
  8000b76:	f000 fc4d 	bl	8001414 <obs_detector_deInit>

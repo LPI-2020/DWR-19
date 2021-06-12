@@ -127,6 +127,76 @@ void stop_detector(void)
 	sens_prev = sens;
 }
 
+void stop_detector_init(void)
+{
+	// start Obstacle detector timer
+	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
+	// start Obstacle detector ADC
+	//HAL_ADC_Start_IT(&OBS_DETECTOR_ADC);
+	// start DMA to obstacle detector>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><
+}
+
+void stop_detector_deInit(void)
+{
+	// start Obstacle detector timer
+	HAL_TIM_Base_Stop(&OBS_DETECTOR_TIM);
+	// start Obstacle detector ADC
+	//HAL_ADC_Stop_IT(&OBS_DETECTOR_ADC);
+	// stop DMA to obstacle detector>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><
+}
+
+uint8_t stop_detector_isr()
+{
+	// previous sensor values
+	static uint8_t sens_prev = 0;
+	// current sensor values
+	uint8_t sens = 0;
+
+	// Digital value of distance
+	static uint32_t distance = 0; // >>>>>>>>>>>>>>>>>>>>>>>>>> use DMA
+	static uint32_t old_distance = 0;
+
+
+	// ***** Check Stop Marks Detector *****
+	// if SENSOR_L enabled sens = 0000 0001 (1)
+	// if SENSOR_L disabled sens = 0000 0000 (0)
+	sens = GET_SENS_LOGVAL(SENSOR_L);
+
+	// rotate left one bit
+	// SENSOR_L enabled: sens = 0000 0010
+	// SENSOR_L disabled: sens = 0000 0000
+	sens = sens << 1;
+
+	// SENSOR_L enabled:
+		// if SENSOR_R enabled sens = 0000 0011 (3)
+		// if SENSOR_R disabled sens = 0000 0010 (2)
+	sens += GET_SENS_LOGVAL(SENSOR_R);
+
+	// both sensors enabled
+	if(sens == 3)
+		return E_CROSS_FOUND;
+
+	// current sensors value equal to the previous sensor values
+	// 		and only one sensor enabled
+	else if((sens == sens_prev) && (sens != 0))
+		return E_ROOM_FOUND;
+
+	// ***** Check Obstacle Detector *****
+	// Obstacle found flag update
+	obs_found_flag = ((distance >= ADC_DISTANCE_LIMIT) &&
+						(old_distance >= ADC_DISTANCE_LIMIT));
+
+	// update old distance variable
+	old_distance = distance;
+
+	if(obs_found_flag)
+		return E_OBS_FOUND;
+
+	sens_prev = sens;
+
+	return EXIT_SUCCESS;
+}
+
 ///******************************************************************************
 //Cross Detector
 //
