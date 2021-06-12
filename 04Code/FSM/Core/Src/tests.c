@@ -3,6 +3,10 @@
 #include "lfollower.h"
 #include "rfid-rc522.h"
 
+#include "usart.h"
+#include "ucmd.h"
+#include "cmd_list.h"
+
 #include "stm32f7xx_hal.h"
 
 /******************************************************************************
@@ -143,6 +147,55 @@ int test_rfid(void)
 	return err;
 }
 
+void test_bluetooth(void)
+{
+//	if(Rx_string_processing)
+//	{
+//		//pode ser usado o valor de retorno do parser  a função error_handler
+//		ucmd_parse(&my_cmd_list," ",(char*) Message);
+//		Rx_string_processing = 0;
+//	}
+
+	if(bluet_uart.Rx_flag)
+	{
+//		// is there a continuous printing msg?
+//		if(printing_msg_flag)
+//		{
+//			// Print prompt to insert cmd after last printed messages
+//			UART_puts("...\n\r>");
+//			printing_msg_flag = 0;
+//		}
+
+		UART_Receive(&bluet_uart); // Returns received char
+//		if(c != (char)(-1))
+//			// Its not a special character
+//			UART_putchar(c); // Received char is echoed
+
+		bluet_uart.Rx_flag = 0;
+	}
+
+	if(cmd_received)
+	{
+		ucmd_parse(my_cmd_list," ",(char*) bluet_uart.Rx_Buffer);
+//		if(exec_cmd(Rx_Buffer) == 0)// Is there an error?
+//			// No error. Command is valid
+//			strcpy(last_valid_cmd, Rx_Buffer); // Save this as last valid command
+//
+//		if(print_msg_flag == 0)
+//			// no message queued. print prompt
+//			UART_putchar('>');
+//		else
+//		{
+//			// cmd has been executed. free to continue printing messages
+//			printing_msg_flag = 1;
+//			// avoid printing old queued message
+//			print_msg_flag = 0;
+//		}
+		cmd_received = 0;
+		Rx_UART_init(&bluet_uart); // ready to begin reception
+	}
+}
+
 /******************************************************************************
 Test modules functions
 ******************************************************************************/
@@ -164,7 +217,9 @@ int test_modules(void)
 	//err = test_stop_sensor(E_CROSS_FOUND);
 
 	//err = test_rfid();
-	test_stop_sensor();
+	//test_stop_sensor();
+
+	test_bluetooth();
 
 	return err;
 }

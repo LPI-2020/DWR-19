@@ -120,25 +120,27 @@ int main(void)
 
   int err = 0;
 
+  Rx_UART_init(&bluet_uart);
+
   while (1)
   {
 
-	  //test_modules();
+	  test_modules();
 
-	  err = test_modules();
-
-	  switch(err)
-	  {
-		  case 0:
-			  // all ok
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
-			  return 0;
-
-		  default:
-			  // signal error
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-			  return 1;
-	  }
+//	  err = test_modules();
+//
+//	  switch(err)
+//	  {
+//		  case 0:
+//			  // all ok
+//			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
+//			  return 0;
+//
+//		  default:
+//			  // signal error
+//			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+//			  return 1;
+//	  }
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;

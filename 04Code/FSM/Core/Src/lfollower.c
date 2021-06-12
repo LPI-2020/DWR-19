@@ -206,22 +206,22 @@ void lfollower_print_sens(void)
 	qtr_init();
 
 	snprintf(str, sizeof(str), "S1[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR1]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	snprintf(str, sizeof(str), "S3[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR3]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	snprintf(str, sizeof(str), "S4[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR4]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	snprintf(str, sizeof(str), "S5[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR5]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	snprintf(str, sizeof(str), "S6[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR6]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR8]));
-	UART_puts(str);
+	UART_puts(&debug_uart, str);
 
 	// stop QTR readings
 	qtr_kill();
