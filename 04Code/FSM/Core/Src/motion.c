@@ -7,6 +7,7 @@
  */
 #include "motion.h"
 
+#include "timeout.h"
 #include "lfollower.h"
 #include "stop_sensors.h"
 
@@ -19,6 +20,23 @@ motion_status_e motion_status = MOT_OFF;
 /******************************************************************************
 Motion Functions
 ******************************************************************************/
+//void motion_start(void)
+//{
+//	if(motion_status == MOT_ON)
+//		// already moving
+//		return;
+//
+//	// motion ON
+//	motion_status = MOT_ON;
+//
+//	// enable Stop Detectors
+//	stop_detector_init();
+//	// enable Line Follower
+//	lfollower_start();
+//
+//	// start sampling motion sensors
+//	HAL_TIM_Base_Start_IT(&TIM_MOTION);
+//}
 void motion_start(void)
 {
 	if(motion_status == MOT_ON)
@@ -27,10 +45,22 @@ void motion_start(void)
 
 	// enable Line Follower
 	lfollower_start();
-	// enable Stop Detectors
-	stop_detector_init();
+
+	// start movement before beeing on Hold
+	if(motion_status == MOT_HOLD)
+	{
+		// motion ON
+		motion_status = MOT_ON;
+		return;
+	}
+
 	// motion ON
 	motion_status = MOT_ON;
+	// enable Stop Detectors
+	stop_detector_init();
+
+	// start sampling motion sensors
+	HAL_TIM_Base_Start_IT(&TIM_MOTION);
 }
 
 void motion_stop(void)
@@ -41,11 +71,56 @@ void motion_stop(void)
 
 	// disable Line Follower
 	lfollower_stop();
+
+	if(motion_status == MOT_HOLD)
+		// motion in hold
+		// stop detectors remain enabled
+		return;
+
+	// else, stop sampling motion sensors
+	HAL_TIM_Base_Stop_IT(&TIM_MOTION);
+
 	// disable Stop Detectors
 	stop_detector_deInit();
 	// motion OFF
 	motion_status = MOT_OFF;
 }
+
+//void motion_isr(void)
+//{
+//	uint8_t err;
+//
+//	// check Stop Sensors
+//	err = stop_detector_isr();
+//
+//	// check if there is no error due to Stop Detectors
+//	if(err)
+//	{
+//		// Signal that Motion is stopped due to Stop Mark/Obstacle
+//		// err = E_CROSS_FOUND (1) -> motion_status = MOT_CROSS_FOUND (2)
+//		// err = E_ROOM_FOUND (2) -> motion_status = MOT_ROOM_FOUND (3)
+//		// err = E_OBS_FOUND (3) -> motion_status = MOT_HOLD (4)
+//		motion_status = err + (MOT_CROSS_FOUND - E_ST_CROSS_FOUND);
+//
+//		// obstacle/stop mark found
+//		// stop movement
+//		motion_stop();
+//		return;
+//	}
+//
+//	// no error
+//	// continue to follow line
+//	err = lfollower_isr();
+//	if(err)
+//	{
+//		// signal motion error
+//		motion_status = MOT_ERR;
+//
+//		// error following line
+//		// stop movement
+//		motion_stop();
+//	}
+//}
 
 void motion_isr(void)
 {
@@ -54,31 +129,53 @@ void motion_isr(void)
 	// check Stop Sensors
 	err = stop_detector_isr();
 
-	// check if there is no error due to Stop Detectors
-	if(err)
+	if(motion_status == MOT_HOLD)
 	{
-		// obstacle/stop mark found
-		// stop movement
-		motion_stop();
-
+		if(timeout_flag)
+		{
+			// motion timeout occured
+			motion_status = MOT_TIMEOUT;
+			// stop everything
+			motion_stop();
+			return;
+		}
+		if(err == 0)
+			// obstacle has been moved
+			// restart movement
+			motion_start();
+		else
+			// continue in Hold
+			return;
+	}
+	else if(err)
+	{
+		// update motion_status
 		// Signal that Motion is stopped due to Stop Mark/Obstacle
 		// err = E_CROSS_FOUND (1) -> motion_status = MOT_CROSS_FOUND (2)
 		// err = E_ROOM_FOUND (2) -> motion_status = MOT_ROOM_FOUND (3)
 		// err = E_OBS_FOUND (3) -> motion_status = MOT_HOLD (4)
 		motion_status = err + (MOT_CROSS_FOUND - E_ST_CROSS_FOUND);
-		// force exit
+
+		// if motion is on hold, begin timeout
+		if(motion_status == MOT_HOLD)
+			timeout_start(HOLD_TIMEOUT);
+
+		// obstacle/stop mark found
+		// stop movement
+		motion_stop();
 		return;
 	}
 
-	// no error
+	// line follower ISR
 	// continue to follow line
 	err = lfollower_isr();
 	if(err)
 	{
+		// signal motion error
+		motion_status = MOT_ERR;
+
 		// error following line
 		// stop movement
 		motion_stop();
-		// signal motion error
-		motion_status = MOT_ERR;
 	}
 }

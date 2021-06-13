@@ -11,13 +11,6 @@
 #include "move.h" // using move_dir_e
 
 /******************************************************************************
-Line Follower Sampling Timer
-******************************************************************************/
-#include "tim.h"
-// used to sample values from Line Follower Sensors to PID
-#define TIM_LF_PID 			(htim6)
-
-/******************************************************************************
 Define Line Follower Sensors (using QTR)
 ******************************************************************************/
 #include "qtr.h"
@@ -33,6 +26,7 @@ Define Line Follower Sensors (using QTR)
 /******************************************************************************
 Line Follower Error Codes
 ******************************************************************************/
+#define E_LF_OFF			1	// error: line follower disabled
 #define E_LF_NO_LINE		5	// error: no line to follow
 
 /******************************************************************************

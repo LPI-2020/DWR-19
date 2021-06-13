@@ -65,9 +65,9 @@ int test_lf_and_rotate(move_dir_e dir)
 }
 
 /******************************************************************************
-Test stop sensors module
+Test motion module
 ******************************************************************************/
-void test_stop_sensor()
+void test_motion(void)
 {
 	// start movement
 	motion_start();
@@ -75,6 +75,14 @@ void test_stop_sensor()
 	// while motion is ON
 	while(motion_status == MOT_ON)
 		;
+}
+
+/******************************************************************************
+Test stop sensors module
+******************************************************************************/
+void test_stop_sensor(void)
+{
+	test_motion();
 
 	// motion stopped
 	if(motion_status == MOT_CROSS_FOUND)
@@ -86,6 +94,17 @@ void test_stop_sensor()
 	else if(motion_status == MOT_HOLD)
 		// Obstacle found. enable RED LED
 		write_led(LRED, 1);
+}
+
+void test_obs_detector(void)
+{
+	test_motion();
+
+	// wait for obstacle to move
+	while(motion_status == MOT_HOLD)
+		;
+
+	test_motion();
 }
 
 /******************************************************************************
@@ -111,9 +130,14 @@ int test_rfid(void)
 	// begin RFID read. Enable BLUE LED
 	write_led(LBLUE, 1);
 
-	lfollower_start();
+	//lfollower_start();
+	// restart movement
+	motion_start();
+	// read RFID
 	status = RFID_read(&rfid_test);
-	lfollower_stop();
+	//lfollower_stop();
+	// stop movement
+	motion_stop();
 
 	if(status != MI_OK)
 		return -1;
@@ -122,6 +146,21 @@ int test_rfid(void)
 	write_led(LBLUE, 0);
 
 	return lfollower_rotate(MOVE_LEFT);
+}
+
+/******************************************************************************
+Test timeouts
+******************************************************************************/
+void test_timeout(uint8_t sec)
+{
+	timeout_start(sec);
+
+	while(timeout_flag == 0)
+		;
+
+	toggle_led(LBLUE);
+//	while(1)
+//		;
 }
 
 /******************************************************************************
@@ -136,18 +175,17 @@ int test_modules(void)
 //	while(1)
 //		test_lf_print_qtr();
 
-	lfollower_start();
 	while(1)
-		// follow line
-		;
+		test_timeout(10);
 
-//	motion_start();
-//	while(motion_status == MOT_OK)
-//		;
+//	test_motion();
+
+	test_stop_sensor();
+//	test_obs_detector();
+
 
 //	err = lfollower_rotate(MOVE_RIGHT);
 //
-//	test_stop_sensor();
 //	err = test_lf_and_rotate(MOVE_LEFT);
 //
 //	err = test_rfid();

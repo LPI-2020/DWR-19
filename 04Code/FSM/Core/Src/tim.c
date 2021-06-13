@@ -21,9 +21,10 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-#include "lfollower.h"
+//#include "lfollower.h"
 #include "motion.h"
 #include "timeout.h"
+#include "tests.h"
 
 /* USER CODE END 0 */
 
@@ -338,7 +339,8 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
-	if(htim == &TIM_LF_PID)
+//	if(htim == &TIM_LF_PID)
+	if(htim == &TIM_MOTION)
 	{// enters every 10ms
 		// line follower PID and stop_sensors
 		motion_isr();
@@ -346,6 +348,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 1sec
 		timeout_isr();
+//		toggle_led(LBLUE);
 	}
 }
 /* USER CODE END 1 */

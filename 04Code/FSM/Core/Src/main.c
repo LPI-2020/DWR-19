@@ -121,13 +121,16 @@ int main(void)
 	switch(err)
 	{
 		case 0:
-			return 0;
+			break;
 
 		default:
 			// signal error. Light up RED LED
 			write_led(LRED, 1);
-			return 1;
+			break;
 	}
+
+	while(1)
+		;
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;

@@ -60,13 +60,15 @@ Line Follower Start
 ******************************************************************************/
 void lfollower_start(void)
 {
+	// line follower already enabled?
+	if(lfollower_status == 1)
+		return;
+
 	// start storing QTR Sensor values
 	qtr_init();
 	// start movement
 	move_start();
 
-	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
 	// mark line follower is enabled
 	lfollower_status = 1;
 }
@@ -80,8 +82,9 @@ Line Follower Stop
 ******************************************************************************/
 void lfollower_stop(void)
 {
-	// stop sampling for PID application
-	HAL_TIM_Base_Stop_IT(&TIM_LF_PID);
+	// line follower already disabled?
+	if(lfollower_status == 0)
+		return;
 
 	// stop storing QTR sensor values
 	qtr_kill();
@@ -129,12 +132,16 @@ Line Follower ISR
 ******************************************************************************/
 uint8_t lfollower_isr(void)
 {
+	if(lfollower_status == 0)
+		// line follower is disabled
+		return E_LF_OFF;
+
 	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
 		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
 	{
 		// robot is not over the line
 		// stop line follower
-//		lfollower_stop();
+		lfollower_stop();
 		// send error: no line to follow
 		return E_LF_NO_LINE;
 	}
