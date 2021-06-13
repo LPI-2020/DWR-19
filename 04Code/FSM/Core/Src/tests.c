@@ -158,9 +158,7 @@ void test_timeout(uint8_t sec)
 	while(timeout_flag == 0)
 		;
 
-	toggle_led(LBLUE);
-//	while(1)
-//		;
+	toggle_led(LGREEN);
 }
 
 /******************************************************************************
@@ -175,8 +173,8 @@ int test_modules(void)
 //	while(1)
 //		test_lf_print_qtr();
 
-	while(1)
-		test_timeout(10);
+//	while(1)
+//		test_timeout(10);
 
 //	test_motion();
 
