@@ -9,6 +9,7 @@
 
 #include "lfollower.h"
 #include "stop_sensors.h"
+#include "rfid-rc522.h"
 
 /******************************************************************************
 Motion Status

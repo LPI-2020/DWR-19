@@ -45,13 +45,13 @@ void RFID_RC522_Init(void) {
 }
 
 /******************************************************************************
-Read RFID
+Read RFID (POLLING Mode)
 
 @brief 	Reads RFID card
 @para 	rfid struct
 @retval rfid status
 ******************************************************************************/
-uint8_t read_RFID(rfid_t *rfid)
+uint8_t RFID_read(rfid_t *rfid)
 {
 	// RFID status reading
 	uint8_t status = -1;
@@ -71,7 +71,7 @@ uint8_t read_RFID(rfid_t *rfid)
 			// converts CardID to an hexadecimal string
 			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->result);
 
-	//} while((status != MI_OK) && (num_timeout_2sec < TIMEOUT_2SEC));
+	//} while((status != MI_OK) && (num_timeout_2sec < TIMEOUT_4SEC));
 	} while((status != MI_OK) && (timeout_flag == 0));
 
 	//if(num_timeout_2sec < TIMEOUT_4SEC)

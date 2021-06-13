@@ -152,7 +152,7 @@ static void s_rd_rfid(void)
 	// start movement
 	motion_start();
 	// wait for RFID read or timeout (POLLING MODE)
-	err = read_RFID(&rfid);
+	err = RFID_read(&rfid);
 	// stop movement
 	motion_stop();
 
@@ -180,12 +180,12 @@ uint8_t cross_found_func(void)
 uint8_t room_found_func(void)
 {
 	// check if robot needs to stop in this room
-	// if (quarto paragem)
+	// if(quarto paragem)
 		// stop at this room
 		// return S_STOPPED;
-	//else
-		// continue to the next rooms
-		return S_FLW_LINE;
+
+	// else, continue to the next rooms
+	return S_FLW_LINE;
 }
 
 // Next move function pointer
