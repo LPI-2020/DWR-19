@@ -50,18 +50,15 @@ void test_lf_print_qtr(void)
 	HAL_Delay(300);
 }
 
-int test_lf_and_rotate(move_dir_e dir)
+int test_lf_rotate(move_dir_e dir)
 {
-	// use test_stop_sensor() before
+	uint8_t err;
 
-	// motion stopped
-	// line follower only
-	lfollower_start();
-	HAL_Delay(1000);
-	lfollower_stop();
+	write_led(LGREEN, 1);
+	err = lfollower_rotate(dir);
+	write_led(LGREEN, 0);
 
-	// rotate to dir
-	return lfollower_rotate(dir);
+	return err;
 }
 
 /******************************************************************************
@@ -136,12 +133,10 @@ int test_rfid(void)
 	// begin RFID read. Enable BLUE LED
 	write_led(LBLUE, 1);
 
-	//lfollower_start();
 	// restart movement
 	motion_start();
 	// read RFID
 	status = RFID_read(&rfid_test);
-	//lfollower_stop();
 	// stop movement
 	motion_stop();
 
@@ -184,15 +179,13 @@ int test_modules(void)
 
 //	test_motion();
 
-	test_stop_sensor();
+//	test_stop_sensor();
 //	test_obs_detector();
 
+//	test_lf_rotate(MOVE_LEFT);
+//	test_motion();
 
-//	err = lfollower_rotate(MOVE_RIGHT);
-//
-//	err = test_lf_and_rotate(MOVE_LEFT);
-//
-//	err = test_rfid();
+	err = test_rfid();
 
 	return err;
 }

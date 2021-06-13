@@ -78,6 +78,9 @@ uint8_t RFID_read(rfid_t *rfid)
 	if(timeout_flag)
 		return MI_TIMEOUT;
 
+	// else, stop timeout
+	timeout_stop();
+	// return Read status
 	return status;
 }
 
