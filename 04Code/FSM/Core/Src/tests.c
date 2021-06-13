@@ -100,9 +100,15 @@ void test_obs_detector(void)
 {
 	test_motion();
 
+	// obstacle in front
+	write_led(LRED, 1);
+
 	// wait for obstacle to move
 	while(motion_status == MOT_HOLD)
 		;
+
+	// obstacle has been removed
+	write_led(LRED, 0);
 
 	test_motion();
 }

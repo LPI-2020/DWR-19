@@ -18,7 +18,7 @@ Motion Peripherals
 Motion Defines
 ******************************************************************************/
 // Motion Hold timeout, in seconds
-#define HOLD_TIMEOUT		(120)
+#define HOLD_TIMEOUT		(80)
 
 /******************************************************************************
 Motion Status

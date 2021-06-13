@@ -32,7 +32,7 @@ void timeout_start(uint8_t time_sec)
 //		timeout_cycles = time_sec ...
 	}
 	else
-		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec * 4) - 1; // >>>>>>>>>>>>> check this
+		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec * 2) - 1; // >>>>>>>>>>>>> check this
 
 	// init Timer
 	if(HAL_TIM_Base_Init(&TIM_TIMEOUTS) != HAL_OK)
@@ -65,9 +65,6 @@ Timeout ISR
 ******************************************************************************/
 void timeout_isr(void)
 {
-//	if(__HAL_TIM_GET_FLAG(&TIM_TIMEOUTS, TIM_SR_UIF) != RESET)
-//		 return;
-
 	// set timeout flag
 	timeout_flag = 1;
 	// stop generating timeouts
