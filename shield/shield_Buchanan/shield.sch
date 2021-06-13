@@ -889,8 +889,8 @@ U 1 1 60C2EC7B
 P 8750 2450
 F 0 "H1" H 8850 2496 50  0000 L CNN
 F 1 "MountingHole" H 8850 2405 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.5mm" H 8750 2450 50  0001 C CNN
-F 3 "~" H 8750 2450 50  0001 C CNN
+F 2 "MountingHole:MountingHole_4mm" H 8750 2450 50  0001 C CNN
+F 3 "" H 8750 2450 50  0001 C CNN
 	1    8750 2450
 	1    0    0    -1  
 $EndComp
@@ -900,7 +900,7 @@ U 1 1 60C2F8E5
 P 8750 2700
 F 0 "H2" H 8850 2746 50  0000 L CNN
 F 1 "MountingHole" H 8850 2655 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.5mm" H 8750 2700 50  0001 C CNN
+F 2 "MountingHole:MountingHole_4mm" H 8750 2700 50  0001 C CNN
 F 3 "~" H 8750 2700 50  0001 C CNN
 	1    8750 2700
 	1    0    0    -1  
@@ -911,7 +911,7 @@ U 1 1 60C3B112
 P 8750 2900
 F 0 "H3" H 8850 2946 50  0000 L CNN
 F 1 "MountingHole" H 8850 2855 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.5mm" H 8750 2900 50  0001 C CNN
+F 2 "MountingHole:MountingHole_4mm" H 8750 2900 50  0001 C CNN
 F 3 "~" H 8750 2900 50  0001 C CNN
 	1    8750 2900
 	1    0    0    -1  
@@ -922,7 +922,7 @@ U 1 1 60C46AEA
 P 8750 3150
 F 0 "H4" H 8850 3196 50  0000 L CNN
 F 1 "MountingHole" H 8850 3105 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.5mm" H 8750 3150 50  0001 C CNN
+F 2 "MountingHole:MountingHole_4mm" H 8750 3150 50  0001 C CNN
 F 3 "~" H 8750 3150 50  0001 C CNN
 	1    8750 3150
 	1    0    0    -1  
