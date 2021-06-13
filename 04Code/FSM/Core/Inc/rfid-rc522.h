@@ -175,7 +175,7 @@ typedef struct {
 /******************************************************************************
 Read RFID
 ******************************************************************************/
-extern uint8_t read_RFID(rfid_t *rfid);
+extern uint8_t RFID_read(rfid_t *rfid);
 
 /**
  * Initialize MFRC522 RFID reader

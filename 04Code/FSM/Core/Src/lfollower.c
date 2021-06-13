@@ -7,24 +7,24 @@
  */
 #include "lfollower.h"
 #include "pid.h"
-#include "auxiliares.h"
-
-#include "stop_sensors.h"
+#include "timeout.h"
 
 #include <math.h> // using fabs()
 
+/******************************************************************************
+Define Debug Symbol
+******************************************************************************/
+//#define _DEBUG_
+
+#ifdef _DEBUG_
 #include "usart.h" // debug
 #include <stdio.h>
-
-#define _DEBUG_
-
+#endif // !_DEBUG_
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
 #define FORWARD_SPEED 	(float)(0.65)
 #define TURN_SPEED 		(float)(0.75)
-
-#define TIMEOUT_50MS	1
 
 /******************************************************************************
  * GET_SPEED macro
@@ -45,7 +45,7 @@ Define Type of Speed Calculus
 #define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
 
 // line follower status (enabled 1 or disabled 0)
-uint8_t lfollower_status = 0;
+static uint8_t lfollower_status = 0;
 
 /******************************************************************************
 Line Follower Start
@@ -58,15 +58,11 @@ void lfollower_start(void)
 {
 	// start storing QTR Sensor values
 	qtr_init();
-	// start sampling for PID application
-	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
-
 	// start movement
 	move_start();
 
-	// start obstacle detectors
-	obs_detector_init();
-
+	// start sampling for PID application
+	HAL_TIM_Base_Start_IT(&TIM_LF_PID);
 	// mark line follower is enabled
 	lfollower_status = 1;
 }
@@ -80,23 +76,20 @@ Line Follower Stop
 ******************************************************************************/
 void lfollower_stop(void)
 {
-	// stop storing QTR sensor values
-	qtr_kill();
 	// stop sampling for PID application
 	HAL_TIM_Base_Stop_IT(&TIM_LF_PID);
 
+	// stop storing QTR sensor values
+	qtr_kill();
 	// stop movement
 	move_stop();
-
-	// stop obstacle detectors
-	obs_detector_deInit();
 
 	// mark line follower is disabled
 	lfollower_status = 0;
 }
 
 /******************************************************************************
-Line Follower PID
+Line Follower ISR
 
 @brief	Applies PID algorithm to obtain movement speed required to follow the
 		line.
@@ -127,18 +120,17 @@ static pid_st pid = {
 	.u_sat_b	= -1.0
 };
 
-void lfollower_pid(void)
+/******************************************************************************
+Line Follower ISR
+******************************************************************************/
+void lfollower_isr(void)
 {
-	// is line follower disabled?
-	if(lfollower_status == 0)
-		return;
+	// use PID to obtain PWM values to use on motors
+	// error = S_LEFT_VAL - S_RIGHT_VAL
+	pid_calcule(&pid, qtr_get_analog(LF_SENSOR_L), qtr_get_analog(LF_SENSOR_R));
 
 	// Apply PID to adjust motor PWM/velocity
-	// error = S_LEFT_VAL - S_RIGHT_VAL
-	pid_calcule(&pid, 	DIG_TO_ANALOG(qtr_sens[LF_SENSOR_L]),
-						DIG_TO_ANALOG(qtr_sens[LF_SENSOR_R]));
-
-	//move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
 }
 
 /******************************************************************************
@@ -152,8 +144,8 @@ uint8_t lfollower_rotate(move_dir_e dir)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
-	// start rotate_timeout
-	timeout_start();
+	// start rotate 4second timeout
+	timeout_start(4);
 	// start storing QTR sensor values
 	qtr_init();
 
@@ -166,12 +158,13 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	dir >>= 1;
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
-	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8
-	while((GET_SENS_LOGVAL(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
+	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8 (last sensor)
+	//while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
+	while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (timeout_flag == 0))
 		;
 
 	// stop Rotate_Timeout
-	timeout_stop();
+	//timeout_stop();
 	// stop rotating
 	move_stop();
 	// stop storing QTR sensor values
@@ -179,80 +172,12 @@ uint8_t lfollower_rotate(move_dir_e dir)
 
 	// if timeout occured, then we must return an error code, signaling a
 	// non successful rotate
-	if(num_timeout_2sec < TIMEOUT_4SEC)
+	//if(num_timeout_2sec < TIMEOUT_4SEC)
+	if(timeout_flag)
 		return E_LF_TIMEOUT;
 
 	// if timeout didnt occurred then rotate was completed
 	return EXIT_SUCCESS;
-}
-
-/******************************************************************************
-Line Follower Control
-
-@brief	Follows line and stops if detects a cross, room or obstacle
-@param	none
-@retval	err - error code can be: EXIT_SUCCESS - nothing detected;
-					  	  	  	 E_CROSS_FOUND - cross detected;
-					  	  	  	 E_ROOM_FOUND - room detected;
-					  	  	  	 E_OBS_FOUND - obstacle detected.
-******************************************************************************/
-//uint8_t lfollower_control(void)
-//{
-//	uint8_t err = EXIT_SUCCESS;
-//
-//	// line follower already started?
-//	if(lfollower_status == 0)
-//		// start line follower
-//		lfollower_start();
-//
-//	if(cross_detector() == 1)
-//		// cross detected
-//		err = E_CROSS_FOUND;
-//	else if(room_detector() == 1)
-//		// room detected
-//		err = E_ROOM_FOUND;
-//	else if(obs_found_flag == 1)
-//		// obstacle found
-//		err = E_OBS_FOUND;
-//
-//	// error found?
-//	if(err != EXIT_SUCCESS)
-//		// stop line follower
-//		lfollower_stop();
-//	else
-//		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-//
-//	// return error code
-//	return err;
-//}
-
-uint8_t lfollower_control(void)
-{
-	uint8_t err = 0;
-	static uint8_t num_timeout_10ms = 0;
-
-	num_timeout_10ms++;
-
-	// check stop sensors
-	//	cross_detector();
-	//	room_detector();
-	if(num_timeout_10ms == TIMEOUT_50MS)
-		stop_detector();
-
-	// no error if none flag is active
-	err = (obs_found_flag + room_found_flag + cross_found_flag);
-
-	// check for none flag active
-	if(err == 0)
-		// no error
-		// continue to follow line, using PID calculated value
-		move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
-	else
-		// obstacle/stop mark found
-		// stop line follower
-		lfollower_stop();
-
-	return err;
 }
 
 /******************************************************************************
@@ -262,6 +187,7 @@ Debug Functions
 @param	none
 @retval	none
 ******************************************************************************/
+#ifdef _DEBUG_
 void lfollower_print_sens(void)
 {
 	char str[32];
@@ -290,3 +216,4 @@ void lfollower_print_sens(void)
 	// stop QTR readings
 	qtr_kill();
 }
+#endif // !_DEBUG_
