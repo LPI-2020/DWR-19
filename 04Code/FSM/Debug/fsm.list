@@ -3577,8 +3577,8 @@ int test_modules(void)
  80017b6:	2300      	movs	r3, #0
  80017b8:	607b      	str	r3, [r7, #4]
 
-	//err = test_stop_sensor(E_ROOM_FOUND);
-	//err = test_stop_sensor(E_CROSS_FOUND);
+	//err = test_stop_sensor();
+	//err = test_lf_and_rotate(MOVE_LEFT);
 
 	//err = test_rfid();
 	test_stop_sensor();
