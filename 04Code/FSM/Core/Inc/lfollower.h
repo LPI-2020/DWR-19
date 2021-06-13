@@ -13,14 +13,14 @@
 /******************************************************************************
 Define Peripherals INSTANCES in use
 ******************************************************************************/
-#include "adc.h"
+//#include "adc.h"
 #include "tim.h"
 
 // used to sample values from Line Follower Sensors to PID
-#define TIM_LF_PID 			(htim3)
+#define TIM_LF_PID 			(htim6)
 
 /******************************************************************************
-Define Line Follower Sensors
+Define Line Follower Sensors (using QTR)
 ******************************************************************************/
 #include "qtr.h"
 
@@ -33,9 +33,6 @@ Define Line Follower Sensors
 Line Follower Error Codes
 ******************************************************************************/
 #define EXIT_SUCCESS	0
-#define E_CROSS_FOUND	1
-#define E_ROOM_FOUND	2
-#define E_OBS_FOUND		3
 #define E_LF_TIMEOUT	4
 
 /******************************************************************************
@@ -43,11 +40,9 @@ Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
 void lfollower_stop(void);
+void lfollower_isr();
 
-void lfollower_pid(void);
 uint8_t lfollower_rotate(move_dir_e dir);
-
-uint8_t lfollower_control(void);
 
 /******************************************************************************
 Debug Functions

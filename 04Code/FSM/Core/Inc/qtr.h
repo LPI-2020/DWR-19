@@ -1,7 +1,7 @@
 #ifndef __QTR_H__
 #define __QTR_H__
 
-#include "auxiliares.h" // using DIG_TO_ANALOG
+#include <stdint.h>
 
 /******************************************************************************
 QTR Peripherals
@@ -9,6 +9,15 @@ QTR Peripherals
 #include "adc.h"
 // ADC-DMA that stores QTR sensor values
 #define ADC_QTR_DMA		(hadc3)
+
+/******************************************************************************
+QTR defines
+******************************************************************************/
+// Number of sensors in use
+#define QTR_SENS_NUM 	(6)
+
+// Minimum (analog, in volts) value of a digital value (0 or 1).
+#define ANALOG_HI_VOLT 	(2.45)
 
 /******************************************************************************
 QTR struct
@@ -26,21 +35,13 @@ typedef enum {
 	// QTR LEFT side
 } qtr_e;
 
-// Number of sensors in use
-#define QTR_SENS_NUM (6)
-// QTR Sensors array
-extern uint32_t qtr_sens[QTR_SENS_NUM];
-
 /******************************************************************************
 QTR functions
 ******************************************************************************/
-#define ANALOG_HI_VOLT (2.45)	// In Volts. Minimum (analog) value of a digital
-								// value (0 or 1).
-//#define ANALOG_HI_VOLT 2.8
-// Get sensor logical value Macro
-#define GET_SENS_LOGVAL(_sens_)  (DIG_TO_ANALOG(qtr_sens[_sens_]) > ANALOG_HI_VOLT)
-
 void qtr_init(void);
 void qtr_kill(void);
+
+float 	qtr_get_analog(qtr_e sensor);
+uint8_t qtr_get_digital(qtr_e sensor);
 
 #endif // !__QTR_H__

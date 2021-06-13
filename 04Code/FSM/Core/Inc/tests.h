@@ -8,19 +8,9 @@
 #ifndef __TESTS_H__
 #define __TESTS_H__
 
-#include "move.h"
-#include <stdint.h>
-
 /******************************************************************************
 Test modules
 ******************************************************************************/
 int test_modules(void);
-
-/******************************************************************************
-Test modules functions
-******************************************************************************/
-//void test_move(float speed);
-//void test_stop_sensor(uint8_t val);
-//void test_lfollower(move_dir_e dir);
 
 #endif // !__TESTS_H__

@@ -1,6 +1,8 @@
 /*
  * stop_sensors.h
  *
+ * Stop Sensors
+ *
  *  Created on: May 5, 2021
  */
 
@@ -8,51 +10,38 @@
 #define _STOP_SENSORS_H_
 
 /******************************************************************************
-Define Peripherals in Use
+Obstacle Detector Peripherals
 ******************************************************************************/
 #include "adc.h"
-#include "tim.h"
-
-// Obstacle Detector Timer and ADC
-#define OBS_DETECTOR_TIM (htim6)
-#define OBS_DETECTOR_ADC (hadc2)
+// define obstacle detector ADC DMA in use
+#define OBS_DETECTOR_ADC_DMA 	(hadc2)
 
 /******************************************************************************
 Define Parameters
 ******************************************************************************/
 #include "qtr.h"
 
-// Sensors used on cross and room detectors:
-// RIGHT sensor
-#define SENSOR_R		(SENSOR1)
-// LEFT sensor
-#define SENSOR_L		(SENSOR8)
+// Stop Detector RIGHT sensor
+#define ST_SENSOR_R		(SENSOR1)
+// Stop Detector LEFT sensor
+#define ST_SENSOR_L		(SENSOR8)
 
 // Obstacle Detector Limit = Digital value of 30 cm
 #define ADC_DISTANCE_LIMIT (1139)
 
 /******************************************************************************
-Stop Sensors Flags
+Stop Sensors Errors
 ******************************************************************************/
-// Obstacle Found Flag
-extern uint8_t obs_found_flag;
-// Cross Found Flag
-extern uint8_t cross_found_flag;
-// Room Found Flag
-extern uint8_t room_found_flag;
+#define EXIT_SUCCESS	0
+#define E_CROSS_FOUND	1	// error cross found
+#define E_ROOM_FOUND	2	// error room found
+#define E_OBS_FOUND		3	// error obstacle found
 
 /******************************************************************************
 Obstacle Detector Functions
 ******************************************************************************/
-void obs_detector_init(void);
-void obs_detector_deInit(void);
-void isr_obs_detector(void);
-
-/******************************************************************************
-Cross and Room Detectors Functions
-******************************************************************************/
-//uint8_t cross_detector(void);
-//uint8_t room_detector(void);
-void stop_detector(void);
+void stop_detector_init(void);
+void stop_detector_deInit(void);
+uint8_t stop_detector_isr(void);
 
 #endif /* !_STOP_SENSORS_H_ */

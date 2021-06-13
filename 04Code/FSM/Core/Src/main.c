@@ -103,7 +103,6 @@ int main(void)
   MX_TIM4_Init();
   MX_USART1_UART_Init();
   MX_TIM3_Init();
-  MX_TIM7_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
 
@@ -122,26 +121,22 @@ int main(void)
 
   while (1)
   {
+	err = test_modules();
 
-	  //test_modules();
+	switch(err)
+	{
+		case 0:
+			return 0;
 
-	  err = test_modules();
-
-	  switch(err)
-	  {
-		  case 0:
-			  // all ok
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
-			  return 0;
-
-		  default:
-			  // signal error
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-			  return 1;
-	  }
+		default:
+			// signal error. Light up RED LED
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+			return 1;
+	}
 
 	  //fsm_func_ptr[state]();
 	  //state = nstate;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
