@@ -5,7 +5,6 @@
  *
  *  Created on: May 5, 2021
  */
-
 #ifndef _STOP_SENSORS_H_
 #define _STOP_SENSORS_H_
 
@@ -32,10 +31,9 @@ Define Parameters
 /******************************************************************************
 Stop Sensors Errors
 ******************************************************************************/
-#define EXIT_SUCCESS	0
-#define E_CROSS_FOUND	1	// error cross found
-#define E_ROOM_FOUND	2	// error room found
-#define E_OBS_FOUND		3	// error obstacle found
+#define E_ST_CROSS_FOUND	1	// error cross found
+#define E_ST_ROOM_FOUND		2	// error room found
+#define E_ST_OBS_FOUND		3	// error obstacle found
 
 /******************************************************************************
 Obstacle Detector Functions

@@ -6,6 +6,7 @@
  *  Created on: May 5, 2021
  */
 #include "stop_sensors.h"
+#include "errors.h"
 
 /******************************************************************************
 Define Test symbol
@@ -18,15 +19,20 @@ Define Test symbol
 #endif // !_DEBUG_
 
 /******************************************************************************
-Obstacle Detector
+Private macros
 ******************************************************************************/
-// distance to
-static uint32_t obs_distance = 0;
-
 // returns true if obstacle is closer than ADC_DISTANCE_LIMIT -> obstacle found
 // receives CURRENT distance to obstacle and PREVIOUS distance do obstacle
 #define OBS_TOO_CLOSE(_dist_, _prev_dist_) (((_dist_) >= ADC_DISTANCE_LIMIT) &&		\
 											((_prev_dist_) >= ADC_DISTANCE_LIMIT))
+
+/******************************************************************************
+Obstacle Detector variables
+******************************************************************************/
+// distance to obstacle (updated by DMA)
+static uint32_t obs_distance = 0;
+// stop detector status
+static uint8_t stop_detector_status = 0;
 
 /******************************************************************************
 Obstacle Detector
@@ -35,12 +41,16 @@ void stop_detector_init(void)
 {
 	// start Obstacle detector ADC DMA
 	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &obs_distance, 1);
+	// stop detector enabled
+	stop_detector_status = 1;
 }
 
 void stop_detector_deInit(void)
 {
 	// stop Obstacle detector ADC DMA
 	HAL_ADC_Stop_DMA(&OBS_DETECTOR_ADC_DMA);
+	// stop detector disabled
+	stop_detector_status = 0;
 }
 
 /******************************************************************************
@@ -66,6 +76,11 @@ uint8_t stop_detector_isr()
 	static uint32_t old_obs_distance = 0;
 	uint8_t obs_found_flag = 0;
 
+	// is stop detector ON?
+	if(stop_detector_status == 0)
+		// return all ok
+		return 0;
+
 	// ***** Check Stop Marks Detector *****
 	// if SENSOR_L enabled sens = 0000 0001 (1)
 	// if SENSOR_L disabled sens = 0000 0000 (0)
@@ -84,13 +99,13 @@ uint8_t stop_detector_isr()
 	// both sensors enabled
 	if(sens == 3)
 		// return cross found error
-		return E_CROSS_FOUND;
+		return E_ST_CROSS_FOUND;
 
 	// current sensors value equal to the previous sensor values
 	// and only one sensor enabled
 	else if((sens == sens_prev) && (sens != 0))
 		// return room found error
-		return E_ROOM_FOUND;
+		return E_ST_ROOM_FOUND;
 
 	// ***** Check Obstacle Detector *****
 	// Obstacle found flag update
@@ -108,7 +123,7 @@ uint8_t stop_detector_isr()
 
 	if(obs_found_flag)
 		// return obstacle found error
-		return E_OBS_FOUND;
+		return E_ST_OBS_FOUND;
 
 	// update sensors value
 	sens_prev = sens;

@@ -8,13 +8,14 @@
 #include "lfollower.h"
 #include "pid.h"
 #include "timeout.h"
+#include "errors.h"
 
 #include <math.h> // using fabs()
 
 /******************************************************************************
 Define Debug Symbol
 ******************************************************************************/
-//#define _DEBUG_
+#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "usart.h" // debug
@@ -44,6 +45,9 @@ Define Type of Speed Calculus
 ******************************************************************************/
 #define GET_SPEED(_u_) (FORWARD_SPEED + (_u_) * (1 - FORWARD_SPEED))
 
+/******************************************************************************
+Line Follower Private Flags
+******************************************************************************/
 // line follower status (enabled 1 or disabled 0)
 static uint8_t lfollower_status = 0;
 
@@ -123,14 +127,27 @@ static pid_st pid = {
 /******************************************************************************
 Line Follower ISR
 ******************************************************************************/
-void lfollower_isr(void)
+uint8_t lfollower_isr(void)
 {
+	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
+		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
+	{
+		// robot is not over the line
+		// stop line follower
+//		lfollower_stop();
+		// send error: no line to follow
+		return E_LF_NO_LINE;
+	}
+
+	// else, robot over the line
 	// use PID to obtain PWM values to use on motors
 	// error = S_LEFT_VAL - S_RIGHT_VAL
 	pid_calcule(&pid, qtr_get_analog(LF_SENSOR_L), qtr_get_analog(LF_SENSOR_R));
 
 	// Apply PID to adjust motor PWM/velocity
 	move_control(GET_SPEED(-pid.u), GET_SPEED(+pid.u));
+
+	return EXIT_SUCCESS;
 }
 
 /******************************************************************************
@@ -174,7 +191,7 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// non successful rotate
 	//if(num_timeout_2sec < TIMEOUT_4SEC)
 	if(timeout_flag)
-		return E_LF_TIMEOUT;
+		return E_TIMEOUT;
 
 	// if timeout didnt occurred then rotate was completed
 	return EXIT_SUCCESS;
@@ -195,22 +212,22 @@ void lfollower_print_sens(void)
 	// enable QTR readings
 	qtr_init();
 
-	snprintf(str, sizeof(str), "S1[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR1]));
+	snprintf(str, sizeof(str), "S1[%f]\n\r", qtr_get_analog(SENSOR1));
 	UART_puts(str);
 
-	snprintf(str, sizeof(str), "S3[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR3]));
+	snprintf(str, sizeof(str), "S3[%f]\n\r", qtr_get_analog(SENSOR3));
 	UART_puts(str);
 
-	snprintf(str, sizeof(str), "S4[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR4]));
+	snprintf(str, sizeof(str), "S4[%f]\n\r", qtr_get_analog(SENSOR4));
 	UART_puts(str);
 
-	snprintf(str, sizeof(str), "S5[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR5]));
+	snprintf(str, sizeof(str), "S5[%f]\n\r", qtr_get_analog(SENSOR5));
 	UART_puts(str);
 
-	snprintf(str, sizeof(str), "S6[%f]\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR6]));
+	snprintf(str, sizeof(str), "S6[%f]\n\r", qtr_get_analog(SENSOR6));
 	UART_puts(str);
 
-	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", DIG_TO_ANALOG(qtr_sens[SENSOR8]));
+	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", qtr_get_analog(SENSOR8));
 	UART_puts(str);
 
 	// stop QTR readings

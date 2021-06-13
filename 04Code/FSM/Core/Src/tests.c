@@ -79,13 +79,13 @@ void test_stop_sensor()
 	// motion stopped
 	if(motion_status == MOT_CROSS_FOUND)
 		// Cross found. enable BLUE LED
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 1);
+		write_led(LBLUE, 1);
 	else if(motion_status == MOT_ROOM_FOUND)
 		// Room found. enable GREEN LED
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
+		write_led(LGREEN, 1);
 	else if(motion_status == MOT_HOLD)
 		// Obstacle found. enable RED LED
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+		write_led(LRED, 1);
 }
 
 /******************************************************************************
@@ -100,7 +100,6 @@ rfid_t rfid_test = {
 int test_rfid(void)
 {
 	uint8_t status = -1;
-	uint8_t err = 0;
 
 	// start movement
 	motion_start();
@@ -110,7 +109,7 @@ int test_rfid(void)
 		;
 
 	// begin RFID read. Enable BLUE LED
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 1);
+	write_led(LBLUE, 1);
 
 	lfollower_start();
 	status = RFID_read(&rfid_test);
@@ -119,14 +118,10 @@ int test_rfid(void)
 	if(status != MI_OK)
 		return -1;
 
-	// RFID read ok
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 0);
+	// RFID read ok. disable BLUE LED
+	write_led(LBLUE, 0);
 
-	// else status = MI_OK
-	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
-	err = lfollower_rotate(MOVE_LEFT);
-
-	return err;
+	return lfollower_rotate(MOVE_LEFT);
 }
 
 /******************************************************************************
@@ -136,20 +131,26 @@ int test_modules(void)
 {
 	int err = 0;
 
-	//test_move(0.7);
+//	test_move(0.7);
 
-	//while(1)
-		//test_print_qtr();
+//	while(1)
+//		test_lf_print_qtr();
 
-	//lfollower_start();
+	lfollower_start();
+	while(1)
+		// follow line
+		;
 
-	//err = lfollower_rotate(MOVE_RIGHT);
+//	motion_start();
+//	while(motion_status == MOT_OK)
+//		;
 
-	//err = test_stop_sensor();
-	//err = test_lf_and_rotate(MOVE_LEFT);
-
-	//err = test_rfid();
-	test_stop_sensor();
+//	err = lfollower_rotate(MOVE_RIGHT);
+//
+//	test_stop_sensor();
+//	err = test_lf_and_rotate(MOVE_LEFT);
+//
+//	err = test_rfid();
 
 	return err;
 }

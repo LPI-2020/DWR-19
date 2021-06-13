@@ -11,11 +11,9 @@
 #include "move.h" // using move_dir_e
 
 /******************************************************************************
-Define Peripherals INSTANCES in use
+Line Follower Sampling Timer
 ******************************************************************************/
-//#include "adc.h"
 #include "tim.h"
-
 // used to sample values from Line Follower Sensors to PID
 #define TIM_LF_PID 			(htim6)
 
@@ -24,23 +22,25 @@ Define Line Follower Sensors (using QTR)
 ******************************************************************************/
 #include "qtr.h"
 
-// Line Follower RIGHT sensor
+// Define Line Follower Right and Left sensors
 #define LF_SENSOR_R 	(SENSOR3)
-// Line Follower LEFT sensor
 #define LF_SENSOR_L 	(SENSOR6)
+
+// Define Line Follower Control Sensors (Right and Left)
+#define LF_SENSOR_CTR_R	(SENSOR4)
+#define LF_SENSOR_CTR_L	(SENSOR5)
 
 /******************************************************************************
 Line Follower Error Codes
 ******************************************************************************/
-#define EXIT_SUCCESS	0
-#define E_LF_TIMEOUT	4
+#define E_LF_NO_LINE		5	// error: no line to follow
 
 /******************************************************************************
 Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
 void lfollower_stop(void);
-void lfollower_isr();
+uint8_t lfollower_isr();
 
 uint8_t lfollower_rotate(move_dir_e dir);
 

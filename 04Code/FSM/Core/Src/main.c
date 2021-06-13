@@ -31,9 +31,6 @@
 #include "fsm.h"
 #include "tests.h"
 
-#include "lfollower.h"
-#include "stop_sensors.h"
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,12 +107,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  // initialize FSM state and next state
   state = S_STOPPED;
   nstate = S_STOPPED;
-
-  //lfollower_start();
-  //timeout_start();
-  //obs_detector_init();
 
   int err = 0;
 
@@ -130,7 +125,7 @@ int main(void)
 
 		default:
 			// signal error. Light up RED LED
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+			write_led(LRED, 1);
 			return 1;
 	}
 

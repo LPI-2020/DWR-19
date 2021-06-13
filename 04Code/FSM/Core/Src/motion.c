@@ -9,7 +9,6 @@
 
 #include "lfollower.h"
 #include "stop_sensors.h"
-#include "rfid-rc522.h"
 
 /******************************************************************************
 Motion Status
@@ -56,17 +55,30 @@ void motion_isr(void)
 	err = stop_detector_isr();
 
 	// check if there is no error due to Stop Detectors
-	if(err == 0)
-		// no error
-		// continue to follow line
-		lfollower_isr();
-	else
+	if(err)
 	{
 		// obstacle/stop mark found
 		// stop movement
 		motion_stop();
 
 		// Signal that Motion is stopped due to Stop Mark/Obstacle
-		motion_status = err + (MOT_CROSS_FOUND - E_CROSS_FOUND);
+		// err = E_CROSS_FOUND (1) -> motion_status = MOT_CROSS_FOUND (2)
+		// err = E_ROOM_FOUND (2) -> motion_status = MOT_ROOM_FOUND (3)
+		// err = E_OBS_FOUND (3) -> motion_status = MOT_HOLD (4)
+		motion_status = err + (MOT_CROSS_FOUND - E_ST_CROSS_FOUND);
+		// force exit
+		return;
+	}
+
+	// no error
+	// continue to follow line
+	err = lfollower_isr();
+	if(err)
+	{
+		// error following line
+		// stop movement
+		motion_stop();
+		// signal motion error
+		motion_status = MOT_ERR;
 	}
 }
