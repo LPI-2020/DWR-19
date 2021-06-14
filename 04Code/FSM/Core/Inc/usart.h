@@ -42,10 +42,22 @@ extern UART_HandleTypeDef huart3;
 
 #define NEW_LINE		0x0D
 
-extern char Rx_Buffer[RX_BUFF_LEN];
-extern volatile uint8_t Rx_index;
+typedef struct {
+	UART_HandleTypeDef* uart;
+	uint8_t Rx_Buffer[RX_BUFF_LEN];
+	volatile uint8_t Rx_index;
+	volatile uint8_t Rx_flag;
 
-extern volatile uint8_t Rx_flag;
+	uint8_t Tx_Buffer[TX_BUFF_LEN];
+} uart_t;
+
+extern uart_t debug_uart;
+extern uart_t bluet_uart;
+
+//extern char Rx_Buffer[RX_BUFF_LEN];
+//extern volatile uint8_t Rx_index;
+
+//extern volatile uint8_t Rx_flag;
 //extern volatile uint8_t Tx_flag = 0;
 extern volatile uint8_t cmd_received;
 
@@ -58,11 +70,11 @@ void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
-extern void Rx_UART_init(void);
-extern char UART_Receive(void);
+extern void Rx_UART_init(uart_t *huart);
+extern char UART_Receive(uart_t *huart);
 
-extern void UART_puts(const char *s);
-extern void UART_putchar(char c);
+extern void UART_puts(uart_t *huart, const char *s);
+extern void UART_putchar(uart_t *huart, char c);
 
 /* USER CODE END Prototypes */
 

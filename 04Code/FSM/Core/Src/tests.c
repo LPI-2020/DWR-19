@@ -11,6 +11,10 @@
 
 #include "debounce.h"
 
+#include "usart.h"
+#include "parser.h"
+#include "commands.h"
+
 #include "stm32f7xx_hal.h"
 
 void test_stop_sensor(void);
@@ -222,6 +226,23 @@ void test_timeout(uint8_t sec)
 	toggle_led(LGREEN);
 }
 
+void test_bluetooth(void)
+{
+	if(bluet_uart.Rx_flag)
+	{
+		UART_Receive(&bluet_uart); // Returns received char
+		bluet_uart.Rx_flag = 0;
+	}
+
+	if(cmd_received)
+	{
+		exec_cmd((char *) bluet_uart.Rx_Buffer);
+
+		cmd_received = 0;
+		Rx_UART_init(&bluet_uart); // ready to begin reception
+	}
+}
+
 /******************************************************************************
 Test modules functions
 ******************************************************************************/
@@ -243,10 +264,13 @@ int test_modules(void)
 
 //	test_obs_detector(); // lixo
 
+
 //	test_lf_rotate(MOVE_LEFT);
 //	test_motion_rotate();
 //	err = test_rfid();
 //	test_debounce();
+
+//	test_bluetooth();
 
 	return err;
 }
