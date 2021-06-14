@@ -5,7 +5,7 @@
 #include <stdio.h> // snprintf
 
 // Callbacks Includes
-
+char route_sel_cb(uint8_t argc, char** argv);
 
 // Function Prototype
 char help_cb(uint8_t argc, char** argv);
@@ -25,6 +25,11 @@ const Command_t cmd_list[] =
 		"Help text: Lists valid commands.",
 		help_cb 
 	},
+	{
+		"RT",
+		"Route selection: ",
+		route_sel_cb
+	},
 	{ //end of Command list
 		0,
 		0,
@@ -37,7 +42,6 @@ const Command_t cmd_list[] =
 @param		 String inserted by user
 @brief	 	 Parses string, executes commands and prints error message.
 ******************************************************************************/
-
 char exec_cmd(const char *str)
 {
 	char err;
@@ -107,3 +111,26 @@ char help_cb(uint8_t argc, char** argv)
 	
 	return 0;
 }
+
+/******************************************************************************
+@function	Route Selection
+@usage		RT
+
+@brief	 	Selects a route for the robot to take
+******************************************************************************/
+char route_sel_cb(uint8_t argc, char** argv)
+{
+	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
+
+	if(argc != 2) // number of arguments invalid?
+		//return (char)(-EINVARG);
+		return (-1);
+
+	// ...select route... do something
+
+	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
+
+	return 0;
+}
+
+

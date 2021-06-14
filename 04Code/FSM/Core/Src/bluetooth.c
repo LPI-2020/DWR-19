@@ -14,7 +14,7 @@ bluet_state_t bluet_receive(void)
 {
 	char err;
 
-	if(bluet_st == BLUET_N_INIT)
+	if(bluet_st != BLUET_READY)
 		Rx_UART_init(&bluet_uart);
 
 	// any byte received by bluetooth?

@@ -238,6 +238,8 @@ void test_bluetooth(void)
 	{
 		exec_cmd((char *) bluet_uart.Rx_Buffer);
 
+		UART_puts(&bluet_uart, "fuck you!");
+
 		cmd_received = 0;
 		Rx_UART_init(&bluet_uart); // ready to begin reception
 	}
@@ -258,7 +260,7 @@ int test_modules(void)
 //	while(1)
 //		test_timeout(10);
 
-	test_motion();
+//	test_motion();
 //	while(1)
 //		test_stop_sensor();
 
@@ -270,7 +272,7 @@ int test_modules(void)
 //	err = test_rfid();
 //	test_debounce();
 
-//	test_bluetooth();
+	test_bluetooth();
 
 	return err;
 }

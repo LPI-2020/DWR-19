@@ -117,23 +117,23 @@ int main(void)
   while (1)
   {
 	err = test_modules();
+//
+//	switch(err)
+//	{
+//		case 0:
+//			break;
+//
+//		default:
+//			// signal error. Light up RED LED
+//			write_led(LRED, 1);
+//			break;
+//	}
+//
+//	while(1)
+//		;
 
-	switch(err)
-	{
-		case 0:
-			break;
-
-		default:
-			// signal error. Light up RED LED
-			write_led(LRED, 1);
-			break;
-	}
-
-	while(1)
-		;
-
-	  //fsm_func_ptr[state]();
-	  //state = nstate;
+//	  fsm_func_ptr[state]();
+//	  state = nstate;
 
     /* USER CODE END WHILE */
 

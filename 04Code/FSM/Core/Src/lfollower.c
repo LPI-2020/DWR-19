@@ -218,24 +218,23 @@ void lfollower_print_sens(void)
 	// enable QTR readings
 	qtr_init();
 
-<<<<<<< HEAD
 	snprintf(str, sizeof(str), "S1[%f]\n\r", qtr_get_analog(SENSOR1));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	snprintf(str, sizeof(str), "S3[%f]\n\r", qtr_get_analog(SENSOR3));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	snprintf(str, sizeof(str), "S4[%f]\n\r", qtr_get_analog(SENSOR4));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	snprintf(str, sizeof(str), "S5[%f]\n\r", qtr_get_analog(SENSOR5));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	snprintf(str, sizeof(str), "S6[%f]\n\r", qtr_get_analog(SENSOR6));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", qtr_get_analog(SENSOR8));
-	UART_puts(str);
+	UART_puts(&debug_uart,str);
 
 	// stop QTR readings
 	qtr_kill();
