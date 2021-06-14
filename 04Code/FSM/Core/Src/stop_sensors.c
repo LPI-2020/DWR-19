@@ -97,10 +97,9 @@ uint8_t stop_detector_isr()
 	sens += qtr_get_digital(ST_SENSOR_R);
 
 	// both sensors enabled
-	if(sens == 3)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check this
+	if(sens == 3)
 		// return cross found error
 		return E_ST_CROSS_FOUND;
-//		return 0;
 
 	// current sensors value equal to the previous sensor values
 	// and only one sensor enabled
