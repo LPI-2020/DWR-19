@@ -17,8 +17,8 @@ QTR defines
 #define QTR_SENS_NUM 	(6)
 
 // Minimum (analog, in volts) value of a digital value (0 or 1).
-//#define ANALOG_HI_VOLT 	(2.45)
-#define ANALOG_HI_VOLT 		(2.8)
+#define ANALOG_HI_VOLT 	(2.45)
+//#define ANALOG_HI_VOLT 		(2.8)
 
 /******************************************************************************
 QTR struct

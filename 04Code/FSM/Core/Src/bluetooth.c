@@ -7,6 +7,7 @@
 #include "bluetooth.h"
 
 #include "usart.h"
+#include "commands.h"
 
 bluet_state_t bluet_st = BLUET_N_INIT;
 

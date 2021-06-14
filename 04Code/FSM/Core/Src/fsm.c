@@ -188,8 +188,10 @@ static void s_rd_rfid(void)
 
 	// read RFID correctly?
 	if(err == MI_OK)
+	{
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
+	}
 	else
 		// RFID timeout
 		// continue to error state
