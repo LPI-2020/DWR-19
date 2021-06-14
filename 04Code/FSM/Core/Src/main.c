@@ -120,12 +120,10 @@ int main(void)
 
   int err = 0;
 
-  Rx_UART_init(&bluet_uart);
-
   while (1)
   {
 
-	  test_modules();
+//	  test_modules();
 
 //	  err = test_modules();
 //
@@ -142,8 +140,8 @@ int main(void)
 //			  return 1;
 //	  }
 
-	  //fsm_func_ptr[state]();
-	  //state = nstate;
+	  fsm_func_ptr[state]();
+	  state = nstate;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

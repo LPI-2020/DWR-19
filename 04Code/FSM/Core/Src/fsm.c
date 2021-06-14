@@ -10,9 +10,10 @@
 #include "fsm.h"
 
 //#include "stop_sensors.h"
-//#include "lfollower.h"
+#include "lfollower.h"
 //#include "move.h"
 #include "motion.h"
+#include "bluetooth.h"
 
 //#include "spi.h"
 #include "rfid-rc522.h"
@@ -55,7 +56,7 @@ uint8_t nstate = 0;
 
 
 // Route finished flag
-uint8_t route_finished = 0;
+uint8_t route_finished = 1;
 // New route incoming flag
 uint8_t new_route_incoming = 0;
 
@@ -77,9 +78,14 @@ static void s_stopped(void)
 	// stop movement
 	motion_stop();
 
-	if(route_finished && new_route_incoming)
-		// route finished and receiving new route
-		nstate = S_RECEIVE;
+	if(route_finished)
+	{
+		if(bluet_receive() == BLUET_RECEIVING)
+			// route finished and receiving new route
+			nstate = S_RECEIVE;
+
+		// Else nstate = S_STOPPED
+	}
 
 //	else if((!obs_found_flag) && (!obs_found_timeout))
 //		// obstacle is not there anymore and timer not finished
@@ -104,11 +110,35 @@ State Receive
 ******************************************************************************/
 static void s_receive(void)
 {
-	if(new_route_incoming == 0)
-		// new route has been fully received
-		nstate = S_STOPPED;
+	char err;
 
-	// Else, continue receiving route
+	err = bluet_receive();
+
+	if(err == BLUET_OK)
+	{
+		// route received
+		route_finished = 0;
+		bluet_st = BLUET_READY;
+		nstate = S_STOPPED;
+	}
+
+	// Else nstate = S_RECEIVE
+
+//	if(bluet_st == BLUET_OK)
+//		// new route has been fully received
+//		nstate = S_STOPPED;
+//	else
+//	{
+//		err = bluet_receive();
+//
+//		if(err == BLUET_OK)
+//		{
+//			// route received
+//			route_finished = 0;
+//			bluet_st = BLUET_READY;
+//			nstate = S_STOPPED;
+//		}
+//	}
 }
 
 /******************************************************************************
