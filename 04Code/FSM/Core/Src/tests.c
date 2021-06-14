@@ -13,6 +13,7 @@
 
 #include "stm32f7xx_hal.h"
 
+void test_stop_sensor(void);
 /******************************************************************************
 Test Move module
 ******************************************************************************/
@@ -54,7 +55,6 @@ ST_debounce button;
 void test_debounce(void)
 {
 	debounce_init(&button, USER_BTN_PORT, USER_BTN_PIN);
-
 	debounce_start();
 
 	while(1)
@@ -103,31 +103,64 @@ void test_motion(void)
 		;
 }
 
+void test_motion_rotate(void)
+{
+	test_stop_sensor();
+
+	if(motion_status == MOT_CROSS_FOUND)
+	{
+		motion_start();
+		HAL_Delay(2000);
+		motion_stop();
+
+		test_lf_rotate(MOVE_LEFT);
+	}
+
+	while(1)
+	{
+		toggle_led(LGREEN);
+		HAL_Delay(500);
+	}
+}
+
 /******************************************************************************
 Test stop sensors module
 ******************************************************************************/
 void test_stop_sensor(void)
 {
-	test_motion();
+	// use test_motion()
 
 	// motion stopped
 	if(motion_status == MOT_CROSS_FOUND)
+	{
 		// Cross found. enable BLUE LED
 		write_led(LBLUE, 1);
+		write_led(LGREEN, 0);
+		write_led(LRED, 0);
+	}
 	else if(motion_status == MOT_ROOM_FOUND)
+	{
 		// Room found. enable GREEN LED
+		write_led(LBLUE, 0);
 		write_led(LGREEN, 1);
+		write_led(LRED, 0);
+	}
 	else if(motion_status == MOT_HOLD)
+	{
 		// Obstacle found. enable RED LED
+		write_led(LBLUE, 0);
+		write_led(LGREEN, 0);
 		write_led(LRED, 1);
+	}
 }
 
 void test_obs_detector(void)
 {
-	test_motion();
+	// use test_motion()
 
-	// obstacle in front
-	write_led(LRED, 1);
+	if(motion_status == MOT_HOLD)
+		// obstacle in front
+		write_led(LRED, 1);
 
 	// wait for obstacle to move
 	while(motion_status == MOT_HOLD)
@@ -135,8 +168,6 @@ void test_obs_detector(void)
 
 	// obstacle has been removed
 	write_led(LRED, 0);
-
-	test_motion();
 }
 
 /******************************************************************************
@@ -207,13 +238,13 @@ int test_modules(void)
 //		test_timeout(10);
 
 	test_motion();
+//	while(1)
+//		test_stop_sensor();
 
-//	test_stop_sensor();
-//	test_obs_detector();
+//	test_obs_detector(); // lixo
 
 //	test_lf_rotate(MOVE_LEFT);
-//	test_motion();
-
+//	test_motion_rotate();
 //	err = test_rfid();
 //	test_debounce();
 

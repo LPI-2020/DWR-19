@@ -311,6 +311,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	{// enters every 10ms
 		// line follower PID and stop_sensors
 		motion_isr();
+//		toggle_led(LGREEN);
 	}
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 1sec

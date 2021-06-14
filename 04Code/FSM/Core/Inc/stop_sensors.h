@@ -26,7 +26,8 @@ Define Parameters
 #define ST_SENSOR_L		(SENSOR8)
 
 // Obstacle Detector Limit = Digital value of 30 cm
-#define ADC_DISTANCE_LIMIT (1139)
+//#define ADC_DISTANCE_LIMIT (1139)
+#define ADC_DISTANCE_LIMIT (2000)
 
 /******************************************************************************
 Stop Sensors Errors

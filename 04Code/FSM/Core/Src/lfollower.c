@@ -136,15 +136,15 @@ uint8_t lfollower_isr(void)
 		// line follower is disabled
 		return E_LF_OFF;
 
-	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
-		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
-	{
-		// robot is not over the line
-		// stop line follower
-		lfollower_stop();
-		// send error: no line to follow
-		return E_LF_NO_LINE;
-	}
+//	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
+//		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
+//	{
+//		// robot is not over the line
+//		// stop line follower
+//		lfollower_stop();
+//		// send error: no line to follow
+//		return E_LF_NO_LINE;
+//	}
 
 	// else, robot over the line
 	// use PID to obtain PWM values to use on motors
@@ -169,7 +169,7 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 	// start rotate 4second timeout
-	timeout_start(4);
+//	timeout_start(4);
 	// start storing QTR sensor values
 	qtr_init();
 

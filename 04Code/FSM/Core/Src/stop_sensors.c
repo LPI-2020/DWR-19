@@ -100,6 +100,7 @@ uint8_t stop_detector_isr()
 	if(sens == 3)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check this
 		// return cross found error
 		return E_ST_CROSS_FOUND;
+//		return 0;
 
 	// current sensors value equal to the previous sensor values
 	// and only one sensor enabled
@@ -124,6 +125,7 @@ uint8_t stop_detector_isr()
 	if(obs_found_flag)
 		// return obstacle found error
 		return E_ST_OBS_FOUND;
+//		return 0;
 
 	// update sensors value
 	sens_prev = sens;
