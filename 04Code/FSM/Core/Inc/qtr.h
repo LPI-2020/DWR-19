@@ -19,6 +19,7 @@ QTR defines
 // Minimum (analog, in volts) value of a digital value (0 or 1).
 //#define ANALOG_HI_VOLT 	(2.45)
 #define ANALOG_HI_VOLT 		(2.8)
+//#define ANALOG_HI_VOLT 		(3)
 
 /******************************************************************************
 QTR struct

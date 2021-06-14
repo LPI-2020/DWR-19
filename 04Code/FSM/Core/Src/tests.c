@@ -83,9 +83,9 @@ int test_lf_rotate(move_dir_e dir)
 {
 	uint8_t err;
 
-	write_led(LGREEN, 1);
+//	write_led(LBLUE, 1);
 	err = lfollower_rotate(dir);
-	write_led(LGREEN, 0);
+//	write_led(LBLUE, 0);
 
 	return err;
 }
@@ -105,20 +105,35 @@ void test_motion(void)
 
 void test_motion_rotate(void)
 {
-	test_stop_sensor();
+	// use test_motion()
+	uint16_t led;
+
+	motion_status = MOT_CROSS_FOUND;
 
 	if(motion_status == MOT_CROSS_FOUND)
 	{
+		led = LBLUE;
+
+		write_led(LBLUE, 1);
 		motion_start();
+
 		HAL_Delay(2000);
+
 		motion_stop();
+		write_led(LBLUE, 0);
 
 		test_lf_rotate(MOVE_LEFT);
 	}
+	else if(motion_status == MOT_ROOM_FOUND)
+		// Room found. enable GREEN LED
+		led = LGREEN;
+	else if(motion_status == MOT_HOLD)
+		// Obstacle found. enable RED LED
+		led = LRED;
 
 	while(1)
 	{
-		toggle_led(LGREEN);
+		toggle_led(led);
 		HAL_Delay(500);
 	}
 }
@@ -132,26 +147,14 @@ void test_stop_sensor(void)
 
 	// motion stopped
 	if(motion_status == MOT_CROSS_FOUND)
-	{
 		// Cross found. enable BLUE LED
 		write_led(LBLUE, 1);
-		write_led(LGREEN, 0);
-		write_led(LRED, 0);
-	}
 	else if(motion_status == MOT_ROOM_FOUND)
-	{
 		// Room found. enable GREEN LED
-		write_led(LBLUE, 0);
 		write_led(LGREEN, 1);
-		write_led(LRED, 0);
-	}
 	else if(motion_status == MOT_HOLD)
-	{
 		// Obstacle found. enable RED LED
-		write_led(LBLUE, 0);
-		write_led(LGREEN, 0);
 		write_led(LRED, 1);
-	}
 }
 
 void test_obs_detector(void)
@@ -235,18 +238,25 @@ int test_modules(void)
 //		test_lf_print_qtr();
 
 //	while(1)
-//		test_timeout(10);
+//		test_timeout(2);
+
 
 	test_motion();
-//	while(1)
-//		test_stop_sensor();
+	test_stop_sensor();
 
 //	test_obs_detector(); // lixo
 
 //	test_lf_rotate(MOVE_LEFT);
 //	test_motion_rotate();
+
 //	err = test_rfid();
 //	test_debounce();
+
+//	HAL_Delay(500);
+//
+//	motion_start();
+//	HAL_Delay(2000);
+//	motion_stop();
 
 	return err;
 }
