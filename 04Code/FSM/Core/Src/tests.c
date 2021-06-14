@@ -9,6 +9,8 @@
 #include "rfid-rc522.h"
 #include "timeout.h"
 
+#include "debounce.h"
+
 #include "stm32f7xx_hal.h"
 
 /******************************************************************************
@@ -39,6 +41,33 @@ void test_move(float speed)
 	  HAL_Delay(5000);
 	  move_stop();
 	  HAL_Delay(2000);
+}
+
+/******************************************************************************
+Test debounce module
+******************************************************************************/
+ST_debounce button;
+
+#define USER_BTN_PORT	(GPIOC)
+#define USER_BTN_PIN	(GPIO_PIN_8)
+
+void test_debounce(void)
+{
+	debounce_init(&button, USER_BTN_PORT, USER_BTN_PIN);
+
+	debounce_start();
+
+	while(1)
+	{
+		if(button.pin_output)
+		{
+			// user button pressed
+			toggle_led(LBLUE);
+			button.pin_output = 0;
+		}
+	}
+
+	debounce_stop();
 }
 
 /******************************************************************************
@@ -177,7 +206,7 @@ int test_modules(void)
 //	while(1)
 //		test_timeout(10);
 
-//	test_motion();
+	test_motion();
 
 //	test_stop_sensor();
 //	test_obs_detector();
@@ -185,7 +214,8 @@ int test_modules(void)
 //	test_lf_rotate(MOVE_LEFT);
 //	test_motion();
 
-	err = test_rfid();
+//	err = test_rfid();
+//	test_debounce();
 
 	return err;
 }

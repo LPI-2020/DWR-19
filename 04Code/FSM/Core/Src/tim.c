@@ -24,6 +24,8 @@
 //#include "lfollower.h"
 #include "motion.h"
 #include "timeout.h"
+#include "debounce.h"
+
 #include "tests.h"
 
 /* USER CODE END 0 */
@@ -49,8 +51,8 @@ void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 60000-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 450-1;
-  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
+  htim3.Init.Period = 1800-1;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
@@ -314,6 +316,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	{// enters every 1sec
 		timeout_isr();
 		write_led(LBLUE, 1);
+	}
+	else if(htim == &TIM_DEBOUNCE)
+	{
+		debounce_isr();
 	}
 }
 /* USER CODE END 1 */

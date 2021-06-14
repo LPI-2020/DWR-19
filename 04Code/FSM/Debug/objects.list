@@ -1,5 +1,6 @@
 "Core/Src/adc.o"
 "Core/Src/auxiliares.o"
+"Core/Src/debounce.o"
 "Core/Src/dma.o"
 "Core/Src/fsm.o"
 "Core/Src/gpio.o"

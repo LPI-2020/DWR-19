@@ -10,7 +10,7 @@
 /******************************************************************************
 Timeout Private Defines
 ******************************************************************************/
-#define PERIOD_1SEC		(450)
+#define PERIOD_1SEC		(1800)
 #define MAX_TIMEOUT		(uint8_t)(65535 / PERIOD_1SEC)
 
 /******************************************************************************
@@ -22,7 +22,7 @@ uint8_t timeout_flag = 0;
 /******************************************************************************
 Timeout Start
 ******************************************************************************/
-void timeout_start(uint8_t time_sec)
+void timeout_start(int time_sec)
 {
 	// update timeout timer reload
 	if(time_sec > MAX_TIMEOUT)
@@ -32,7 +32,7 @@ void timeout_start(uint8_t time_sec)
 //		timeout_cycles = time_sec ...
 	}
 	else
-		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec * 2) - 1; // >>>>>>>>>>>>> check this
+		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec) - 1; // >>>>>>>>>>>>> check this
 
 	// init Timer
 	if(HAL_TIM_Base_Init(&TIM_TIMEOUTS) != HAL_OK)

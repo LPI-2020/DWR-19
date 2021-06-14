@@ -15,6 +15,7 @@ Timeout TIM - counts 1sec timeouts
 ******************************************************************************/
 #include "tim.h"
 #define TIM_TIMEOUTS	(htim3)
+//#define TIM_TIMEOUTS	(htim14)
 
 /******************************************************************************
 Timeout Status Flag
@@ -24,7 +25,7 @@ extern uint8_t timeout_flag;
 /******************************************************************************
 Timeout Functions
 ******************************************************************************/
-void timeout_start(uint8_t time_sec);
+void timeout_start(int time_sec);
 void timeout_stop(void);
 void timeout_isr(void);
 

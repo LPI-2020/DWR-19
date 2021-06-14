@@ -169,7 +169,7 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 	// start rotate 4second timeout
-//	timeout_start(4);
+	timeout_start(4);
 	// start storing QTR sensor values
 	qtr_init();
 
@@ -183,11 +183,9 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
 	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8 (last sensor)
-	//while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (num_timeout_2sec < TIMEOUT_4SEC))
 	while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (timeout_flag == 0))
 		;
-	// stop Rotate_Timeout
-	//timeout_stop();
+
 	// stop rotating
 	move_stop();
 	// stop storing QTR sensor values
@@ -199,6 +197,8 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	if(timeout_flag)
 		return E_TIMEOUT;
 
+	// stop timeout
+	timeout_stop();
 	// if timeout didnt occurred then rotate was completed
 	return EXIT_SUCCESS;
 }

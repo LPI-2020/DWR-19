@@ -59,7 +59,7 @@ uint8_t RFID_read(rfid_t *rfid)
   	// enable RFID reader
   	RFID_RC522_Init();
   	// start 2sec timeout
-  	timeout_start(2);
+  	timeout_start(3);
 
 	do
 	{
@@ -71,10 +71,8 @@ uint8_t RFID_read(rfid_t *rfid)
 			// converts CardID to an hexadecimal string
 			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->result);
 
-	//} while((status != MI_OK) && (num_timeout_2sec < TIMEOUT_4SEC));
 	} while((status != MI_OK) && (timeout_flag == 0));
 
-	//if(num_timeout_2sec < TIMEOUT_4SEC)
 	if(timeout_flag)
 		return MI_TIMEOUT;
 
