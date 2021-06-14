@@ -12,8 +12,8 @@ JOÃO:
 
 ->Circuito de Alimentação     -> SIM
 ->Parte Mecânica	      	  -> SIM
+->Lista de Componentes	      -> SIM
 
-->Lista de Componentes	      -> NÃO
 ->Periféricos Utilizados      -> NÃO
 
 ->SHIELD		      		  -> NÃO

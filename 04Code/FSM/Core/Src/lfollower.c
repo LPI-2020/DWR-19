@@ -218,6 +218,7 @@ void lfollower_print_sens(void)
 	// enable QTR readings
 	qtr_init();
 
+<<<<<<< HEAD
 	snprintf(str, sizeof(str), "S1[%f]\n\r", qtr_get_analog(SENSOR1));
 	UART_puts(str);
 
