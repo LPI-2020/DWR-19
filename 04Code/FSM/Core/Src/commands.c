@@ -5,10 +5,11 @@
 #include <stdio.h> // snprintf
 
 // Callbacks Includes
-char route_sel_cb(uint8_t argc, char** argv);
 
 // Function Prototype
 char help_cb(uint8_t argc, char** argv);
+char route_sel_cb(uint8_t argc, char** argv);
+char init_receive_cb(uint8_t argc, char** argv);
 
 /******************************************************************************
 @name		cmd_list
@@ -26,10 +27,16 @@ const Command_t cmd_list[] =
 		help_cb 
 	},
 	{
+		"INIT",
+		"Receive init: ",
+		init_receive_cb
+	},
+	{
 		"RT",
 		"Route selection: ",
 		route_sel_cb
 	},
+
 	{ //end of Command list
 		0,
 		0,
@@ -134,4 +141,21 @@ char route_sel_cb(uint8_t argc, char** argv)
 	return 0;
 }
 
+/******************************************************************************
+@function	Init Receiving
+@usage		INIT
 
+@brief	 	Intializes the bluetooth receive
+******************************************************************************/
+char init_receive_cb(uint8_t argc, char** argv)
+{
+	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
+
+	if(argc != 1) // number of arguments invalid?
+		//return (char)(-EINVARG);
+		return (-1);
+
+	bluet_status = BLUET_RECEIVING;
+
+	return 0;
+}

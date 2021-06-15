@@ -115,6 +115,8 @@ int main(void)
 
   int err = 0;
 
+  Rx_UART_init(&bluet_uart);
+
   while (1)
   {
 //	err = test_modules();

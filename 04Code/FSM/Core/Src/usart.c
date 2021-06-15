@@ -244,8 +244,8 @@ char UART_Receive(uart_t *huart)
 		// Treat as 'CR'
 		c = NEW_LINE;
 	
-	//if(process_as_control() == 0) // Is the received char a control char?
-	//	return (char)(-1);
+	if(c == 0) // Is the received char a control char?
+		return (char)(-1);
 	
 	// Its not a special character
 	process_as_data(huart);
@@ -273,8 +273,6 @@ char UART_Receive(uart_t *huart)
 //		}
 //		s_key_ptr++;
 //	}
-//
-//	// Its not a control char. Needs to be processed as data
 //	return (char)(-1);
 //}
 
