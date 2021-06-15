@@ -97,15 +97,15 @@ uint8_t stop_detector_isr()
 	sens += qtr_get_digital(ST_SENSOR_R);
 
 	// both sensors enabled
-	if(sens == 3)
+	if((sens == sens_prev) && (sens == 3))
 		// return cross found error
 		return E_ST_CROSS_FOUND;
 
 	// current sensors value equal to the previous sensor values
 	// and only one sensor enabled
-	else if((sens == sens_prev) && (sens != 0))
-		// return room found error
-		return E_ST_ROOM_FOUND;
+//	else if((sens == sens_prev) && (sens != 0))
+//		// return room found error
+//		return E_ST_ROOM_FOUND;
 
 	// ***** Check Obstacle Detector *****
 	// Obstacle found flag update

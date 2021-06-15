@@ -59,9 +59,7 @@ static void process_as_data(uart_t *huart);
 
 /* USER CODE END 0 */
 
-// Bluetooth UART
 UART_HandleTypeDef huart1;
-// Control UART - Debug purpose
 UART_HandleTypeDef huart3;
 
 /* USART1 init function */

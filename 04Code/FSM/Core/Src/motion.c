@@ -44,7 +44,7 @@ void motion_start(void)
 
 	// start sampling motion sensors
 	HAL_TIM_Base_Start_IT(&TIM_MOTION);
-
+	TIM_MOTION.Instance->EGR = TIM_EGR_UG;
 }
 
 void motion_stop(void)

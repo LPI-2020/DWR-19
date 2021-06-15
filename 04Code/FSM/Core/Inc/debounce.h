@@ -16,7 +16,7 @@ Debounce Peripherals
 ******************************************************************************/
 #include "tim.h"
 //#define TIM_DEBOUNCE		(htim6)
-#define TIM_DEBOUNCE		(htim3)
+#define TIM_DEBOUNCE		(htim13)
 
 /******************************************************************************
 Debounce Struct

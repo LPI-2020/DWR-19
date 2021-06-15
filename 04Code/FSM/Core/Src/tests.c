@@ -61,6 +61,11 @@ void test_debounce(void)
 	debounce_init(&button, USER_BTN_PORT, USER_BTN_PIN);
 	debounce_start();
 
+//	while(button.pin_output == 0)
+//		;
+//
+//	button.pin_output = 0;
+
 	while(1)
 	{
 		if(button.pin_output)
@@ -198,10 +203,14 @@ int test_rfid(void)
 		;
 
 	// begin RFID read. Enable BLUE LED
-	write_led(LBLUE, 1);
+//	write_led(LBLUE, 1);
 
+	HAL_Delay(1000);
 	// restart movement
 	motion_start();
+
+	test_stop_sensor();
+
 	// read RFID
 	status = RFID_read(&rfid_test);
 	// stop movement
@@ -211,9 +220,13 @@ int test_rfid(void)
 		return -1;
 
 	// RFID read ok. disable BLUE LED
-	write_led(LBLUE, 0);
+//	write_led(LBLUE, 0);
 
-	return lfollower_rotate(MOVE_LEFT);
+	write_led(LGREEN, 1);
+	status = lfollower_rotate(MOVE_LEFT);
+	write_led(LGREEN, 0);
+
+	return status;
 }
 
 /******************************************************************************
@@ -229,6 +242,9 @@ void test_timeout(uint8_t sec)
 	toggle_led(LGREEN);
 }
 
+/******************************************************************************
+Test Bluetooth
+******************************************************************************/
 void test_bluetooth(void)
 {
 	if(bluet_uart.Rx_flag)
@@ -262,8 +278,8 @@ int test_modules(void)
 //		test_timeout(2);
 
 
-	test_motion();
-	test_stop_sensor();
+//	test_motion();
+//	test_stop_sensor();
 
 //	test_obs_detector(); // lixo
 
@@ -271,14 +287,10 @@ int test_modules(void)
 //	test_lf_rotate(MOVE_LEFT);
 //	test_motion_rotate();
 
+	test_debounce();
+	test_motion();
+	test_stop_sensor();
 //	err = test_rfid();
-//	test_debounce();
-
-//	HAL_Delay(500);
-//
-//	motion_start();
-//	HAL_Delay(2000);
-//	motion_stop();
 
 //	test_bluetooth();
 
