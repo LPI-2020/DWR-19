@@ -16,17 +16,20 @@ void bluet_receive(void)
 	char err;
 
 	if(bluet_status != BLUET_READY)
+	{
 		Rx_UART_init(&bluet_uart);
+		bluet_status = BLUET_READY;
+	}
 
 	// any byte received by bluetooth?
-	if(bluet_uart.Rx_flag)
+	else if(bluet_uart.Rx_flag)
 	{
 		UART_Receive(&bluet_uart);
 		bluet_uart.Rx_flag = 0;
 		bluet_status = BLUET_RECEIVING;
 	}
 	// command received?
-	if(cmd_received)
+	else if(cmd_received)
 	{
 		// parses and executes the command - returns 0 if valid
 		err = exec_cmd((char *) bluet_uart.Rx_Buffer);
