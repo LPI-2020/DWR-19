@@ -122,12 +122,12 @@ int main(void)
 	switch(err)
 	{
 		case 0:
+			HAL_NVIC_SystemReset();
 			break;
 
 		default:
 			// signal error. Light up RED LED
 			write_led(LRED, 1);
-			break;
 	}
 
 	while(1)

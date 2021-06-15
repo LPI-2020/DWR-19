@@ -94,7 +94,7 @@ void debounce_isr(void)
 	if((pre_state == 1) && (state == 0))
 		button.pin_output = 0;
 
-	//button.pin_output = (~(state * ((~pre_state) & 0x01))) & 0x01;
+	//button.pin_output = (state * ((~pre_state) & 0x01));
 
 	// update previous button state
 	pre_state = state;

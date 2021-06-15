@@ -180,9 +180,8 @@ static void s_rd_rfid(void)
 	uint8_t err;
 
 	// start movement
-	//motion_start();
 	// wait for RFID read or timeout (POLLING MODE)
-	err = RFID_read(&rfid);
+	err = RFID_read(&rfid, RFID_TIMEOUT);
 	// stop movement
 	motion_stop();
 
@@ -244,7 +243,7 @@ static void s_rotate(void)
 	uint8_t err;
 
 	// rotate to direction 'next_move_dir' (POLLING MODE)
-	err = lfollower_rotate(next_move_dir);
+	err = lfollower_rotate(next_move_dir, ROTATE_TIMEOUT);
 
 	// rotate has returned error?
 	if(err)

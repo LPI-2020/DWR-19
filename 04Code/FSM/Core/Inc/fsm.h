@@ -24,8 +24,9 @@ FSM states
 /******************************************************************************
 FSM Private Defines
 ******************************************************************************/
-// defines robot speed when using RFID reader
-#define RD_RFID_SPEED 0.6
+// timeouts in seconds
+#define RFID_TIMEOUT	2
+#define ROTATE_TIMEOUT	4
 
 /******************************************************************************
 FSM current state pointer

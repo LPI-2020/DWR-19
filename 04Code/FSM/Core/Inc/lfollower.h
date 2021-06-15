@@ -36,7 +36,7 @@ void lfollower_start(void);
 void lfollower_stop(void);
 uint8_t lfollower_isr();
 
-uint8_t lfollower_rotate(move_dir_e dir);
+uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout);
 
 /******************************************************************************
 Debug Functions

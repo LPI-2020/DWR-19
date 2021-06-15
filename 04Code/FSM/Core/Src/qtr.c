@@ -42,7 +42,7 @@ QTR Sensor Value
 // QTR get sensor digital value
 uint8_t qtr_get_digital(qtr_e sensor)
 {
-	return (DIG_TO_ANALOG(qtr_sens[sensor]) > ANALOG_HI_VOLT);
+	return (DIG_TO_ANALOG(qtr_sens[sensor]) > ANALOG_HI_VOLT) & 0x01;
 }
 
 // QTR get sensor analog value

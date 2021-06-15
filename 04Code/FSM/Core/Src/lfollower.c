@@ -137,15 +137,15 @@ uint8_t lfollower_isr(void)
 		// line follower is disabled
 		return E_LF_OFF;
 
-//	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
-//		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
-//	{
-//		// robot is not over the line
-//		// stop line follower
-//		lfollower_stop();
-//		// send error: no line to follow
-//		return E_LF_NO_LINE;
-//	}
+	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
+		(qtr_get_digital(LF_SENSOR_CTR_L) == 0))
+	{
+		// robot is not over the line
+		// stop line follower
+		lfollower_stop();
+		// send error: no line to follow
+		return E_LF_NO_LINE;
+	}
 
 	// else, robot over the line
 	// use PID to obtain PWM values to use on motors
@@ -165,12 +165,12 @@ Line Follower Rotate
 @param	dir - direction to rotate
 @retval '1' if timeout occured
 ******************************************************************************/
-uint8_t lfollower_rotate(move_dir_e dir)
+uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 	// start rotate 4second timeout
-	timeout_start(4);
+	timeout_start(timeout);
 	// start storing QTR sensor values
 	qtr_init();
 
@@ -212,6 +212,16 @@ Debug Functions
 @retval	none
 ******************************************************************************/
 #ifdef _DEBUG_
+
+const static uint8_t lf_sens_str[][3] =
+{
+		"S1",
+		"S3",
+		"S4",
+		"S5",
+		"S6",
+		"S8"
+};
 void lfollower_print_sens(void)
 {
 	char str[32];
@@ -219,23 +229,15 @@ void lfollower_print_sens(void)
 	// enable QTR readings
 	qtr_init();
 
-	snprintf(str, sizeof(str), "S1[%f]\n\r", qtr_get_analog(SENSOR1));
-	UART_puts(&debug_uart,str);
+	for(uint8_t i = 0; i < QTR_SENS_NUM; i++)
+	{
+		snprintf(str, sizeof(str), "%s[%.4f]=[%d]\n\r", lf_sens_str[i],
+													qtr_get_analog(i),
+													qtr_get_digital(i));
+		UART_puts(&debug_uart,str);
+	}
 
-	snprintf(str, sizeof(str), "S3[%f]\n\r", qtr_get_analog(SENSOR3));
-	UART_puts(&debug_uart,str);
-
-	snprintf(str, sizeof(str), "S4[%f]\n\r", qtr_get_analog(SENSOR4));
-	UART_puts(&debug_uart,str);
-
-	snprintf(str, sizeof(str), "S5[%f]\n\r", qtr_get_analog(SENSOR5));
-	UART_puts(&debug_uart,str);
-
-	snprintf(str, sizeof(str), "S6[%f]\n\r", qtr_get_analog(SENSOR6));
-	UART_puts(&debug_uart,str);
-
-	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", qtr_get_analog(SENSOR8));
-	UART_puts(&debug_uart,str);
+	UART_puts(&debug_uart, "\n\r");
 
 	// stop QTR readings
 	qtr_kill();

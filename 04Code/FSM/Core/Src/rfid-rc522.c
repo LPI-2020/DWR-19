@@ -51,7 +51,7 @@ Read RFID (POLLING Mode)
 @para 	rfid struct
 @retval rfid status
 ******************************************************************************/
-uint8_t RFID_read(rfid_t *rfid)
+uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 {
 	// RFID status reading
 	uint8_t status = -1;
@@ -59,7 +59,7 @@ uint8_t RFID_read(rfid_t *rfid)
   	// enable RFID reader
   	RFID_RC522_Init();
   	// start 2sec timeout
-  	timeout_start(3);
+  	timeout_start(timeout);
 
 	do
 	{
