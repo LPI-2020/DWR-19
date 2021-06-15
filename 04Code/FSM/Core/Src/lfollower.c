@@ -234,10 +234,10 @@ void lfollower_print_sens(void)
 		snprintf(str, sizeof(str), "%s[%.4f]=[%d]\n\r", lf_sens_str[i],
 													qtr_get_analog(i),
 													qtr_get_digital(i));
-		UART_puts(&debug_uart,str);
+		UART_puts(&bluet_uart,str);
 	}
 
-	UART_puts(&debug_uart, "\n\r");
+	UART_puts(&bluet_uart, "\n\r");
 
 	// stop QTR readings
 	qtr_kill();

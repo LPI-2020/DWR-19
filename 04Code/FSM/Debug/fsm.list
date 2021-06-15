@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0002c274  00000000  00000000  00048fb8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001d097  00000000  00000000  0007522c  2**0
+ 17 .debug_line   0001d095  00000000  00000000  0007522c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00106739  00000000  00000000  000922c3  2**0
+ 18 .debug_str    00106739  00000000  00000000  000922c1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  001989fc  2**0
+ 19 .comment      00000053  00000000  00000000  001989fa  2**0
                   CONTENTS, READONLY
  20 .debug_frame  000064a4  00000000  00000000  00198a50  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -1690,7 +1690,7 @@ void lfollower_print_sens(void)
  8000da8:	4a0f      	ldr	r2, [pc, #60]	; (8000de8 <lfollower_print_sens+0x8c>)
  8000daa:	2120      	movs	r1, #32
  8000dac:	f007 f932 	bl	8008014 <sniprintf>
-		UART_puts(&debug_uart,str);
+		UART_puts(&bluet_uart,str);
  8000db0:	1d3b      	adds	r3, r7, #4
  8000db2:	4619      	mov	r1, r3
  8000db4:	480d      	ldr	r0, [pc, #52]	; (8000dec <lfollower_print_sens+0x90>)
@@ -1704,14 +1704,11 @@ void lfollower_print_sens(void)
  8000dca:	d9d2      	bls.n	8000d72 <lfollower_print_sens+0x16>
 	}
 
-	UART_puts(&debug_uart, "\n\r");
+	UART_puts(&bluet_uart, "\n\r");
  8000dcc:	4908      	ldr	r1, [pc, #32]	; (8000df0 <lfollower_print_sens+0x94>)
  8000dce:	4807      	ldr	r0, [pc, #28]	; (8000dec <lfollower_print_sens+0x90>)
  8000dd0:	f001 f97e 	bl	80020d0 <UART_puts>
-//
-//	snprintf(str, sizeof(str), "S8[%f]\n\r\n\r", qtr_get_analog(SENSOR8));
-//	UART_puts(&debug_uart,str);
-//
+
 	// stop QTR readings
 	qtr_kill();
  8000dd4:	f000 fae4 	bl	80013a0 <qtr_kill>
@@ -4322,9 +4319,9 @@ void MX_TIM13_Init(void)
  8001baa:	4b0b      	ldr	r3, [pc, #44]	; (8001bd8 <MX_TIM13_Init+0x40>)
  8001bac:	2200      	movs	r2, #0
  8001bae:	609a      	str	r2, [r3, #8]
-  htim13.Init.Period = 500-1;
+  htim13.Init.Period = 300-1;
  8001bb0:	4b09      	ldr	r3, [pc, #36]	; (8001bd8 <MX_TIM13_Init+0x40>)
- 8001bb2:	f240 12f3 	movw	r2, #499	; 0x1f3
+ 8001bb2:	f240 122b 	movw	r2, #299	; 0x12b
  8001bb6:	60da      	str	r2, [r3, #12]
   htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
  8001bb8:	4b07      	ldr	r3, [pc, #28]	; (8001bd8 <MX_TIM13_Init+0x40>)
