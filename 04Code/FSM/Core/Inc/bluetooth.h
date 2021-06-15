@@ -16,6 +16,8 @@ typedef enum {
 	BLUET_N_INIT
 } bluet_state_t;
 
+#define BLUET_SET_STATUS
+
 extern bluet_state_t bluet_status;
 
 void bluet_receive(void);

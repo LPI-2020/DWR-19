@@ -108,8 +108,7 @@ void motion_isr(void)
 		// update motion_status
 		// Signal that Motion is stopped due to Stop Mark/Obstacle
 		// err = E_CROSS_FOUND (1) -> motion_status = MOT_CROSS_FOUND (2)
-		// err = E_ROOM_FOUND (2) -> motion_status = MOT_ROOM_FOUND (3)
-		// err = E_OBS_FOUND (3) -> motion_status = MOT_HOLD (4)
+		// err = E_OBS_FOUND (2) -> motion_status = MOT_HOLD (3)
 		motion_status = err + (MOT_CROSS_FOUND - E_ST_CROSS_FOUND);
 
 		// if motion is on hold, begin timeout

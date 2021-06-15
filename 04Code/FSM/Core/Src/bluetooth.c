@@ -14,7 +14,6 @@ bluet_state_t bluet_status = BLUET_N_INIT;
 void bluet_receive(void)
 {
 	char err;
-
 //	if(bluet_status != BLUET_READY)
 //	{
 //
@@ -28,14 +27,14 @@ void bluet_receive(void)
 		bluet_uart.Rx_flag = 0;
 	}
 	// command received?
-	else if(cmd_received)
+	if(cmd_received)
 	{
 		// parses and executes the command - returns 0 if valid
 		err = exec_cmd((char *) bluet_uart.Rx_Buffer);
 
-		// command executed -> bluet_st = BLUET_OK
-		// command not executed -> BLUET_READY
-		bluet_status = (err == 0) ? BLUET_OK : BLUET_READY;
+//		// command executed -> bluet_st = BLUET_OK
+//		// command not executed -> BLUET_READY
+//		bluet_status = (err == 0) ? BLUET_OK : BLUET_READY;
 
 		cmd_received = 0;
 		// prepares bluetooth to receive again

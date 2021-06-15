@@ -113,8 +113,10 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
-  int err = 0;
-
+//  int err = 0;
+//
+//	while(1)
+//		test_lf_print_qtr();
   Rx_UART_init(&bluet_uart);
 
   while (1)

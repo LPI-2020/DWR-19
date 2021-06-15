@@ -25,5 +25,5 @@ GPIO pins: LEDs used for testing
 Test modules
 ******************************************************************************/
 int test_modules(void);
-
+void test_lf_print_qtr(void);
 #endif // !__TESTS_H__

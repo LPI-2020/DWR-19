@@ -33,8 +33,7 @@ Define Parameters
 Stop Sensors Errors
 ******************************************************************************/
 #define E_ST_CROSS_FOUND	1	// error cross found
-#define E_ST_ROOM_FOUND		2	// error room found
-#define E_ST_OBS_FOUND		3	// error obstacle found
+#define E_ST_OBS_FOUND		2		// error obstacle found
 
 /******************************************************************************
 Obstacle Detector Functions

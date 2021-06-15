@@ -4,12 +4,18 @@
 #include "usart.h" // UART_puts
 #include <stdio.h> // snprintf
 
+#include "bluetooth.h"
+
+#include "fsm.h"
+
 // Callbacks Includes
 
 // Function Prototype
 char help_cb(uint8_t argc, char** argv);
 char route_sel_cb(uint8_t argc, char** argv);
 char init_receive_cb(uint8_t argc, char** argv);
+char start_cb(uint8_t argc, char** argv);
+char stop_cb(uint8_t argc, char** argv);
 
 /******************************************************************************
 @name		cmd_list
@@ -36,7 +42,16 @@ const Command_t cmd_list[] =
 		"Route selection: ",
 		route_sel_cb
 	},
-
+	{
+		"S",
+		"Start: ",
+		start_cb
+	},
+	{
+		"ST",
+		"Stop: ",
+		stop_cb
+	},
 	{ //end of Command list
 		0,
 		0,
@@ -135,6 +150,7 @@ char route_sel_cb(uint8_t argc, char** argv)
 		return (-1);
 
 	// ...select route... do something
+	bluet_status = BLUET_OK;
 
 //	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
 
@@ -159,3 +175,42 @@ char init_receive_cb(uint8_t argc, char** argv)
 
 	return 0;
 }
+
+/******************************************************************************
+@function	start
+@usage		S
+
+@brief	 	Intializes the bluetooth receive
+******************************************************************************/
+char start_cb(uint8_t argc, char** argv)
+{
+	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
+
+	if(argc != 1) // number of arguments invalid?
+		//return (char)(-EINVARG);
+		return (-1);
+
+	nstate = S_FLW_LINE;
+
+	return 0;
+}
+
+/******************************************************************************
+@function	stop
+@usage		ST
+
+@brief	 	Intializes the bluetooth receive
+******************************************************************************/
+char stop_cb(uint8_t argc, char** argv)
+{
+	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
+
+	if(argc != 1) // number of arguments invalid?
+		//return (char)(-EINVARG);
+		return (-1);
+
+	nstate = S_STOPPED;
+
+	return 0;
+}
+

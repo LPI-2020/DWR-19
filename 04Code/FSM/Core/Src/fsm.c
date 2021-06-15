@@ -17,6 +17,7 @@
 
 #include "debounce.h"
 #include "tests.h"
+#include "usart.h"
 
 /******************************************************************************
 Private Defines
@@ -60,18 +61,8 @@ uint8_t state = 0;
 // Next FSM state
 uint8_t nstate = 0;
 
-
 // Route finished flag
 uint8_t route_finished = 1;
-
-// New route incoming flag
-//uint8_t new_route_incoming = 0;
-
-// Timeout flags
-//uint8_t pick_up_timeout = 0;
-//uint8_t obs_found_timeout = 0;
-//uint8_t rotate_timeout = 0;
-//uint8_t read_rfid_timeout = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
@@ -99,19 +90,19 @@ static void s_stopped(void)
 	}
 
 	//else if((!obs_found_flag) && (!obs_found_timeout))
-	else if((motion_status != MOT_HOLD) && (motion_status != MOT_TIMEOUT))
+	else if(motion_status == MOT_ON)
 		// obstacle is not there anymore and timer not finished
 		// restart movement
 		nstate = S_FLW_LINE;
 
 	//else if(obs_found_timeout)
-	else if(motion_status == MOT_HOLD)
+	else if(motion_status == MOT_TIMEOUT)
 		// obstacle has been there for too long
 		// continue to error state
 		nstate = S_ERROR;
 
 //	else if((!route_finished) && ((button.pin_output == 1) || pick_up_timeout))
-	else if((!route_finished) && ((button.pin_output == 1) || (motion_status == MOT_OFF && timeout_flag)))
+	else if((button.pin_output == 1) || (motion_status == MOT_OFF && timeout_flag))
 		// Route not finished (have received a new route and User button pressed
 		// or robot has been waiting too much time for user to pick up his goods.
 		// Restart movement.
@@ -129,7 +120,6 @@ static void s_receive(void)
 	write_led(LBLUE,0);
 	write_led(LGREEN,1);
 
-
 	bluet_receive();
 
 	if(bluet_status == BLUET_OK)
@@ -145,22 +135,6 @@ static void s_receive(void)
 	}
 
 	// Else nstate = S_RECEIVE
-
-//	if(bluet_st == BLUET_OK)
-//		// new route has been fully received
-//		nstate = S_STOPPED;
-//	else
-//	{
-//		err = bluet_receive();
-//
-//		if(err == BLUET_OK)
-//		{
-//			// route received
-//			route_finished = 0;
-//			bluet_st = BLUET_READY;
-//			nstate = S_STOPPED;
-//		}
-//	}
 }
 
 /******************************************************************************
@@ -171,6 +145,7 @@ static void s_flw_line(void)
 	write_led(LRED,0);
 	write_led(LBLUE,1);
 	write_led(LGREEN,0);
+
 	// start movement
 	motion_start();
 
@@ -178,17 +153,18 @@ static void s_flw_line(void)
 	{
 		case MOT_CROSS_FOUND:
 			// Cross Found
+			UART_puts(&bluet_uart,"Cross Found\n\r");
 			nstate = S_RD_RFID;
 			break;
-//		case MOT_ROOM_FOUND:
-//			// Room Found
-//			nstate = S_NEXT_MOV;
-//			break;
+
 		case MOT_HOLD:
 			// obstacle found
+			UART_puts(&bluet_uart,"Obstacle Found\n\r");
 			nstate = S_STOPPED;
 			break;
+
 		case MOT_ERR:
+			UART_puts(&bluet_uart,"Out of route\n\r");
 			// out of route
 			nstate = S_ERROR;
 	}
@@ -219,47 +195,25 @@ static void s_rd_rfid(void)
 	err = RFID_read(&rfid, RFID_TIMEOUT);
 	// stop movement
 	motion_stop();
+	// signal motion off
+	motion_status = MOT_OFF;
 
 	// read RFID correctly?
 	if(err == MI_OK)
-	{
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
-	}
 	else
+	{
 		// RFID timeout
 		// continue to error state
+		UART_puts(&bluet_uart, "RFID timeout\n\r");
 		nstate = S_ERROR;
+	}
 }
 
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
-//uint8_t cross_found_func(void)
-//{
-//	// calculate next direction of movement
-//	//next_move_dir = ...
-//
-//	return S_ROTATE;
-//}
-//
-//uint8_t room_found_func(void)
-//{
-//	// check if robot needs to stop in this room
-//	// if(quarto paragem)
-//		// stop at this room
-//		// return S_STOPPED;
-//
-//	// else, continue to the next rooms
-//	return S_FLW_LINE;
-//}
-//
-//// Next move function pointer
-//uint8_t (*next_move_func[])(void) = {
-//		cross_found_func,
-//		room_found_func
-//};
-
 static void s_next_mov(void)
 {
 	write_led(LRED,1);
@@ -297,9 +251,12 @@ static void s_rotate(void)
 
 	// rotate has returned error?
 	if(err)
+	{
 		// rotate TIMEOUT
 		// rotate was not successfull
+		UART_puts(&bluet_uart, "Rotate timeout\n\r");
 		nstate = S_ERROR;
+	}
 	else
 		// turn completed. Restart following line
 		nstate = S_FLW_LINE;

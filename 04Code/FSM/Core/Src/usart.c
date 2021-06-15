@@ -237,16 +237,22 @@ char UART_Receive(uart_t *huart)
 {
 	if(c != NEW_LINE) // Is this the end of reception?
 		Rx_UART_init(huart); // prepare for next character
-	else
-		cmd_received = 1;
 
 	if(huart->Rx_index == (RX_BUFF_LEN - 1)) // Is the buffer full?
 		// Treat as 'CR'
 		c = NEW_LINE;
 	
-	if(c == 0) // Is the received char a control char?
-		return (char)(-1);
+//	if(c == 0) // Is the received char a control char?
+//		return (char)(-1);
 	
+	if(c == NEW_LINE)
+	{
+		huart->Rx_Buffer[huart->Rx_index] = 0;	// mark end of string
+		huart->Rx_index = 0;
+		cmd_received = 1;
+		return (char)(-1);
+	}
+
 	// Its not a special character
 	process_as_data(huart);
 

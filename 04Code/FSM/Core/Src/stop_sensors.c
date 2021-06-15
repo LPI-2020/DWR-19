@@ -98,6 +98,7 @@ uint8_t stop_detector_isr()
 
 	// both sensors enabled
 	if((sens == sens_prev) && (sens == 3))
+//	if(sens == 3)
 		// return cross found error
 		return E_ST_CROSS_FOUND;
 
