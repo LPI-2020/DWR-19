@@ -180,7 +180,7 @@ static void s_rd_rfid(void)
 	uint8_t err;
 
 	// start movement
-	motion_start();
+	//motion_start();
 	// wait for RFID read or timeout (POLLING MODE)
 	err = RFID_read(&rfid);
 	// stop movement

@@ -112,12 +112,17 @@ void motion_isr(void)
 
 		// if motion is on hold, begin timeout
 		if(motion_status == MOT_HOLD)
+		{
 			timeout_start(HOLD_TIMEOUT);
+			motion_stop();
+			return;
+		}
 
 		// obstacle/stop mark found
 		// stop movement
-		motion_stop();
-		return;
+//		motion_stop();
+//
+//		return;
 	}
 
 	// line follower ISR
