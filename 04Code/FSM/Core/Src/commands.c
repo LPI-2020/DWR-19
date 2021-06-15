@@ -83,6 +83,7 @@ char exec_cmd(const char *str)
 //
 //	}
 	
+
 	return err;
 }
 
@@ -128,7 +129,7 @@ char route_sel_cb(uint8_t argc, char** argv)
 
 	// ...select route... do something
 
-	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
+//	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
 
 	return 0;
 }

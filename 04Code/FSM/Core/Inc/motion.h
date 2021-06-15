@@ -29,7 +29,6 @@ typedef enum
 	MOT_OFF,			// Motion OFF (stopped)
 
 	MOT_CROSS_FOUND,	// Motion: stopped at a cross
-	MOT_ROOM_FOUND,		// Motion: stopped at a room
 	MOT_HOLD,			// Motion in Hold (obstacle detected)
 
 	MOT_ERR,			// Motion Error (Out of route)

@@ -16,10 +16,8 @@ typedef enum {
 	BLUET_N_INIT
 } bluet_state_t;
 
-extern uint8_t receiving;
+extern bluet_state_t bluet_status;
 
-extern bluet_state_t bluet_st;
-
-bluet_state_t bluet_receive(void);
+void bluet_receive(void);
 
 #endif /* __BLUETOOTH_H__ */

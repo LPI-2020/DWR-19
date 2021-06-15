@@ -1,15 +1,15 @@
 #include "debounce.h"
 
 /******************************************************************************
-Debounce Init
+Debounce Start
 
 @brief
 @param
 @retval	none
 ******************************************************************************/
-void debounce_init(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+void debounce_start(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
-	// init sliding window
+	// initialize sliding window
 	s->window = 0xf;
 	s->count1s = 4;
 
@@ -17,17 +17,7 @@ void debounce_init(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 	s->GPIO_Pin = GPIO_Pin;
 
 	s->pin_output = 0;
-}
 
-/******************************************************************************
-Debounce Start
-
-@brief
-@param
-@retval	none
-******************************************************************************/
-void debounce_start(void)
-{
 	// start Timer to interrupt
 	HAL_TIM_Base_Start_IT(&TIM_DEBOUNCE);
 }

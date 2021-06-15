@@ -36,10 +36,8 @@ extern ST_debounce button;
 /******************************************************************************
 Debounce Functions
 ******************************************************************************/
-// init debounce struct
-void debounce_init(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 // start/stop debounce
-void debounce_start(void);
+void debounce_start(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 void debounce_stop(void);
 // debounce ISR
 void debounce_isr(void);

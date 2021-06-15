@@ -15,18 +15,23 @@ FSM states
 #define S_RECEIVE		1	// Robot is receiving a new route
 
 #define S_FLW_LINE 		2	// Robot is following line
-#define S_RD_RFID		4	// Robot detects and reads RFID
-#define S_NEXT_MOV		5	// Robot determines next movement to make
-#define S_ROTATE		6	// Robot rotates in order to move in other direction
+#define S_RD_RFID		3	// Robot detects and reads RFID
+#define S_NEXT_MOV		4	// Robot determines next movement to make
+#define S_ROTATE		5	// Robot rotates in order to move in other direction
 
-#define S_ERROR			7	// Robot waiting for intervention
+#define S_ERROR			6	// Robot waiting for intervention
 
 /******************************************************************************
 FSM Private Defines
 ******************************************************************************/
 // timeouts in seconds
-#define RFID_TIMEOUT	2
-#define ROTATE_TIMEOUT	4
+#define RFID_TIMEOUT	2	// RFID timeout time
+#define ROTATE_TIMEOUT	4	// rotate timeout time
+#define PICK_UP_TIMEOUT 30	// Pick up (of the object in each room) timeout time
+
+// User button debounce
+#define USER_BTN_PORT	(GPIOC)
+#define USER_BTN_PIN	(GPIO_PIN_8)
 
 /******************************************************************************
 FSM current state pointer

@@ -37,16 +37,7 @@ uart_t bluet_uart = {
 		.Rx_flag = 0
 };
 
-//volatile uint8_t Rx_index = 0;
-
-//volatile uint8_t Tx_flag = 0;
-//volatile uint8_t Rx_flag = 0;
 volatile uint8_t cmd_received = 0;
-
-//volatile uint8_t receiving = 0;
-
-//char message[TX_BUFF_LEN];
-//volatile uint8_t print_msg_flag = 0;
 
 volatile uint8_t c; // received char
 

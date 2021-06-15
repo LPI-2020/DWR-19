@@ -58,8 +58,7 @@ ST_debounce button;
 
 void test_debounce(void)
 {
-	debounce_init(&button, USER_BTN_PORT, USER_BTN_PIN);
-	debounce_start();
+	debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
 
 	write_led(LGREEN, 1);
 	while(button.pin_output == 0)
@@ -136,9 +135,9 @@ void test_motion_rotate(void)
 
 		test_lf_rotate(MOVE_LEFT);
 	}
-	else if(motion_status == MOT_ROOM_FOUND)
-		// Room found. enable GREEN LED
-		led = LGREEN;
+//	else if(motion_status == MOT_ROOM_FOUND)
+//		// Room found. enable GREEN LED
+//		led = LGREEN;
 	else if(motion_status == MOT_HOLD)
 		// Obstacle found. enable RED LED
 		led = LRED;
@@ -161,9 +160,9 @@ void test_stop_sensor(void)
 	if(motion_status == MOT_CROSS_FOUND)
 		// Cross found. enable BLUE LED
 		write_led(LBLUE, 1);
-	else if(motion_status == MOT_ROOM_FOUND)
-		// Room found. enable GREEN LED
-		write_led(LGREEN, 1);
+//	else if(motion_status == MOT_ROOM_FOUND)
+//		// Room found. enable GREEN LED
+//		write_led(LGREEN, 1);
 	else if(motion_status == MOT_HOLD)
 		// Obstacle found. enable RED LED
 		write_led(LRED, 1);
