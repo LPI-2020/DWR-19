@@ -61,10 +61,12 @@ void test_debounce(void)
 	debounce_init(&button, USER_BTN_PORT, USER_BTN_PIN);
 	debounce_start();
 
+	write_led(LGREEN, 1);
 	while(button.pin_output == 0)
 		;
 
 	button.pin_output = 0;
+	write_led(LGREEN, 0);
 //	write_led(LBLUE, 0);
 //
 //	while(1)
@@ -265,8 +267,8 @@ int test_modules(void)
 
 //	test_move(0.7);
 
-	while(1)
-		test_lf_print_qtr();
+//	while(1)
+//		test_lf_print_qtr();
 
 //	while(1)
 //		test_timeout(2);

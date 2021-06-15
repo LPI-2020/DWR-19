@@ -29,6 +29,8 @@ void motion_start(void)
 	// enable Line Follower
 	lfollower_start();
 
+	//HAL_Delay(500);
+
 	// start movement before beeing on Hold
 	if(motion_status == MOT_HOLD)
 	{
@@ -44,7 +46,7 @@ void motion_start(void)
 
 	// start sampling motion sensors
 	HAL_TIM_Base_Start_IT(&TIM_MOTION);
-	TIM_MOTION.Instance->EGR = TIM_EGR_UG;
+	//TIM_MOTION.Instance->EGR = TIM_EGR_UG;
 }
 
 void motion_stop(void)
@@ -137,4 +139,6 @@ void motion_isr(void)
 		// stop movement
 		motion_stop();
 	}
+//	else
+//		motion_start();
 }
