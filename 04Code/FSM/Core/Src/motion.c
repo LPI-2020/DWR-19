@@ -87,8 +87,6 @@ void motion_isr(void)
 			motion_status = MOT_TIMEOUT;
 			// stop everything
 			motion_stop();
-			// motion timeout occured
-//			motion_status = MOT_TIMEOUT;
 			return;
 		}
 		if(err == 0)
@@ -138,6 +136,4 @@ void motion_isr(void)
 		// stop movement
 		motion_stop();
 	}
-//	else
-//		motion_start();
 }

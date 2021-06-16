@@ -17,6 +17,8 @@
 
 #include "debounce.h"
 #include "tests.h"
+
+#include <stdlib.h>
 #include "usart.h"
 
 /******************************************************************************
@@ -34,11 +36,12 @@ checkpoint_t route1[4] = {
 			.action = ACT_FORWARD
 		},
 		{
-			.RFID = "0x034BFC0",
+//			.RFID = "0x034BFC0",
+			.RFID = "0xa31cd604",
 			.action = ACT_STOP
 		},
 		{
-			.RFID = "0xA31CD60",
+			.RFID = "0xA31CD60" ,
 			.action = ACT_LEFT
 		},
 		{
@@ -95,9 +98,9 @@ uint8_t nstate = 0;
 uint8_t route_finished = 1;
 
 // Route pointer to the selected route
-checkpoint_t *route_ptr = 0;
+checkpoint_t *route_ptr = NULL;
 // first rfid
-checkpoint_t *route_base_ptr = 0;
+checkpoint_t *route_base_ptr = NULL;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
@@ -311,16 +314,25 @@ static void s_next_mov(void)
 	write_led(LBLUE,0);
 	write_led(LGREEN,0);
 
-	// move to the next checkpoint in the route
+	// route can be used?
+	if((route_ptr == NULL) || (route_base_ptr == NULL))
+	{
+		// avoid bad memory access
+		nstate = S_ERROR;
+		return;
+	}
+
+	// move to the next checkpoint in route
 	route_ptr += returning;
 
+	// is this the last RFID in the route?
 	if((route_ptr + 1)->RFID == 0)
 	{
-		// last rfid in the route
+		// check if this is the route start checkpoint
 		if(route_ptr != route_base_ptr)
 		{
 			// last rfid in the route diferent from the firt rfid
-			// turns aroud
+			// turns around
 			next_move_dir = MOVE_LEFT;
 			// sinalises that the robot is returning to the start point
 			returning = -1;
@@ -334,6 +346,7 @@ static void s_next_mov(void)
 		// successfully compared - expected rfid
 		// executes the next move
 		nstate = next_move_func[route_ptr->action]();
+
 	else if(route_ptr == route_base_ptr)
 	{
 		// returned to starting point
