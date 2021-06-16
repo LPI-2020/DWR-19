@@ -96,9 +96,15 @@ uint8_t route_finished = 1;
 
 // Route pointer to the selected route
 checkpoint_t *route_ptr = 0;
+// first rfid
+checkpoint_t *route_base_ptr = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
+// returning:
+//		+1 - going forward
+// 		-1 - comming back
+uint8_t returning = 1;
 
 /******************************************************************************
 State Stopped
@@ -242,8 +248,8 @@ static void s_rd_rfid(void)
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
 
-		snprintf(str, sizeof(str), "RFID: %s\n\r", rfid.CardID_str);
-		UART_puts(&bluet_uart, str);
+//		snprintf(str, sizeof(str), "RFID: %s\n\r", rfid.CardID_str);
+		UART_puts(&bluet_uart, "RFID read.\n\r");
 	}
 	else
 	{
@@ -267,20 +273,27 @@ uint8_t turn_func(void)
 
 	dir -= 1;
 
-	next_move_dir = dir;
+	next_move_dir = dir * returning;
 
 	return S_ROTATE;
 }
 
 uint8_t forward_func(void)
 {
+	UART_puts(&bluet_uart,"Continue moving.\n\r");
 	return S_FLW_LINE;
 }
 
 uint8_t stop_func(void)
 {
+	// coming back -> follow line and dont stop
+	if(returning == -1)
+		return S_FLW_LINE;
+
 	motion_status = MOT_OFF;
 	timeout_start(PICK_UP_TIMEOUT);
+
+	UART_puts(&bluet_uart,"Room Found.\n\r");
 
 	return S_STOPPED;
 }
@@ -299,17 +312,36 @@ static void s_next_mov(void)
 	write_led(LGREEN,0);
 
 	// move to the next checkpoint in the route
-	route_ptr++;
+	route_ptr += returning;
 
 	if((route_ptr + 1)->RFID == 0)
 	{
-		// verifica se é igual ao da cozinha
-		// else dá a volta
+		// last rfid in the route
+		if(route_ptr != route_base_ptr)
+		{
+			// last rfid in the route diferent from the firt rfid
+			// turns aroud
+			next_move_dir = MOVE_LEFT;
+			// sinalises that the robot is returning to the start point
+			returning = -1;
+
+			UART_puts(&bluet_uart,"Return.\n\r");
+
+			nstate = S_ROTATE;
+		}
 	}
 	else if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
 		// successfully compared - expected rfid
 		// executes the next move
 		nstate = next_move_func[route_ptr->action]();
+	else if(route_ptr == route_base_ptr)
+	{
+		// returned to starting point
+		route_ptr = 0;
+		route_finished = 1;
+		nstate = S_STOPPED;
+	}
+
 
 }
 
