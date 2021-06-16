@@ -229,10 +229,10 @@ Test timeouts
 ******************************************************************************/
 void test_timeout(uint8_t sec)
 {
-	timeout_start(sec);
-
-	while(timeout_flag == 0)
-		;
+//	timeout_start(sec);
+//
+//	while(timeout_flag == 0)
+//		;
 
 	toggle_led(LGREEN);
 }

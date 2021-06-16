@@ -31,6 +31,7 @@
 #include "fsm.h"
 #include "tests.h"
 #include "rfid-rc522.h"
+#include "timeout.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,13 +114,14 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
-//  	state = S_RD_RFID;
-//  	nstate = S_RD_RFID;
+//  	state = S_FLW_LINE;
+//  	nstate = S_FLW_LINE;
 //	while(1)
 //		test_lf_print_qtr();
   // enable RFID reader
   RFID_RC522_Init();
   Rx_UART_init(&bluet_uart);
+  timeout_start();
 
   while (1)
   {

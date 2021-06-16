@@ -141,12 +141,16 @@ static void s_stopped(void)
 		nstate = S_ERROR;
 
 //	else if((!route_finished) && ((button.pin_output == 1) || pick_up_timeout))
-	else if((button.pin_output == 1) || (motion_status == MOT_OFF && timeout_flag))
+//	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (timeout_flag)))
+	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (pick_up_timeout)))
+	{
+		//timeout_flag = 0;
+		pick_up_timeout = 0;
 		// Route not finished (have received a new route and User button pressed
 		// or robot has been waiting too much time for user to pick up his goods.
 		// Restart movement.
 		nstate = S_FLW_LINE;
-
+	}
 	// Else, continue in S_STOPPED
 }
 
@@ -165,6 +169,9 @@ static void s_receive(void)
 
 	if(bluet_status == BLUET_OK)
 	{
+//		route_ptr = route1;// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> remove this
+
+
 		// save route base pointer
 		route_base_ptr = route_ptr;
 
@@ -236,19 +243,20 @@ static void s_rd_rfid(void)
 //	write_led(LBLUE,1);
 //	write_led(LGREEN,1);
 
-	char str[32];
-	snprintf(str, sizeof(str), "LF[%d]ST[%d]\n\r", lfollower_status, stop_detector_status);
-	UART_puts(&bluet_uart, str);
+//	char str[32];
+//	snprintf(str, sizeof(str), "LF[%d]ST[%d]\n\r", lfollower_status, stop_detector_status);
+//	UART_puts(&bluet_uart, str);
 
 	// start movement
 	// wait for RFID read or timeout (POLLING MODE)
 	err = RFID_read(&rfid, RFID_TIMEOUT);
 
-	// stop movement
-	motion_stop();
-	// signal motion off
-	motion_status = MOT_OFF;
-	UART_puts(&bluet_uart, "MotOFF.\n\r");
+//	// stop movement
+//	motion_stop();
+//	// signal motion off
+//	motion_status = MOT_OFF;
+
+//	UART_puts(&bluet_uart, "MotOFF.\n\r");
 
 	// read RFID correctly?
 	if(err == MI_OK)
@@ -264,6 +272,9 @@ static void s_rd_rfid(void)
 		// RFID timeout
 		// continue to error state
 		UART_puts(&bluet_uart, "RFID timeout\n\r");
+
+		// stop movement
+		motion_stop();
 		nstate = S_ERROR;
 	}
 }
@@ -300,8 +311,13 @@ uint8_t stop_func(void)
 	// else, room found
 	// start pick up timeout
 	UART_puts(&bluet_uart,"Room Found.\n\r");
+
 	motion_status = MOT_OFF;
-	timeout_start(PICK_UP_TIMEOUT);
+	// stop movement
+	motion_stop();
+
+//	timeout_start(PICK_UP_TIMEOUT);
+	pick_timeout_ctrl = 1;
 
 	return S_STOPPED;
 }

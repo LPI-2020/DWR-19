@@ -58,18 +58,22 @@ uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 	TM_MFRC522_Status_t status;
 
   	// start timeout
-  	timeout_start(timeout);
+  	//timeout_start(timeout);
+	rfid_timeout_ctrl = 1;
   	write_led(LGREEN, 1);
 
 	do{
 		// check if rfid was read
 		status = TM_MFRC522_Check(rfid->CardID, &rfid->type);
-	} while((status != MI_OK) && (timeout_flag == 0));
+	//} while((status != MI_OK) && (timeout_flag == 0));
+	} while((status != MI_OK) && (rfid_timeout == 0));
 
 	write_led(LGREEN, 0);
-	if(timeout_flag)
+//	if(timeout_flag)
+	if(rfid_timeout)
 	{
-		timeout_flag = 0;
+//		timeout_flag = 0;
+		rfid_timeout = 0;
 		return MI_TIMEOUT;
 	}
 

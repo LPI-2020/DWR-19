@@ -29,8 +29,6 @@ void motion_start(void)
 	// enable Line Follower
 	lfollower_start();
 
-	//HAL_Delay(500);
-
 	// start movement before beeing on Hold
 	if(motion_status == MOT_HOLD)
 	{
@@ -81,8 +79,11 @@ void motion_isr(void)
 
 	if(motion_status == MOT_HOLD)
 	{
-		if(timeout_flag)
+		//if(timeout_flag)
+		if(hold_timeout)
 		{
+			//timeout_flag = 0;
+			hold_timeout = 0;
 			// motion timeout occured
 			motion_status = MOT_TIMEOUT;
 			// stop everything
@@ -93,7 +94,7 @@ void motion_isr(void)
 		{
 			// obstacle has been moved
 			// stop timeout
-			timeout_stop();
+			//timeout_stop();
 			// restart movement
 			motion_start();
 		}
@@ -112,7 +113,8 @@ void motion_isr(void)
 		// if motion is on hold, begin timeout
 		if(motion_status == MOT_HOLD)
 		{
-			timeout_start(HOLD_TIMEOUT);
+//			timeout_start(HOLD_TIMEOUT);
+			hold_timeout_ctrl = 1;
 			motion_stop();
 			return;
 		}
