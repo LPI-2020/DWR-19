@@ -69,7 +69,7 @@ uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 		if(status == MI_OK)
 			// rfid read
 			// converts CardID to an hexadecimal string
-			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->result);
+			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->CardID_str);
 
 	} while((status != MI_OK) && (timeout_flag == 0));
 

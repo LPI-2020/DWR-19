@@ -8,6 +8,8 @@
 
 #include <stdint.h> // using uint8_t
 
+#include "route.h"
+
 /******************************************************************************
 FSM states
 ******************************************************************************/
@@ -32,6 +34,9 @@ FSM Private Defines
 // User button debounce
 #define USER_BTN_PORT	(GPIOC)
 #define USER_BTN_PIN	(GPIO_PIN_8)
+
+extern checkpoint_t route1[4];
+extern checkpoint_t *route_ptr;
 
 /******************************************************************************
 FSM current state pointer

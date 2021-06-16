@@ -26,6 +26,36 @@ Private Defines
 ST_debounce button;
 
 /******************************************************************************
+Route Defines
+******************************************************************************/
+checkpoint_t route1[4] = {
+		{
+			.RFID = "0x034BFC0",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0x034BFC0",
+			.action = ACT_STOP
+		},
+		{
+			.RFID = "0xA31CD60",
+			.action = ACT_LEFT
+		},
+		{
+			.RFID = 0,
+			.action = 0
+		}
+};
+
+//// checkpoint struct definition
+//typedef struct{
+//	uint8_t *RFID;		// RFID: checkpoint unique identifier
+//	move_dir_e dir;			// Direction to take at the checkpoint
+//	move_action_e action;	// Action to execute at the checkpoint
+//} checkpoint_t;
+
+
+/******************************************************************************
 FSM state functions
 ******************************************************************************/
 static void s_stopped(void);
@@ -63,6 +93,9 @@ uint8_t nstate = 0;
 
 // Route finished flag
 uint8_t route_finished = 1;
+
+// Route pointer to the selected route
+checkpoint_t *route_ptr = 0;
 
 // Direction of the next movement at junction
 uint8_t next_move_dir = 0;
@@ -120,17 +153,21 @@ static void s_receive(void)
 	write_led(LBLUE,0);
 	write_led(LGREEN,1);
 
+	// receives and parses commands by uart
+	// if received with success returns 0 (bluet_ok)
 	bluet_receive();
 
 	if(bluet_status == BLUET_OK)
 	{
 		// route received
 		route_finished = 0;
+		// bluetooth ready to receive again
 		bluet_status = BLUET_READY;
 
 		// initialize debounce button and start timer it used in S_STOPPED
 		debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
 
+		// go to S_STOPPED waits for the user_button
 		nstate = S_STOPPED;
 	}
 
@@ -178,7 +215,7 @@ State Read RFID
 // RFID struct
 static rfid_t rfid = {
 		.CardID = {0},
-		.result = 0,
+		.CardID_str = 0,
 		.type = 0
 };
 
@@ -200,8 +237,14 @@ static void s_rd_rfid(void)
 
 	// read RFID correctly?
 	if(err == MI_OK)
+	{
+		char str[16];
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
+
+		snprintf(str, sizeof(str), "RFID: %s\n\r", rfid.CardID_str);
+		UART_puts(&bluet_uart, str);
+	}
 	else
 	{
 		// RFID timeout
@@ -214,25 +257,60 @@ static void s_rd_rfid(void)
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
+uint8_t turn_func(void)
+{
+	// dir = 0 -> move right
+	// dir = 1 -> move left
+	char dir = route_ptr->action;
+
+	dir <<= 1;
+
+	dir -= 1;
+
+	next_move_dir = dir;
+
+	return S_ROTATE;
+}
+
+uint8_t forward_func(void)
+{
+	return S_FLW_LINE;
+}
+
+uint8_t stop_func(void)
+{
+	motion_status = MOT_OFF;
+	timeout_start(PICK_UP_TIMEOUT);
+
+	return S_STOPPED;
+}
+
+uint8_t (*next_move_func [])(void) = {
+	turn_func,
+	turn_func,
+	forward_func,
+	stop_func
+};
+
 static void s_next_mov(void)
 {
 	write_led(LRED,1);
 	write_led(LBLUE,0);
 	write_led(LGREEN,0);
 
-	// imaginando que está no quarto pretendido:
+	// move to the next checkpoint in the route
+	route_ptr++;
 
-//	motion_status = MOT_OFF;
-//	timeout_start(PICK_UP_TIMEOUT);
-//
-//	nstate = S_STOPPED;
-//
-	//-----------------------------
+	if((route_ptr + 1)->RFID == 0)
+	{
+		// verifica se é igual ao da cozinha
+		// else dá a volta
+	}
+	else if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
+		// successfully compared - expected rfid
+		// executes the next move
+		nstate = next_move_func[route_ptr->action]();
 
-
-	next_move_dir = MOVE_LEFT;
-
-	nstate = S_ROTATE;
 }
 
 /******************************************************************************

@@ -149,10 +149,11 @@ char route_sel_cb(uint8_t argc, char** argv)
 		//return (char)(-EINVARG);
 		return (-1);
 
-	// ...select route... do something
-	bluet_status = BLUET_OK;
+	// route selection
+	route_ptr = route1;
 
-//	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
+	// command received with success
+	bluet_status = BLUET_OK;
 
 	return 0;
 }

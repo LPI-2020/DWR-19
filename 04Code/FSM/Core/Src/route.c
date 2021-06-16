@@ -6,8 +6,8 @@
 
 #include "route.h"
 
-#define ROUTES_NUM 3
-
-route_t routes[ROUTES_NUM] = {
-
-};
+//#define ROUTES_NUM 3
+//
+//route_t routes[ROUTES_NUM] = {
+//
+//};

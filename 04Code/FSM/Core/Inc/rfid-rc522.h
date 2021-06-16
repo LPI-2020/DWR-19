@@ -68,7 +68,7 @@ typedef enum {
 typedef struct {
 	uint8_t CardID[4];
 	uint8_t type;
-	char *result;
+	char *CardID_str;
 } rfid_t;
 
 /* MFRC522 Commands */
