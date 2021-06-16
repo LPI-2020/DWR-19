@@ -372,7 +372,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	else if(htim == &TIM_TIMEOUTS)
 	{// enters every 1sec
 		timeout_isr();
-//		write_led(LBLUE, 1);
 	}
 	else if(htim == &TIM_DEBOUNCE)
 	{// user button debounce

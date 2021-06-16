@@ -15,12 +15,11 @@ Timeout TIM - counts 1sec timeouts
 ******************************************************************************/
 #include "tim.h"
 #define TIM_TIMEOUTS	(htim3)
-//#define TIM_TIMEOUTS	(htim14)
 
 /******************************************************************************
 Timeout Status Flag
 ******************************************************************************/
-extern uint8_t timeout_flag;
+extern volatile uint8_t timeout_flag;
 
 /******************************************************************************
 Timeout Functions

@@ -6,6 +6,7 @@
  *  Created on: June 12, 2021
  */
 #include "timeout.h"
+#include "tests.h"
 
 /******************************************************************************
 Timeout Private Defines
@@ -16,8 +17,7 @@ Timeout Private Defines
 /******************************************************************************
 Timeout Flags
 ******************************************************************************/
-uint8_t timeout_flag = 0;
-//static uint8_t timeout_cycles = 0;
+volatile uint8_t timeout_flag = 0;
 
 /******************************************************************************
 Timeout Start
@@ -26,13 +26,9 @@ void timeout_start(int time_sec)
 {
 	// update timeout timer reload
 	if(time_sec > MAX_TIMEOUT)
-	{
-//		TIM_TIMEOUTS.Init.Prescaler = x - 1;
 		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * MAX_TIMEOUT) - 1;
-//		timeout_cycles = time_sec ...
-	}
 	else
-		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec) - 1; // >>>>>>>>>>>>> check this
+		TIM_TIMEOUTS.Init.Period = (PERIOD_1SEC * time_sec) - 1;
 
 	// init Timer
 	if(HAL_TIM_Base_Init(&TIM_TIMEOUTS) != HAL_OK)
@@ -43,6 +39,8 @@ void timeout_start(int time_sec)
 		// init timer ok
 		// reset timeout flag
 		timeout_flag = 0;
+		write_led(LRED, 1);
+		write_led(LBLUE, 1);
 
 		// clear TIM_SR_UIF TIM flag
 		__HAL_TIM_CLEAR_FLAG(&TIM_TIMEOUTS, TIM_SR_UIF);
@@ -57,6 +55,7 @@ Timeout Stop
 void timeout_stop(void)
 {
 	// stop timeout Timer
+	write_led(LRED, 0);
 	HAL_TIM_Base_Stop_IT(&TIM_TIMEOUTS);
 }
 
@@ -65,6 +64,7 @@ Timeout ISR
 ******************************************************************************/
 void timeout_isr(void)
 {
+	toggle_led(LBLUE);
 	// set timeout flag
 	timeout_flag = 1;
 	// stop generating timeouts

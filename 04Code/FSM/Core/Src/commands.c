@@ -151,8 +151,7 @@ char route_sel_cb(uint8_t argc, char** argv)
 
 	// route selection
 	route_ptr = route1;
-
-	route_base_ptr = &route1;
+//	route_base_ptr = &route1;
 
 	// command received with success
 	bluet_status = BLUET_OK;

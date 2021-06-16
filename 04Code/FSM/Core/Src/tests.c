@@ -260,7 +260,7 @@ void test_bluetooth(void)
 /******************************************************************************
 Test modules functions
 ******************************************************************************/
-int test_modules(void)
+void test_modules(void)
 {
 	int err = 0;
 
@@ -289,5 +289,17 @@ int test_modules(void)
 
 //	test_bluetooth();
 
-	return err;
+	switch(err)
+	{
+		case 0:
+			HAL_NVIC_SystemReset();
+			break;
+
+		default:
+			// signal error. Light up RED LED
+			write_led(LRED, 1);
+	}
+
+	while(1)
+		;
 }

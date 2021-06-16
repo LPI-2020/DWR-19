@@ -50,7 +50,7 @@ Define Type of Speed Calculus
 Line Follower Private Flags
 ******************************************************************************/
 // line follower status (enabled 1 or disabled 0)
-static uint8_t lfollower_status = 0;
+volatile uint8_t lfollower_status = 0;
 
 /******************************************************************************
 Line Follower Start
@@ -224,6 +224,7 @@ const static uint8_t lf_sens_str[][3] =
 		"S6",
 		"S8"
 };
+
 void lfollower_print_sens(void)
 {
 	char str[32];

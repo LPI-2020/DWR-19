@@ -30,7 +30,7 @@
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
 #include "tests.h"
-
+#include "rfid-rc522.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,30 +113,16 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
-//  int err = 0;
-//
+//  	state = S_RD_RFID;
+//  	nstate = S_RD_RFID;
 //	while(1)
 //		test_lf_print_qtr();
+  // enable RFID reader
+  RFID_RC522_Init();
   Rx_UART_init(&bluet_uart);
 
   while (1)
   {
-//	err = test_modules();
-//
-//	switch(err)
-//	{
-//		case 0:
-//			HAL_NVIC_SystemReset();
-//			break;
-//
-//		default:
-//			// signal error. Light up RED LED
-//			write_led(LRED, 1);
-//	}
-//
-//	while(1)
-//		;
-
 	  fsm_func_ptr[state]();
 	  state = nstate;
 

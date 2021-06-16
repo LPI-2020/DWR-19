@@ -29,6 +29,7 @@ Define Parameters
 //#define ADC_DISTANCE_LIMIT (1139)
 #define ADC_DISTANCE_LIMIT (2000)
 
+extern volatile uint8_t stop_detector_status;
 /******************************************************************************
 Stop Sensors Errors
 ******************************************************************************/

@@ -23,6 +23,7 @@ Define Line Follower Sensors (using QTR)
 #define LF_SENSOR_CTR_R	(SENSOR4)
 #define LF_SENSOR_CTR_L	(SENSOR5)
 
+extern volatile uint8_t lfollower_status;
 /******************************************************************************
 Line Follower Error Codes
 ******************************************************************************/

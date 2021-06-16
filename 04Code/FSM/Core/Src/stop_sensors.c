@@ -32,13 +32,17 @@ Obstacle Detector variables
 // distance to obstacle (updated by DMA)
 static uint32_t obs_distance = 0;
 // stop detector status
-static uint8_t stop_detector_status = 0;
+volatile uint8_t stop_detector_status = 0;
 
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
 void stop_detector_init(void)
 {
+	if(stop_detector_status)
+		// stop detector already started
+		return;
+
 	// start Obstacle detector ADC DMA
 	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &obs_distance, 1);
 	// stop detector enabled
@@ -47,6 +51,10 @@ void stop_detector_init(void)
 
 void stop_detector_deInit(void)
 {
+	if(stop_detector_status == 0)
+		// stop detector already stopped
+		return;
+
 	// stop Obstacle detector ADC DMA
 	HAL_ADC_Stop_DMA(&OBS_DETECTOR_ADC_DMA);
 	// stop detector disabled
@@ -79,7 +87,7 @@ uint8_t stop_detector_isr()
 	// is stop detector ON?
 	if(stop_detector_status == 0)
 		// return all ok
-		return 0;
+		return EXIT_SUCCESS;
 
 	// ***** Check Stop Marks Detector *****
 	// if SENSOR_L enabled sens = 0000 0001 (1)
@@ -125,7 +133,6 @@ uint8_t stop_detector_isr()
 	if(obs_found_flag)
 		// return obstacle found error
 		return E_ST_OBS_FOUND;
-//		return 0;
 
 	// update sensors value
 	sens_prev = sens;

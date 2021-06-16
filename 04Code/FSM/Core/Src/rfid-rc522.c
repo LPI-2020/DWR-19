@@ -51,30 +51,27 @@ Read RFID (POLLING Mode)
 @para 	rfid struct
 @retval rfid status
 ******************************************************************************/
+#include "tests.h"
 uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 {
 	// RFID status reading
-	uint8_t status = -1;
+	TM_MFRC522_Status_t status;
 
-  	// enable RFID reader
-  	RFID_RC522_Init();
-  	// start 2sec timeout
+  	// start timeout
   	timeout_start(timeout);
+  	write_led(LGREEN, 1);
 
-	do
-	{
+	do{
 		// check if rfid was read
 		status = TM_MFRC522_Check(rfid->CardID, &rfid->type);
-
-		if(status == MI_OK)
-			// rfid read
-			// converts CardID to an hexadecimal string
-			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->CardID_str);
-
 	} while((status != MI_OK) && (timeout_flag == 0));
 
+	write_led(LGREEN, 0);
 	if(timeout_flag)
+	{
+		timeout_flag = 0;
 		return MI_TIMEOUT;
+	}
 
 	// else, stop timeout
 	timeout_stop();
