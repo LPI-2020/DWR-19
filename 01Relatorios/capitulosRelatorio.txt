@@ -1,5 +1,5 @@
 - Introdução
-- Hardware
+- Arquitetura e Modulos Utilizados
 	- Introdução
 		- Diagrama de Sistema
 	- Sensores
@@ -11,13 +11,9 @@
 	- Circuito de alimentação
 		- Bateria, BMS e Step-UP
 
-- FSM
-	- Introdução
-	- Explicação
+- Implementação em Software
+	- Introdução -> Máquina de estados (FSM)
 	- Periféricos
-
-- Software
-	- Introdução
 	- Descrição do SW
 		- Módulos criados
 	- Simulações ?
