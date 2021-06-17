@@ -95,6 +95,7 @@ void motion_isr(void)
 			// obstacle has been moved
 			// stop timeout
 			//timeout_stop();
+			hold_timeout_ctrl = 0;
 			// restart movement
 			motion_start();
 		}

@@ -114,8 +114,7 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
-//  	state = S_FLW_LINE;
-//  	nstate = S_FLW_LINE;
+ 	state = nstate = S_RD_RFID;;
 //	while(1)
 //		test_lf_print_qtr();
   // enable RFID reader

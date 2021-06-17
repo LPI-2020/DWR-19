@@ -132,8 +132,8 @@ uint8_t stop_detector_isr()
 
 	if(obs_found_flag)
 		// return obstacle found error
-		return E_ST_OBS_FOUND;
-//		return 0;
+//		return E_ST_OBS_FOUND;
+		return 0;
 
 	// update sensors value
 	sens_prev = sens;

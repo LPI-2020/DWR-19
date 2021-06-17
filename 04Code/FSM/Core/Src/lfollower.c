@@ -207,6 +207,7 @@ uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout)
 	}
 
 	// stop timeout
+	rotate_timeout_ctrl = 0;
 //	timeout_stop();
 	// if timeout didnt occurred then rotate was completed
 	return EXIT_SUCCESS;

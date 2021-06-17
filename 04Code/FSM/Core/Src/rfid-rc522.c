@@ -65,27 +65,24 @@ uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 	do{
 		// check if rfid was read
 		status = TM_MFRC522_Check(rfid->CardID, &rfid->type);
-	//} while((status != MI_OK) && (timeout_flag == 0));
 	} while((status != MI_OK) && (rfid_timeout == 0));
 
 	write_led(LGREEN, 0);
-//	if(timeout_flag)
+
 	if(rfid_timeout)
 	{
-//		timeout_flag = 0;
 		rfid_timeout = 0;
 		return MI_TIMEOUT;
 	}
 
 	// else, stop timeout
-	timeout_stop();
+	rfid_timeout_ctrl = 0;
 	// return Read status
 	return status;
 }
 
 TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 	TM_MFRC522_Status_t status;
-	//Find cards, return card type
 
 	// REQuest command, Type A. Invites PICCs in state IDLE to go to READY and prepare for anticollision or selection. 7 bit frame.
 	status = TM_MFRC522_Request(PICC_REQIDL, id);
@@ -94,12 +91,12 @@ TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 		//Card detected
 		//Anti-collision, return card serial number 4 bytes
 		status = TM_MFRC522_Anticoll(id);
+
 		//select, return sak and crc
 		status = TM_MFRC522_SelectTag(id, type);
 	}
 
 	TM_MFRC522_Halt();			//Command card into hibernation
-
 	return status;
 }
 
