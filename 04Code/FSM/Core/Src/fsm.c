@@ -33,28 +33,6 @@ debounce_t button;
 /******************************************************************************
 Route Defines
 ******************************************************************************/
-//checkpoint_t route1[4] = {
-//		{
-//			.RFID = "0x034BFC0",
-//			.action = ACT_FORWARD
-//		},
-////		{
-//////			.RFID = "0x034BFC0",
-////			.RFID = "0xa31cd604",
-//////			.action = ACT_STOP
-////			.action = ACT_STOP
-////		},
-//		{
-//			.RFID = "0xA31CD60" ,
-//			.action = ACT_LEFT
-//		},
-//		// end of Checkpoint Array
-//		{
-//			.RFID = 0,
-//			.action = 0
-//		}
-//};
-
 checkpoint_t route1[5] = {
 		{
 			.RFID = "0xc3ed9705",
@@ -114,26 +92,32 @@ uint8_t state = 0;
 // Next FSM state
 uint8_t nstate = 0;
 
-// Route finished flag
-//uint8_t route_finished = 1;
-
 // Route pointer to the selected route
 checkpoint_t *route_ptr = NULL;
 // first rfid
-checkpoint_t *route_base_ptr = NULL;
+static checkpoint_t *route_base_ptr = NULL;
 
 // Direction of the next movement at junction
-uint8_t next_move_dir = 0;
+static uint8_t next_move_dir = 0;
+
 // returning:
 //		+1 - going forward
 // 		-1 - comming back
-uint8_t returning = 1;
+static uint8_t returning = 1;
 
 /******************************************************************************
 State Stopped
 ******************************************************************************/
+const static uint8_t returning_nstate_arr[] =
+{
+		S_ROTATE,
+		S_FLW_LINE
+};
+
 static void s_stopped(void)
 {
+	uint8_t returning_nstate = returning;
+
 //	write_led(LRED,0);
 //	write_led(LBLUE,0);
 //	write_led(LGREEN,0);
@@ -141,8 +125,12 @@ static void s_stopped(void)
 	// stop movement
 	motion_stop();
 
+	// returning_nstate is -1 or +1
+	returning_nstate += 1;
+	returning_nstate >>= 1;
+	// returning_nstate is 0 or +1
+
 	// is there a route available?
-	//if(route_finished)
 	if(route_ptr == NULL)
 	{
 		bluet_receive();
@@ -152,18 +140,14 @@ static void s_stopped(void)
 			nstate = S_RECEIVE;
 	}
 
-	//else if((!obs_found_flag) && (!obs_found_timeout))
-	//else if(motion_status == MOT_ON)
-	//else if((hold_timeout == 0) && (obs_found_flag == 0) && (hold_timeout_ctrl == 1))
 	else if(motion_status == MOT_OK)
 	{
 		// obstacle is not there anymore and timer not finished
 		// restart movement
-
 		nstate = S_FLW_LINE;
 		UART_puts(&bluet_uart,"Restart movement\n\r");
 	}
-	//else if(obs_found_timeout)
+
 	else if(motion_status == MOT_TIMEOUT)
 	{
 		// obstacle has been there for too long
@@ -171,28 +155,23 @@ static void s_stopped(void)
 		nstate = S_ERROR;
 		UART_puts(&bluet_uart,"Obstacle timeout\n\r");
 	}
-//	else if((!route_finished) && ((button.pin_output == 1) || pick_up_timeout))
-//	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (timeout_flag)))
-//	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (pick_up_timeout)))
-//	{
-//		//timeout_flag = 0;
-//		pick_up_timeout = 0;
-//		// Route not finished (have received a new route and User button pressed
-//		// or robot has been waiting too much time for user to pick up his goods.
-//		// Restart movement.
-//		nstate = S_FLW_LINE;
-//	}
+
 	else if(button.pin_output == 1)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> adicionar condiçº~ies
-		nstate = S_FLW_LINE;
+	{
+		pick_num_sec = 0;
+		pick_timeout_ctrl = 0;
+
+		nstate = returning_nstate_arr[returning_nstate];
+	}
 
 	else if((motion_status == MOT_OFF) && (pick_up_timeout))
 	{
+		// Restart movement.
 		pick_up_timeout = 0;
 		UART_puts(&bluet_uart,"Pick up timeout\n\r");
-		// Restart movement.
-		nstate = S_FLW_LINE;
-	}
 
+		nstate = returning_nstate_arr[returning_nstate];
+	}
 
 	// Else, continue in S_STOPPED
 }
@@ -215,8 +194,10 @@ static void s_receive(void)
 		// save route base pointer
 		route_base_ptr = route_ptr;
 
+		// going forward
+		returning = +1;
+
 		// route received
-		//route_finished = 0;
 		// bluetooth ready to receive again
 		bluet_status = BLUET_READY;
 
@@ -251,14 +232,14 @@ static void s_flw_line(void)
 			break;
 
 		case MOT_HOLD:
-			// obstacle found
+			// Obstacle found
 			UART_puts(&bluet_uart,"Obstacle Found\n\r");
 			nstate = S_STOPPED;
 			break;
 
 		case MOT_ERR:
+			// Out of route
 			UART_puts(&bluet_uart,"Out of route\n\r");
-			// out of route
 			nstate = S_ERROR;
 	}
 
@@ -283,20 +264,9 @@ static void s_rd_rfid(void)
 //	write_led(LBLUE,1);
 //	write_led(LGREEN,1);
 
-//	char str[32];
-//	snprintf(str, sizeof(str), "LF[%d]ST[%d]\n\r", lfollower_status, stop_detector_status);
-//	UART_puts(&bluet_uart, str);
-
 	// start movement
 	// wait for RFID read or timeout (POLLING MODE)
 	err = RFID_read(&rfid, RFID_TIMEOUT);
-
-//	// stop movement
-//	motion_stop();
-//	// signal motion off
-//	motion_status = MOT_OFF;
-
-//	UART_puts(&bluet_uart, "MotOFF.\n\r");
 
 	// read RFID correctly?
 	if(err == MI_OK)
@@ -313,8 +283,7 @@ static void s_rd_rfid(void)
 		// continue to error state
 		UART_puts(&bluet_uart, "RFID timeout\n\r");
 
-		// stop movement
-//		motion_stop();
+		// stop movement at S_ERROR
 		nstate = S_ERROR;
 	}
 }
@@ -360,7 +329,6 @@ uint8_t stop_func(void)
 	// stop movement
 	motion_stop();
 
-//	timeout_start(PICK_UP_TIMEOUT);
 	pick_timeout_ctrl = 1;
 
 	return S_STOPPED;
@@ -390,37 +358,12 @@ static void s_next_mov(void)
 	}
 
 	// move to the next checkpoint in route
-	route_ptr += returning;
+	route_ptr += returning * sizeof(checkpoint_t);
 
-	// is this the last RFID in the route?
-//	if((route_ptr + 1)->RFID == 0)
-//	{
-//		// check if this is the route start checkpoint
-//		if(route_ptr != route_base_ptr)
-//		{
-//			// last rfid in the route diferent from the firt rfid
-//			// turns around
-//			next_move_dir = MOVE_LEFT;
-//			// sinalises that the robot is returning to the start point
-//			returning = -1;
-//
-//			UART_puts(&bluet_uart,"Returning to origin\n\r");
-//
-//			nstate = S_ROTATE;
-//		}
-//	}
-	// check if this is the route start checkpoint
-	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
-	{
-		// last rfid in the route diferent from the firt rfid
-		// turns around
-		next_move_dir = MOVE_LEFT;
-		// sinalises that the robot is returning to the start point
-		returning = -1;
-
-		UART_puts(&bluet_uart,"Returning to origin\n\r");
-		nstate = S_ROTATE;
-	}
+	if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
+		// rfid is as expected
+		// execute next move
+		nstate = next_move_func[route_ptr->action]();
 
 	// robot at route start point?
 	else if(route_ptr == route_base_ptr)
@@ -428,20 +371,22 @@ static void s_next_mov(void)
 		// returned to starting point
 		// signal route finished from route_ptr
 		route_ptr = NULL;
-		//route_finished = 1;
 		nstate = S_STOPPED;
 	}
-
-	else if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
-		// rfid is as expected
-		// execute next move
-		nstate = next_move_func[route_ptr->action]();
-
 	else
 	{
 		// detected RFID but there is no match with route
 		UART_puts(&bluet_uart,"RFID not as expected\n\r");
 		nstate = S_ERROR;
+	}
+
+	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
+	{
+		// last rfid in the route diferent from the firt rfid
+		// turns around
+		next_move_dir = MOVE_LEFT;
+		// sinalises that the robot is returning to the start point
+		returning = -1;
 	}
 }
 

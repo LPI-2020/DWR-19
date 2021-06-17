@@ -37,7 +37,6 @@ FSM Private Defines
 
 extern checkpoint_t route1[5];
 extern checkpoint_t *route_ptr;
-//extern checkpoint_t *route_base_ptr;
 
 /******************************************************************************
 FSM current state pointer
