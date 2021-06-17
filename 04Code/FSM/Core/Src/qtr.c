@@ -1,9 +1,12 @@
 #include "qtr.h"
 
+#include "auxiliares.h" // using DIG_TO_ANALOG
+
 /******************************************************************************
 QTR Sensors array
 ******************************************************************************/
-uint32_t qtr_sens[QTR_SENS_NUM];
+// QTR Sensors array
+static uint32_t qtr_sens[QTR_SENS_NUM] = {0};
 
 /******************************************************************************
 QTR init
@@ -27,4 +30,23 @@ QTR kill
 void qtr_kill(void)
 {
 	HAL_ADC_Stop_DMA(&ADC_QTR_DMA);
+}
+
+/******************************************************************************
+QTR Sensor Value
+
+@brief 	Returns QTR sensor digital/analog value
+@param	Sensor
+@retval	Digital/analog value of the requested sensor
+******************************************************************************/
+// QTR get sensor digital value
+uint8_t qtr_get_digital(qtr_e sensor)
+{
+	return (DIG_TO_ANALOG(qtr_sens[sensor]) > ANALOG_HI_VOLT) & 0x01;
+}
+
+// QTR get sensor analog value
+float qtr_get_analog(qtr_e sensor)
+{
+	return (DIG_TO_ANALOG(qtr_sens[sensor]));
 }

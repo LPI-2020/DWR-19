@@ -1,0 +1,23 @@
+Explicar:
+->Sensor de Obstaculos 	      -> DIOGO/TOMAS
+->RFID 			      -> BRUNO/CHICO
+->BLUETOOTH / SPI 	      -> BRUNO/CHICO
+
+->Maquina de estados          -> SIM
+
+DARTE:
+->PID 		              -> NÃO
+
+JOÃO:
+
+->Circuito de Alimentação     -> SIM
+->Parte Mecânica	      	  -> SIM
+->Lista de Componentes	      -> SIM
+
+->Periféricos Utilizados      -> NÃO
+
+->SHIELD		      		  -> NÃO
+->Análise do Produto	      -> NÃO
+
+
+

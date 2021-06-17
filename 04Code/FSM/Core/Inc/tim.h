@@ -34,18 +34,9 @@ extern "C" {
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim6;
-extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim13;
 
 /* USER CODE BEGIN Private defines */
-
-// number of 2second cycles, counted by interrupt
-extern uint8_t num_timeout_2sec;
-
-// Timer used to count 2sec timeouts
-#define TIM_TIMEOUTS	(htim7)
-// timeout 4 seconds == (num_timeout_2sec = 2)
-#define TIMEOUT_4SEC	(3)
-#define TIMEOUT_2SEC	(2)
 
 #define TIMER6_PERIOD (float) 0.01
 /* USER CODE END Private defines */
@@ -53,7 +44,7 @@ extern uint8_t num_timeout_2sec;
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
 void MX_TIM6_Init(void);
-void MX_TIM7_Init(void);
+void MX_TIM13_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
@@ -61,9 +52,6 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 // set PWM htim-channel duty cycle
 void set_pwm(TIM_HandleTypeDef *htim, uint16_t channel, uint16_t dc);
-
-void timeout_start(void);
-void timeout_stop(void);
 
 /* USER CODE END Prototypes */
 

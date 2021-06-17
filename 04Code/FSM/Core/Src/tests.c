@@ -1,10 +1,23 @@
 #include "tests.h"
-#include "stop_sensors.h"
+
+#include "move.h"
 #include "lfollower.h"
+
+#include "stop_sensors.h"
+#include "motion.h"
+
 #include "rfid-rc522.h"
+#include "timeout.h"
+
+#include "debounce.h"
+
+#include "usart.h"
+#include "parser.h"
+#include "commands.h"
 
 #include "stm32f7xx_hal.h"
 
+void test_stop_sensor(void);
 /******************************************************************************
 Test Move module
 ******************************************************************************/
@@ -36,135 +49,259 @@ void test_move(float speed)
 }
 
 /******************************************************************************
+Test debounce module
+******************************************************************************/
+debounce_t button;
+
+#define USER_BTN_PORT	(GPIOC)
+#define USER_BTN_PIN	(GPIO_PIN_8)
+
+void test_debounce(void)
+{
+	debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
+
+//
+//	write_led(LGREEN, 1);
+//	while(button.pin_output == 0)
+//		;
+//
+//	button.pin_output = 0;
+//	write_led(LGREEN, 0);
+	write_led(LBLUE, 0);
+
+	while(1)
+	{
+		if(button.pin_output)
+		{
+			// user button pressed
+			toggle_led(LBLUE);
+			button.pin_output = 0;
+		}
+	}
+
+	debounce_stop();
+}
+
+/******************************************************************************
 Test lineFollower module
 ******************************************************************************/
-void test_print_qtr(void)
+void test_lf_print_qtr(void)
 {
 	lfollower_print_sens();
 	HAL_Delay(300);
 }
 
-int test_lfollower_rotate(move_dir_e dir)
+int test_lf_rotate(move_dir_e dir)
 {
 	uint8_t err;
 
-	// rotate to direction dir
-	err = lfollower_rotate(dir);
+//	write_led(LBLUE, 1);
+	err = lfollower_rotate(dir, 4);
+//	write_led(LBLUE, 0);
 
 	return err;
-	// write LED RED pin if rotate is not completed
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
 }
 
-int test_lfollower_and_rotate(void)
+/******************************************************************************
+Test motion module
+******************************************************************************/
+void test_motion(void)
 {
-	uint8_t err = 0;
+	// start movement
+	motion_start();
 
-	while(err == 0)
-		err = lfollower_control();
+	// while motion is ON
+	while(motion_status == MOT_ON)
+		;
+}
 
-	// signal ERROR found through LED RED
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+void test_motion_rotate(void)
+{
+	// use test_motion()
+	uint16_t led;
 
-	lfollower_start();
-	HAL_Delay(500);
-	lfollower_stop();
+	motion_status = MOT_CROSS_FOUND;
 
-	// rotate to direction dir
-	err = lfollower_rotate(MOVE_LEFT);
+	if(motion_status == MOT_CROSS_FOUND)
+	{
+		led = LBLUE;
 
-	while(err == 0)
-			err = lfollower_control();
+		write_led(LBLUE, 1);
+		motion_start();
 
-	return 0;
-	// write LED RED pin if rotate is not completed
-	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, err & 0x01);
+		HAL_Delay(2000);
+
+		motion_stop();
+		write_led(LBLUE, 0);
+
+		test_lf_rotate(MOVE_LEFT);
+	}
+//	else if(motion_status == MOT_ROOM_FOUND)
+//		// Room found. enable GREEN LED
+//		led = LGREEN;
+	else if(motion_status == MOT_HOLD)
+		// Obstacle found. enable RED LED
+		led = LRED;
+
+	while(1)
+	{
+		toggle_led(led);
+		HAL_Delay(500);
+	}
 }
 
 /******************************************************************************
 Test stop sensors module
 ******************************************************************************/
-int test_stop_sensor()
+void test_stop_sensor(void)
 {
-	lfollower_start();
+	// use test_motion()
 
-	while((!room_found_flag) && (!cross_found_flag))
-		;
+	// motion stopped
+	if(motion_status == MOT_CROSS_FOUND)
+		// Cross found. enable BLUE LED
+		write_led(LBLUE, 1);
+//	else if(motion_status == MOT_ROOM_FOUND)
+//		// Room found. enable GREEN LED
+//		write_led(LGREEN, 1);
+	else if(motion_status == MOT_HOLD)
+		// Obstacle found. enable RED LED
+		write_led(LRED, 1);
+}
 
-	// stop movement
-	lfollower_stop();
+#define OBS_TOO_CLOSE(_dist_, _prev_dist_) (((_dist_) >= ADC_DISTANCE_LIMIT) &&		\
+											((_prev_dist_) >= ADC_DISTANCE_LIMIT))
 
-	if(cross_found_flag)
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 1);
-	else if(room_found_flag)
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
+extern uint32_t obs_distance;
 
-	return 0;
+void test_obs_detector(void)
+{
+	while(1)
+	{
+		stop_detector_print();
+		HAL_Delay(10);
+	}
 }
 
 /******************************************************************************
 Test RFID module
 ******************************************************************************/
-
 rfid_t rfid_test = {
 			.CardID = {0},
-			.result = 0,
+			.CardID_str = 0,
 			.type = 0
 };
 
 int test_rfid(void)
 {
 	uint8_t status = -1;
-	uint8_t err = 0;
 
-	// follow line
-	lfollower_start();
+	// start movement
+	motion_start();
 
-	while((!room_found_flag) && (!cross_found_flag))
+	// while there is no cross
+	while(motion_status != MOT_CROSS_FOUND)
 		;
 
-	// begin RFID read
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 1);
-
-	lfollower_start();
-	status = read_RFID(&rfid_test);
-	lfollower_stop();
+	// begin RFID read. Enable BLUE LED
+	write_led(LBLUE, 1);
+	// read RFID
+	status = RFID_read(&rfid_test, 2);
+	// stop movement
+	motion_stop();
 
 	if(status != MI_OK)
 		return -1;
 
-	// RFID read ok
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 0);
+	// RFID read ok. disable BLUE LED
+	write_led(LBLUE, 0);
+	// init rotate
+	write_led(LGREEN, 1);
+	status = lfollower_rotate(MOVE_LEFT, 4);
+	write_led(LGREEN, 0);
 
-	// else status = MI_OK
-	//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
-	err = lfollower_rotate(MOVE_LEFT);
+	return status;
+}
 
-	return err;
+/******************************************************************************
+Test timeouts
+******************************************************************************/
+void test_timeout(uint8_t sec)
+{
+//	timeout_start(sec);
+//
+//	while(timeout_flag == 0)
+//		;
+
+	toggle_led(LGREEN);
+}
+
+/******************************************************************************
+Test Bluetooth
+******************************************************************************/
+void test_bluetooth(void)
+{
+	if(bluet_uart.Rx_flag)
+	{
+		UART_Receive(&bluet_uart); // Returns received char
+		bluet_uart.Rx_flag = 0;
+	}
+
+	if(cmd_received)
+	{
+		exec_cmd((char *) bluet_uart.Rx_Buffer);
+
+		cmd_received = 0;
+		Rx_UART_init(&bluet_uart); // ready to begin reception
+	}
 }
 
 /******************************************************************************
 Test modules functions
 ******************************************************************************/
-int test_modules(void)
+void test_modules(void)
 {
 	int err = 0;
 
-	//test_move(0.7);
+//	test_move(0.7);
 
-	//while(1)
-		//test_print_qtr();
+//	while(1)
+//		test_lf_print_qtr();
 
-	//lfollower_start();
+//	while(1)
+//		test_timeout(2);
 
-	//err = test_lfollower_rotate(MOVE_RIGHT);
-	//err = test_lfollower_and_rotate();
+//	test_debounce();
 
-	//err = test_stop_sensor(E_ROOM_FOUND);
-	//err = test_stop_sensor(E_CROSS_FOUND);
+//	test_motion();
+//	test_stop_sensor();
 
-	//err = test_rfid();
-	test_stop_sensor();
+//	test_obs_detector(); // lixo
 
-	return err;
+
+//	test_lf_rotate(MOVE_LEFT);
+//	test_motion_rotate();
+
+//	test_motion();
+//	test_stop_sensor();
+//	err = test_rfid();
+
+	while(1)
+		test_obs_detector();
+
+//	test_bluetooth();
+
+	switch(err)
+	{
+		case 0:
+			HAL_NVIC_SystemReset();
+			break;
+
+		default:
+			// signal error. Light up RED LED
+			write_led(LRED, 1);
+	}
+
+	while(1)
+		;
 }

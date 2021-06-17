@@ -23,18 +23,21 @@
 /* USER CODE BEGIN 0 */
 //#include "special_keys.h"
 
-char Rx_Buffer[RX_BUFF_LEN];
-char Tx_Buffer[TX_BUFF_LEN];
-volatile uint8_t Rx_index = 0;
+#define UART_Bluetooth (huart1)
 
-//volatile uint8_t Tx_flag = 0;
-volatile uint8_t Rx_flag = 0;
+uart_t debug_uart = {
+		.uart = &huart3,
+		.Rx_index = 0,
+		.Rx_flag = 0
+};
+
+uart_t bluet_uart = {
+		.uart = &UART_Bluetooth,
+		.Rx_index = 0,
+		.Rx_flag = 0
+};
+
 volatile uint8_t cmd_received = 0;
-
-//volatile uint8_t receiving = 0;
-
-char message[TX_BUFF_LEN];
-volatile uint8_t print_msg_flag = 0;
 
 volatile uint8_t c; // received char
 
@@ -42,7 +45,7 @@ volatile uint8_t c; // received char
 Function prototypes
 ******************************************************************************/
 
-static void process_as_data(void);
+static void process_as_data(uart_t *huart);
 //static char process_as_control(void);
 
 /* USER CODE END 0 */
@@ -230,20 +233,29 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 /******************************************************************************
 @brief	 	 Receives a char by UART serial port
 ******************************************************************************/
-char UART_Receive(void)
+char UART_Receive(uart_t *huart)
 {
-	if(Rx_index == (RX_BUFF_LEN - 1)) // Is the buffer full?
+	if(c != NEW_LINE) // Is this the end of reception?
+		Rx_UART_init(huart); // prepare for next character
+
+	if(huart->Rx_index == (RX_BUFF_LEN - 1)) // Is the buffer full?
 		// Treat as 'CR'
 		c = NEW_LINE;
 	
-	if(c != NEW_LINE) // Is this the end of reception?
-		Rx_UART_init(); // prepare for next character
+//	if(c == 0) // Is the received char a control char?
+//		return (char)(-1);
 	
-	//if(process_as_control() == 0) // Is the received char a control char?
-	//	return (char)(-1);
-	
+	if(c == NEW_LINE)
+	{
+		huart->Rx_Buffer[huart->Rx_index] = 0;	// mark end of string
+		huart->Rx_index = 0;
+		cmd_received = 1;
+		return (char)(-1);
+	}
+
 	// Its not a special character
-	process_as_data();
+	process_as_data(huart);
+
 	return c;
 }
 
@@ -267,8 +279,6 @@ char UART_Receive(void)
 //		}
 //		s_key_ptr++;
 //	}
-//
-//	// Its not a control char. Needs to be processed as data
 //	return (char)(-1);
 //}
 
@@ -278,24 +288,31 @@ char UART_Receive(void)
 @brief	 	 process the char received as a data character
 ******************************************************************************/
 
-static void process_as_data(void)
+static void process_as_data(uart_t *huart)
 {
 	// add received char to Rx_Buffer
-	Rx_Buffer[Rx_index] = c;
-	Rx_index++;
+	huart->Rx_Buffer[huart->Rx_index] = c;
+	huart->Rx_index++;
 }
 
-// set the interrupt for UART3 Rx
-void Rx_UART_init(void)
+// set the interrupt for UART
+void Rx_UART_init(uart_t *huart)
 {
-	HAL_UART_Receive_IT(&huart3, (uint8_t*)&c, 1);
+	HAL_UART_Receive_IT(huart->uart, (uint8_t*)&c, 1);
 }
 
 //implementation of UART ISR
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	if (huart->Instance == USART3) //current UART?
-		Rx_flag = 1;
+	// debug uart
+	if (huart->Instance == debug_uart.uart->Instance)
+		debug_uart.Rx_flag = 1;
+
+	// bluetooth uart
+	else if (huart->Instance == bluet_uart.uart->Instance)
+		bluet_uart.Rx_flag = 1;
+
+//	HAL_UART_Receive_IT(huart, (uint8_t*)&c, 1);
 }
 
 //implementation of UART ISR
@@ -306,38 +323,38 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart)
 //}
 
 /******************************************************************************
-@brief	 	 Sends a char by UART - Polling (Waits for UART_Tx to transmitt 
+@brief	 	 Sends a char by UART - Polling (Waits for UART_Tx to transmit
 							queued data
 @param  	 Char to be transmitted
 ******************************************************************************/
-void UART_putchar(char ch)
+void UART_putchar(uart_t *huart, char ch)
 {
-	while(huart3.gState == HAL_UART_STATE_BUSY_TX) // Waits for UART_Tx to transmitt queued data
+	while(huart->uart->gState == HAL_UART_STATE_BUSY_TX) // Waits for UART_Tx to transmit queued data
 		;
 	
-	c = ch; // 'ch' cannot be used to transmitt since its local to this function. Content may be lost
-	HAL_UART_Transmit_IT(&huart3, (uint8_t*)&c, 1);
+	c = ch; // 'ch' cannot be used to transmit since its local to this function. Content may be lost
+	HAL_UART_Transmit_IT(huart->uart, (uint8_t*)&c, 1);
 }
 
 /******************************************************************************
-@brief	 	 Sends a string by UART - Polling (Waits for UART_Tx to transmitt 
+@brief	 	 Sends a string by UART - Polling (Waits for UART_Tx to transmit
 							queued data
 @param  	 String to be transmitted
 ******************************************************************************/
-void UART_puts(const char *s)
+void UART_puts(uart_t *huart, const char *str)
 {
-	if((s == NULL) || (s[0] == 0))	// string empty?
+	if((str == NULL) || (str[0] == 0))	// string empty?
 		return;
 	
-	int len = strlen(s);
+	int len = strlen(str);
 	if(len > TX_BUFF_LEN)		// string size bigger than the max size of Tx_Buffer?
 		return;
 
-	while(huart3.gState == HAL_UART_STATE_BUSY_TX) // Waits for UART_Tx to transmitt queued data
+	while(huart->uart->gState == HAL_UART_STATE_BUSY_TX) // Waits for UART_Tx to transmit queued data
 		;
 	
-	strcpy(Tx_Buffer, s);	// send string 'str' to 'TX_Buffer'
-	HAL_UART_Transmit_IT(&huart3, (uint8_t*)Tx_Buffer, len);
+	strcpy((char *)huart->Tx_Buffer, str);	// send string 'str' to 'TX_Buffer'
+	HAL_UART_Transmit_IT(huart->uart, (uint8_t*)huart->Tx_Buffer, len);
 }
 
 //void UART_puts(const char *s)

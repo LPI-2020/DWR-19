@@ -20,6 +20,8 @@
 #include <stdlib.h>
 
 #include "tim.h"
+#include "timeout.h"
+
 //SPI_HandleTypeDef SpiHandle = hspi1;
 
 void RFID_RC522_Init(void) {
@@ -43,41 +45,46 @@ void RFID_RC522_Init(void) {
 }
 
 /******************************************************************************
-Read RFID
+Read RFID (POLLING Mode)
 
 @brief 	Reads RFID card
 @para 	rfid struct
 @retval rfid status
 ******************************************************************************/
-uint8_t read_RFID(rfid_t *rfid)
+#include "tests.h"
+uint8_t RFID_read(rfid_t *rfid, uint8_t timeout)
 {
 	// RFID status reading
-	uint8_t status = -1;
+	TM_MFRC522_Status_t status;
 
-  	// enable RFID reader
-  	RFID_RC522_Init();
+  	// start timeout
+  	//timeout_start(timeout);
+	rfid_timeout_ctrl = 1;
+//  	write_led(LGREEN, 1);
 
-	do
-	{
+	do{
 		// check if rfid was read
 		status = TM_MFRC522_Check(rfid->CardID, &rfid->type);
+	} while((status != MI_OK) && (rfid_timeout == 0));
 
-		if(status == MI_OK)
-			// rfid read
-			// converts CardID to an hexadecimal string
-			bin_to_strhex((unsigned char *)rfid->CardID, sizeof(rfid->CardID), &rfid->result);
+//	write_led(LGREEN, 0);
 
-	} while((status != MI_OK) && (num_timeout_2sec < TIMEOUT_2SEC));
-
-	if(num_timeout_2sec < TIMEOUT_4SEC)
+	if(rfid_timeout)
+	{
+		rfid_timeout = 0;
 		return MI_TIMEOUT;
+	}
 
+	// else, stop timeout
+	rfid_timeout_ctrl = 0;
+	rfid_num_sec = 0;
+
+	// return Read status
 	return status;
 }
 
 TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 	TM_MFRC522_Status_t status;
-	//Find cards, return card type
 
 	// REQuest command, Type A. Invites PICCs in state IDLE to go to READY and prepare for anticollision or selection. 7 bit frame.
 	status = TM_MFRC522_Request(PICC_REQIDL, id);
@@ -86,12 +93,12 @@ TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 		//Card detected
 		//Anti-collision, return card serial number 4 bytes
 		status = TM_MFRC522_Anticoll(id);
+
 		//select, return sak and crc
 		status = TM_MFRC522_SelectTag(id, type);
 	}
 
 	TM_MFRC522_Halt();			//Command card into hibernation
-
 	return status;
 }
 

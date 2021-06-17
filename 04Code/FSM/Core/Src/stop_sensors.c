@@ -1,86 +1,67 @@
 /*
  * stop_sensors.c
  *
+ * Stop Sensors
+ *
  *  Created on: May 5, 2021
  */
 #include "stop_sensors.h"
+#include "errors.h"
+#include "auxiliares.h"
 
 /******************************************************************************
 Define Test symbol
 ******************************************************************************/
-//#define _DEBUG_
+#include "usart.h"
+#include <stdio.h>
 
-#ifdef _DEBUG_
-	#include "usart.h"
-	#include <stdio.h>
-#endif // !_DEBUG_
 /******************************************************************************
-Stop Sensors Flags
+Private macros
 ******************************************************************************/
-// Obstacle Found Flag
-uint8_t obs_found_flag = 0;
-// Cross Found Flag
-uint8_t cross_found_flag = 0;
-// Room Found Flag
-uint8_t room_found_flag = 0;
+// returns true if obstacle is closer than ADC_DISTANCE_LIMIT -> obstacle found
+// receives CURRENT distance to obstacle
+#define OBS_TOO_CLOSE(_dist_) ((_dist_) >= ADC_DISTANCE_LIMIT)
+
+/******************************************************************************
+Obstacle Detector variables
+******************************************************************************/
+// distance to obstacle (updated by DMA)
+//static uint32_t obs_distance = 0;
+volatile uint8_t obs_found_flag = 0;
+
+uint32_t obs_distance = 0;
+// stop detector status
+volatile uint8_t stop_detector_status = 0;
 
 /******************************************************************************
 Obstacle Detector
 ******************************************************************************/
-void obs_detector_init(void)
+void stop_detector_init(void)
 {
-	// start Obstacle detector timer
-	HAL_TIM_Base_Start(&OBS_DETECTOR_TIM);
-	// start Obstacle detector ADC
-	HAL_ADC_Start_IT(&OBS_DETECTOR_ADC);
+	if(stop_detector_status)
+		// stop detector already started
+		return;
+
+	// start Obstacle detector ADC DMA
+	HAL_ADC_Start_DMA(&OBS_DETECTOR_ADC_DMA, &obs_distance, 1);
+	// stop detector enabled
+	stop_detector_status = 1;
 }
 
-void obs_detector_deInit(void)
+void stop_detector_deInit(void)
 {
-	// start Obstacle detector timer
-	HAL_TIM_Base_Stop(&OBS_DETECTOR_TIM);
-	// start Obstacle detector ADC
-	HAL_ADC_Stop_IT(&OBS_DETECTOR_ADC);
-}
+	if(stop_detector_status == 0)
+		// stop detector already stopped
+		return;
 
-/******************************************************************************
-Obstacle Detector ISR
-
-- Used in adc.c at void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-  when (hadc->Instance == OBS_DETECTOR_ADC)
-
-- Receives distance to near object by ADC
-- The closer the object is to the sensor, the higher value will be measured
-  by the sensor.
-- ADC_DISTANCE_LIMIT is the limit that defines that an object has been found.
-******************************************************************************/
-void isr_obs_detector(void)
-{
-	// Digital value of distance
-	static uint32_t distance;
-	static uint32_t old_distance = 0;
-
-	// read ADC value
-	distance = HAL_ADC_GetValue(&OBS_DETECTOR_ADC);
-
-	// Obstacle found flag update
-	obs_found_flag = ((distance >= ADC_DISTANCE_LIMIT) &&
-						(old_distance >= ADC_DISTANCE_LIMIT));
-	// update old distance variable
-	old_distance = distance;
-
-#ifdef _DEBUG_
-	//HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // ## debug <- remove this pin
-
-	char str[32];
-	snprintf(str, sizeof(str), "Dist: %d, flag%d\n\r", (int)distance,
-														obs_found_flag);
-	UART_puts(str);
-#endif // !_DEBUG_
+	// stop Obstacle detector ADC DMA
+	HAL_ADC_Stop_DMA(&OBS_DETECTOR_ADC_DMA);
+	// stop detector disabled
+	stop_detector_status = 0;
 }
 
 /******************************************************************************
-Stop Detector
+Stop Detector ISR
 
 @brief 	Detects a cross if both sensors, SENSOR_R and SENSOR_L are over the line.
 		Detects a room if one of the sensors, SENSOR_R or SENSOR_L is over the line.
@@ -91,16 +72,33 @@ Stop Detector
 @param	none
 @retval	none
 ******************************************************************************/
-void stop_detector(void)
+slide_window_t obs_window =
+{
+//		.window 	= 0x0F,
+//		.count1s 	= 4
+		.count1s = 0,
+		.window = 0
+};
+
+uint8_t stop_detector_isr()
 {
 	// previous sensor values
 	static uint8_t sens_prev = 0;
 	// current sensor values
 	uint8_t sens = 0;
 
+	// Digital value of distance
+//	static uint32_t old_obs_distance = 0;
+
+	// is stop detector ON?
+	if(stop_detector_status == 0)
+		// return all ok
+		return EXIT_SUCCESS;
+
+	// ***** Check Stop Marks Detector *****
 	// if SENSOR_L enabled sens = 0000 0001 (1)
 	// if SENSOR_L disabled sens = 0000 0000 (0)
-	sens = GET_SENS_LOGVAL(SENSOR_L);
+	sens = qtr_get_digital(ST_SENSOR_L);
 
 	// rotate left one bit
 	// SENSOR_L enabled: sens = 0000 0010
@@ -110,34 +108,49 @@ void stop_detector(void)
 	// SENSOR_L enabled:
 		// if SENSOR_R enabled sens = 0000 0011 (3)
 		// if SENSOR_R disabled sens = 0000 0010 (2)
-	sens += GET_SENS_LOGVAL(SENSOR_R);
+	sens += qtr_get_digital(ST_SENSOR_R);
 
 	// both sensors enabled
-	if(sens == 3)
-		cross_found_flag = 1;
+	if((sens == sens_prev) && (sens == 3))
+		// return cross found error
+		return E_ST_CROSS_FOUND;
 
-	// current sensors value equal to the previous sensor values
-	// 		and only one sensor enabled
-	else if((sens == sens_prev) && (sens != 0))
-	{
-		room_found_flag = 1;
-		//sens_prev = 0;
-	}
+	// ***** Check Obstacle Detector *****
+	// Obstacle sliding window update
+	sliding_window(OBS_TOO_CLOSE(obs_distance), &obs_window);
 
+	// obstacle found if there is more then 4 detections
+	obs_found_flag = (((6 - obs_window.count1s) >> 7) & 0x01);
+
+	if(obs_found_flag)
+		// return obstacle found error
+		return E_ST_OBS_FOUND;
+//		return 0;
+
+	// update sensors value
 	sens_prev = sens;
+
+	return EXIT_SUCCESS;
 }
 
-///******************************************************************************
-//Cross Detector
-//
-//@brief 	Detects a room if only SENSOR_R is above the line, logical state HIGH
-//		with SENSOR_L at logical state LOW.
-//@param	none
-//@retval	Room found flag
-//******************************************************************************/
-//uint8_t room_detector(void)
-//{
-//	// check if SENSOR_R is over the line (logical state HIGH) and SENSOR_L isnt.
-//	return (room_found_flag = ((GET_SENS_LOGVAL(SENSOR_R) == 1) &&
-//			(GET_SENS_LOGVAL(SENSOR_L) == 0)));
-//}
+void stop_detector_print(void)
+{
+	uint8_t obs_found_flag = 0;
+	char str[32];
+
+	stop_detector_init();
+
+	// Obstacle sliding window update
+	sliding_window(OBS_TOO_CLOSE(obs_distance), &obs_window);
+
+	// obstacle found if there is more then 4 detections
+	obs_found_flag = (((6 - obs_window.count1s) >> 7) & 0x01);
+
+//	snprintf(str, sizeof(str), "Dist: %4d = [%d]\n\r", (int)obs_distance,
+//														obs_found_flag);
+
+	snprintf(str, sizeof(str), "%d\n\r", obs_found_flag);
+	UART_puts(&bluet_uart, str);
+
+	stop_detector_deInit();
+}

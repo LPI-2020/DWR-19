@@ -9,12 +9,20 @@
 #define __MOVE_H__
 
 /******************************************************************************
-Move Directions Enum
+Move Enums
 ******************************************************************************/
 typedef enum {
 	MOVE_RIGHT = -1,
 	MOVE_LEFT = 1
 } move_dir_e;
+
+//typedef enum
+//{
+//	// move
+//	MOVE_FORWARD = 1,
+//	// stop
+//	MOVE_STOP = 2
+//} move_action_e;
 
 /******************************************************************************
 Move Functions

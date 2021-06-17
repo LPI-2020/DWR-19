@@ -68,7 +68,7 @@ typedef enum {
 typedef struct {
 	uint8_t CardID[4];
 	uint8_t type;
-	char *result;
+	char *CardID_str;
 } rfid_t;
 
 /* MFRC522 Commands */
@@ -175,7 +175,7 @@ typedef struct {
 /******************************************************************************
 Read RFID
 ******************************************************************************/
-extern uint8_t read_RFID(rfid_t *rfid);
+extern uint8_t RFID_read(rfid_t *rfid, uint8_t timeout);
 
 /**
  * Initialize MFRC522 RFID reader
