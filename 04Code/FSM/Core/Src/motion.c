@@ -44,7 +44,6 @@ void motion_start(void)
 
 	// start sampling motion sensors
 	HAL_TIM_Base_Start_IT(&TIM_MOTION);
-	//TIM_MOTION.Instance->EGR = TIM_EGR_UG;
 }
 
 void motion_stop(void)
@@ -61,15 +60,17 @@ void motion_stop(void)
 		// stop detectors remain enabled
 		return;
 
+	// disable Stop Detectors
+	stop_detector_deInit();
+
 	// else, stop sampling motion sensors
 	HAL_TIM_Base_Stop_IT(&TIM_MOTION);
 
-	// disable Stop Detectors
-	stop_detector_deInit();
 	// motion OFF
 //	motion_status = MOT_OFF;
 }
 
+#include "tests.h"
 void motion_isr(void)
 {
 	uint8_t err;
@@ -82,12 +83,15 @@ void motion_isr(void)
 		//if(timeout_flag)
 		if(hold_timeout)
 		{
+			write_led(LBLUE, 1);
 			//timeout_flag = 0;
 			hold_timeout = 0;
 			// motion timeout occured
 			motion_status = MOT_TIMEOUT;
+
+
 			// stop everything
-			motion_stop();
+			//motion_stop();
 			return;
 		}
 		if(err == 0)
@@ -95,37 +99,28 @@ void motion_isr(void)
 			// obstacle has been moved
 			// stop timeout
 			//timeout_stop();
+			write_led(LRED, 0);
 			hold_timeout_ctrl = 0;
+			hold_num_sec = 0;
+
+			motion_status = MOT_OK;
 			// restart movement
-			motion_start();
+			//motion_start();
+			return;
 		}
 		else
 			// continue in Hold
 			return;
 	}
-	else if(err)
+	else if(err == E_ST_OBS_FOUND)
 	{
-		// update motion_status
-		// Signal that Motion is stopped due to Stop Mark/Obstacle
-		// err = E_CROSS_FOUND (1) -> motion_status = MOT_CROSS_FOUND (2)
-		// err = E_OBS_FOUND (2) -> motion_status = MOT_HOLD (3)
-		motion_status = err + (MOT_CROSS_FOUND - E_ST_CROSS_FOUND);
-
-		// if motion is on hold, begin timeout
-		if(motion_status == MOT_HOLD)
-		{
-//			timeout_start(HOLD_TIMEOUT);
-			hold_timeout_ctrl = 1;
-			motion_stop();
-			return;
-		}
-
-		// obstacle/stop mark found
-		// stop movement
-//		motion_stop();
-//
-//		return;
+		motion_status = MOT_HOLD;
+		write_led(LRED, 1);
+		hold_timeout_ctrl = 1;
+		return;
 	}
+	else if(err == E_ST_CROSS_FOUND)
+		motion_status = MOT_CROSS_FOUND;
 
 	// line follower ISR
 	// continue to follow line
@@ -137,6 +132,6 @@ void motion_isr(void)
 
 		// error following line
 		// stop movement
-		motion_stop();
+//		motion_stop();
 	}
 }

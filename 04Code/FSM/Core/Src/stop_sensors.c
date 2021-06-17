@@ -7,30 +7,29 @@
  */
 #include "stop_sensors.h"
 #include "errors.h"
+#include "auxiliares.h"
 
 /******************************************************************************
 Define Test symbol
 ******************************************************************************/
-//#define _DEBUG_
-
-#ifdef _DEBUG_
-	#include "usart.h"
-	#include <stdio.h>
-#endif // !_DEBUG_
+#include "usart.h"
+#include <stdio.h>
 
 /******************************************************************************
 Private macros
 ******************************************************************************/
 // returns true if obstacle is closer than ADC_DISTANCE_LIMIT -> obstacle found
-// receives CURRENT distance to obstacle and PREVIOUS distance do obstacle
-#define OBS_TOO_CLOSE(_dist_, _prev_dist_) (((_dist_) >= ADC_DISTANCE_LIMIT) &&		\
-											((_prev_dist_) >= ADC_DISTANCE_LIMIT))
+// receives CURRENT distance to obstacle
+#define OBS_TOO_CLOSE(_dist_) ((_dist_) >= ADC_DISTANCE_LIMIT)
 
 /******************************************************************************
 Obstacle Detector variables
 ******************************************************************************/
 // distance to obstacle (updated by DMA)
-static uint32_t obs_distance = 0;
+//static uint32_t obs_distance = 0;
+volatile uint8_t obs_found_flag = 0;
+
+uint32_t obs_distance = 0;
 // stop detector status
 volatile uint8_t stop_detector_status = 0;
 
@@ -73,6 +72,14 @@ Stop Detector ISR
 @param	none
 @retval	none
 ******************************************************************************/
+slide_window_t obs_window =
+{
+//		.window 	= 0x0F,
+//		.count1s 	= 4
+		.count1s = 0,
+		.window = 0
+};
+
 uint8_t stop_detector_isr()
 {
 	// previous sensor values
@@ -81,8 +88,7 @@ uint8_t stop_detector_isr()
 	uint8_t sens = 0;
 
 	// Digital value of distance
-	static uint32_t old_obs_distance = 0;
-	uint8_t obs_found_flag = 0;
+//	static uint32_t old_obs_distance = 0;
 
 	// is stop detector ON?
 	if(stop_detector_status == 0)
@@ -106,37 +112,45 @@ uint8_t stop_detector_isr()
 
 	// both sensors enabled
 	if((sens == sens_prev) && (sens == 3))
-//	if(sens == 3)
 		// return cross found error
 		return E_ST_CROSS_FOUND;
 
-	// current sensors value equal to the previous sensor values
-	// and only one sensor enabled
-//	else if((sens == sens_prev) && (sens != 0))
-//		// return room found error
-//		return E_ST_ROOM_FOUND;
-
 	// ***** Check Obstacle Detector *****
-	// Obstacle found flag update
-	obs_found_flag = OBS_TOO_CLOSE(obs_distance, old_obs_distance);
+	// Obstacle sliding window update
+	sliding_window(OBS_TOO_CLOSE(obs_distance), &obs_window);
 
-#ifdef _DEBUG_
-	char str[32];
-	snprintf(str, sizeof(str), "Dist: %d, flag%d\n\r", (int)obs_distance,
-														obs_found_flag);
-	UART_puts(str);
-#endif // !_DEBUG_
-
-	// update old distance variable
-	old_obs_distance = obs_distance;
+	// obstacle found if there is more then 4 detections
+	obs_found_flag = (((6 - obs_window.count1s) >> 7) & 0x01);
 
 	if(obs_found_flag)
 		// return obstacle found error
-//		return E_ST_OBS_FOUND;
-		return 0;
+		return E_ST_OBS_FOUND;
+//		return 0;
 
 	// update sensors value
 	sens_prev = sens;
 
 	return EXIT_SUCCESS;
+}
+
+void stop_detector_print(void)
+{
+	uint8_t obs_found_flag = 0;
+	char str[32];
+
+	stop_detector_init();
+
+	// Obstacle sliding window update
+	sliding_window(OBS_TOO_CLOSE(obs_distance), &obs_window);
+
+	// obstacle found if there is more then 4 detections
+	obs_found_flag = (((6 - obs_window.count1s) >> 7) & 0x01);
+
+//	snprintf(str, sizeof(str), "Dist: %4d = [%d]\n\r", (int)obs_distance,
+//														obs_found_flag);
+
+	snprintf(str, sizeof(str), "%d\n\r", obs_found_flag);
+	UART_puts(&bluet_uart, str);
+
+	stop_detector_deInit();
 }

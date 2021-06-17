@@ -7,11 +7,11 @@ Debounce Start
 @param
 @retval	none
 ******************************************************************************/
-void debounce_start(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+void debounce_start(debounce_t *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
 	// initialize sliding window
-	s->window = 0xf;
-	s->count1s = 4;
+	s->sw.window = 0xf;
+	s->sw.count1s = 4;
 
 	s->GPIOx = GPIOx;
 	s->GPIO_Pin = GPIO_Pin;
@@ -42,26 +42,18 @@ Debounce ISR
 @param	none
 @retval	none
 ******************************************************************************/
-static uint8_t debounce(ST_debounce *pb)
+static uint8_t debounce(debounce_t *pb)
 {
 	uint8_t pin_sample;
-	// sample pin - once per interrupt
 
+	// sample pin - once per interrupt
 	pin_sample = HAL_GPIO_ReadPin(pb->GPIOx, pb->GPIO_Pin);
 
-	// refresh count1s
-	// subtract window bit 7 to count1s
-	pb->count1s -= (pb->window >> 7);
-	// add pim_sample
-	pb->count1s += pin_sample;
-
-	// slide window
-	pb->window <<=1;
-	// put pin_sample bit 0 if window
-	pb->window |= pin_sample;
+	// apply sliding window
+	sliding_window(pin_sample, &(pb->sw));
 
 	// verify output
-	return (((4 - pb->count1s) >> 7) & 0x01);
+	return (((4 - pb->sw.count1s) >> 7) & 0x01);
 }
 
 void debounce_isr(void)
@@ -75,16 +67,7 @@ void debounce_isr(void)
 	state = debounce(&button);
 
 	// determine button output
-//	if((pre_state == 0) && (state == 1))
-//		button.pin_output = 0;
-//	if((pre_state == 1) && (state == 0))
-//		button.pin_output = 1;
-	if((pre_state == 0) && (state == 1))
-		button.pin_output = 1;
-	if((pre_state == 1) && (state == 0))
-		button.pin_output = 0;
-
-	//button.pin_output = (state * ((~pre_state) & 0x01));
+	button.pin_output = (state * ((~pre_state) & 0x01));
 
 	// update previous button state
 	pre_state = state;

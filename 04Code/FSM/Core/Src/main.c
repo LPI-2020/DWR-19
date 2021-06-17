@@ -122,6 +122,8 @@ int main(void)
   Rx_UART_init(&bluet_uart);
   timeout_start();
 
+//  test_modules();
+
   while (1)
   {
 	  fsm_func_ptr[state]();

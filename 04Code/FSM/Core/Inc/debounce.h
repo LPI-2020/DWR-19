@@ -8,38 +8,37 @@
 #ifndef __DEBOUNCE_H__
 #define __DEBOUNCE_H__
 
-#include <stdint.h>
-#include "gpio.h"
+#include "auxiliares.h" // using slide_window_t
+#include <stdint.h>		// using uint16_t
 
 /******************************************************************************
 Debounce Peripherals
 ******************************************************************************/
 #include "tim.h"
-//#define TIM_DEBOUNCE		(htim6)
 #define TIM_DEBOUNCE		(htim13)
 
 /******************************************************************************
 Debounce Struct
 ******************************************************************************/
-typedef struct slidewindow
+#include "gpio.h"
+
+typedef struct
 {
-	uint8_t window;			// sliding window
-	uint8_t count1s;		// count 1s in window
+	slide_window_t sw;
 
 	GPIO_TypeDef* GPIOx;	// GPIO button port
 	uint16_t GPIO_Pin;		// GPIO button pin
 
 	uint8_t pin_output;		// button output
-}ST_debounce;
+} debounce_t;
 
-extern ST_debounce button;
+extern debounce_t button;
 /******************************************************************************
 Debounce Functions
 ******************************************************************************/
 // start/stop debounce
-void debounce_start(ST_debounce *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+void debounce_start(debounce_t *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 void debounce_stop(void);
-// debounce ISR
 void debounce_isr(void);
 
 #endif /* __DEBOUNCE_H__ */

@@ -51,7 +51,7 @@ void test_move(float speed)
 /******************************************************************************
 Test debounce module
 ******************************************************************************/
-ST_debounce button;
+debounce_t button;
 
 #define USER_BTN_PORT	(GPIOC)
 #define USER_BTN_PIN	(GPIO_PIN_8)
@@ -60,23 +60,24 @@ void test_debounce(void)
 {
 	debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
 
-	write_led(LGREEN, 1);
-	while(button.pin_output == 0)
-		;
-
-	button.pin_output = 0;
-	write_led(LGREEN, 0);
-//	write_led(LBLUE, 0);
 //
-//	while(1)
-//	{
-//		if(button.pin_output)
-//		{
-//			// user button pressed
-//			toggle_led(LBLUE);
-//			button.pin_output = 0;
-//		}
-//	}
+//	write_led(LGREEN, 1);
+//	while(button.pin_output == 0)
+//		;
+//
+//	button.pin_output = 0;
+//	write_led(LGREEN, 0);
+	write_led(LBLUE, 0);
+
+	while(1)
+	{
+		if(button.pin_output)
+		{
+			// user button pressed
+			toggle_led(LBLUE);
+			button.pin_output = 0;
+		}
+	}
 
 	debounce_stop();
 }
@@ -168,20 +169,18 @@ void test_stop_sensor(void)
 		write_led(LRED, 1);
 }
 
+#define OBS_TOO_CLOSE(_dist_, _prev_dist_) (((_dist_) >= ADC_DISTANCE_LIMIT) &&		\
+											((_prev_dist_) >= ADC_DISTANCE_LIMIT))
+
+extern uint32_t obs_distance;
+
 void test_obs_detector(void)
 {
-	// use test_motion()
-
-	if(motion_status == MOT_HOLD)
-		// obstacle in front
-		write_led(LRED, 1);
-
-	// wait for obstacle to move
-	while(motion_status == MOT_HOLD)
-		;
-
-	// obstacle has been removed
-	write_led(LRED, 0);
+	while(1)
+	{
+		stop_detector_print();
+		HAL_Delay(10);
+	}
 }
 
 /******************************************************************************
@@ -272,7 +271,7 @@ void test_modules(void)
 //	while(1)
 //		test_timeout(2);
 
-	test_debounce();
+//	test_debounce();
 
 //	test_motion();
 //	test_stop_sensor();
@@ -283,9 +282,12 @@ void test_modules(void)
 //	test_lf_rotate(MOVE_LEFT);
 //	test_motion_rotate();
 
-	test_motion();
+//	test_motion();
 //	test_stop_sensor();
-	err = test_rfid();
+//	err = test_rfid();
+
+	while(1)
+		test_obs_detector();
 
 //	test_bluetooth();
 

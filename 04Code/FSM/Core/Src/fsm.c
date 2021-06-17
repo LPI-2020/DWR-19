@@ -28,7 +28,7 @@
 Private Defines
 ******************************************************************************/
 // User button debounce
-ST_debounce button;
+debounce_t button;
 
 /******************************************************************************
 Route Defines
@@ -153,10 +153,13 @@ static void s_stopped(void)
 	}
 
 	//else if((!obs_found_flag) && (!obs_found_timeout))
-	else if(motion_status == MOT_ON)
+	//else if(motion_status == MOT_ON)
+	//else if((hold_timeout == 0) && (obs_found_flag == 0) && (hold_timeout_ctrl == 1))
+	else if(motion_status == MOT_OK)
 	{
 		// obstacle is not there anymore and timer not finished
 		// restart movement
+
 		nstate = S_FLW_LINE;
 		UART_puts(&bluet_uart,"Restart movement\n\r");
 	}
@@ -179,7 +182,7 @@ static void s_stopped(void)
 //		// Restart movement.
 //		nstate = S_FLW_LINE;
 //	}
-	else if(button.pin_output == 1)
+	else if(button.pin_output == 1)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> adicionar condiçº~ies
 		nstate = S_FLW_LINE;
 
 	else if((motion_status == MOT_OFF) && (pick_up_timeout))
@@ -209,9 +212,6 @@ static void s_receive(void)
 
 	if(bluet_status == BLUET_OK)
 	{
-//		route_ptr = route1;// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> remove this
-
-
 		// save route base pointer
 		route_base_ptr = route_ptr;
 
@@ -306,7 +306,6 @@ static void s_rd_rfid(void)
 
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
-//		nstate = S_RD_RFID;
 	}
 	else
 	{
@@ -495,7 +494,8 @@ static void s_error(void)
 
 		snprintf(str, sizeof(str), "RFID '%s'\n\r", (route_ptr - 1)->RFID);
 		UART_puts(&bluet_uart, str);
-	}
+	} else
+		UART_puts(&bluet_uart, "ERROR: ....\n\r");
 
 	while(1)
 		;

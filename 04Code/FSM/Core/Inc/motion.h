@@ -27,6 +27,7 @@ typedef enum
 {
 	MOT_ON = 0,			// Motion ON (moving)
 	MOT_OFF,			// Motion OFF (stopped)
+	MOT_OK,
 
 	MOT_CROSS_FOUND,	// Motion: stopped at a cross
 	MOT_HOLD,			// Motion in Hold (obstacle detected)
