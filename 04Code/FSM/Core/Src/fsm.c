@@ -103,7 +103,7 @@ static uint8_t next_move_dir = 0;
 // returning:
 //		+1 - going forward
 // 		-1 - comming back
-static uint8_t returning = 1;
+static int returning = 1;
 
 /******************************************************************************
 State Stopped
@@ -358,7 +358,7 @@ static void s_next_mov(void)
 	}
 
 	// move to the next checkpoint in route
-	route_ptr += returning * sizeof(checkpoint_t);
+	route_ptr += returning;
 
 	if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
 		// rfid is as expected
