@@ -65,7 +65,7 @@ checkpoint_t route1[5] = {
 			.action = ACT_STOP
 		},
 		{
-			.RFID = "0xA31CD60",
+			.RFID = "0x034bfc03",
 			.action = ACT_LEFT
 		},
 		{
