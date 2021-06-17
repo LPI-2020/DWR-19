@@ -1,0 +1,35 @@
+- Introdução
+- Hardware
+	- Introdução
+		- Diagrama de Sistema
+	- Sensores
+		- QTR, Sensor de obstáculos
+	- Driver
+	- Módulos
+		- Bluetooth, RFID
+	- STM, shield
+	- Circuito de alimentação
+		- Bateria, BMS e Step-UP
+
+- FSM
+	- Introdução
+	- Explicação
+	- Periféricos
+
+- Software
+	- Introdução
+	- Descrição do SW
+		- Módulos criados
+	- Simulações ?
+
+- Lista de componentes
+- Circuito mecânico
+- Resultados Experimentais
+- Análise do produto
+	- Certificação
+	- ...
+
+- Conclusão
+- Referências
+
+

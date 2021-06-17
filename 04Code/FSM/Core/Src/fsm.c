@@ -55,7 +55,7 @@ Route Defines
 //		}
 //};
 
-checkpoint_t route1[4] = {
+checkpoint_t route1[5] = {
 		{
 			.RFID = "0xc3ed9705",
 			.action = ACT_FORWARD
@@ -248,7 +248,6 @@ static void s_flw_line(void)
 			// Cross Found
 			UART_puts(&bluet_uart,"Cross Found\n\r");
 			nstate = S_RD_RFID;
-//			nstate = S_ROTATE;
 			break;
 
 		case MOT_HOLD:
@@ -306,8 +305,8 @@ static void s_rd_rfid(void)
 		bin_to_strhex((unsigned char *)rfid.CardID, sizeof(rfid.CardID), &rfid.CardID_str);
 
 		// calculate next movement on the route
-//		nstate = S_NEXT_MOV;
-		nstate = S_RD_RFID;
+		nstate = S_NEXT_MOV;
+//		nstate = S_RD_RFID;
 	}
 	else
 	{
