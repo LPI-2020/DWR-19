@@ -62,20 +62,19 @@ Timeout Stop
 void timeout_stop(void)
 {
 	// stop timeout Timer
-	write_led(LRED, 0);
 	HAL_TIM_Base_Stop_IT(&TIM_TIMEOUTS);
 }
 
 /******************************************************************************
 Timeout ISR
 ******************************************************************************/
-volatile uint8_t num_sec = 0;
+//volatile uint8_t num_sec = 0;
 volatile uint8_t 	rfid_timeout = 0,
 					rotate_timeout = 0,
 					pick_up_timeout = 0,
 					hold_timeout = 0;
 
-uint8_t rfid_timeout_ctrl = 0,
+volatile uint8_t rfid_timeout_ctrl = 0,
 		rotate_timeout_ctrl = 0,
 		pick_timeout_ctrl = 0,
 		hold_timeout_ctrl = 0;
@@ -88,13 +87,15 @@ volatile uint8_t rfid_num_sec = 0,
 void timeout_isr(void)
 {
 //	num_sec++;
-	rfid_num_sec += rfid_timeout_ctrl;
-	rotate_num_sec += rotate_timeout_ctrl;
-	pick_num_sec += pick_timeout_ctrl;
-	hold_num_sec += hold_timeout_ctrl;
+	rfid_num_sec 	+= rfid_timeout_ctrl;
+	rotate_num_sec 	+= rotate_timeout_ctrl;
+	pick_num_sec 	+= pick_timeout_ctrl;
+	hold_num_sec	+= hold_timeout_ctrl;
 
 	if(rfid_num_sec == RFID_TIMEOUT)
 	{
+		write_led(LBLUE, 1);
+
 		rfid_timeout = 1;
 		rfid_num_sec = 0;
 		rfid_timeout_ctrl = 0;
@@ -120,11 +121,4 @@ void timeout_isr(void)
 		hold_num_sec = 0;
 		hold_timeout_ctrl = 0;
 	}
-
-//
-//	toggle_led(LBLUE);
-//	// set timeout flag
-//	timeout_flag = 1;
-//	// stop generating timeouts
-//	timeout_stop();
 }

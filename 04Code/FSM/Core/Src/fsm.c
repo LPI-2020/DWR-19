@@ -33,19 +33,44 @@ ST_debounce button;
 /******************************************************************************
 Route Defines
 ******************************************************************************/
+//checkpoint_t route1[4] = {
+//		{
+//			.RFID = "0x034BFC0",
+//			.action = ACT_FORWARD
+//		},
+////		{
+//////			.RFID = "0x034BFC0",
+////			.RFID = "0xa31cd604",
+//////			.action = ACT_STOP
+////			.action = ACT_STOP
+////		},
+//		{
+//			.RFID = "0xA31CD60" ,
+//			.action = ACT_LEFT
+//		},
+//		// end of Checkpoint Array
+//		{
+//			.RFID = 0,
+//			.action = 0
+//		}
+//};
+
 checkpoint_t route1[4] = {
 		{
-			.RFID = "0x034BFC0",
+			.RFID = "0xc3ed9705",
 			.action = ACT_FORWARD
 		},
 		{
-//			.RFID = "0x034BFC0",
 			.RFID = "0xa31cd604",
 			.action = ACT_STOP
 		},
 		{
-			.RFID = "0xA31CD60" ,
+			.RFID = "0xA31CD60",
 			.action = ACT_LEFT
+		},
+		{
+			.RFID = "0x53fde405",
+			.action = ACT_STOP
 		},
 		// end of Checkpoint Array
 		{
@@ -53,7 +78,6 @@ checkpoint_t route1[4] = {
 			.action = 0
 		}
 };
-
 /******************************************************************************
 FSM state functions
 ******************************************************************************/
@@ -130,27 +154,43 @@ static void s_stopped(void)
 
 	//else if((!obs_found_flag) && (!obs_found_timeout))
 	else if(motion_status == MOT_ON)
+	{
 		// obstacle is not there anymore and timer not finished
 		// restart movement
 		nstate = S_FLW_LINE;
-
+		UART_puts(&bluet_uart,"Restart movement\n\r");
+	}
 	//else if(obs_found_timeout)
 	else if(motion_status == MOT_TIMEOUT)
+	{
 		// obstacle has been there for too long
 		// continue to error state
 		nstate = S_ERROR;
-
+		UART_puts(&bluet_uart,"Obstacle timeout\n\r");
+	}
 //	else if((!route_finished) && ((button.pin_output == 1) || pick_up_timeout))
 //	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (timeout_flag)))
-	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (pick_up_timeout)))
+//	else if((button.pin_output == 1) || ((motion_status == MOT_OFF) && (pick_up_timeout)))
+//	{
+//		//timeout_flag = 0;
+//		pick_up_timeout = 0;
+//		// Route not finished (have received a new route and User button pressed
+//		// or robot has been waiting too much time for user to pick up his goods.
+//		// Restart movement.
+//		nstate = S_FLW_LINE;
+//	}
+	else if(button.pin_output == 1)
+		nstate = S_FLW_LINE;
+
+	else if((motion_status == MOT_OFF) && (pick_up_timeout))
 	{
-		//timeout_flag = 0;
 		pick_up_timeout = 0;
-		// Route not finished (have received a new route and User button pressed
-		// or robot has been waiting too much time for user to pick up his goods.
+		UART_puts(&bluet_uart,"Pick up timeout\n\r");
 		// Restart movement.
 		nstate = S_FLW_LINE;
 	}
+
+
 	// Else, continue in S_STOPPED
 }
 
@@ -208,6 +248,7 @@ static void s_flw_line(void)
 			// Cross Found
 			UART_puts(&bluet_uart,"Cross Found\n\r");
 			nstate = S_RD_RFID;
+//			nstate = S_ROTATE;
 			break;
 
 		case MOT_HOLD:
@@ -265,7 +306,8 @@ static void s_rd_rfid(void)
 		bin_to_strhex((unsigned char *)rfid.CardID, sizeof(rfid.CardID), &rfid.CardID_str);
 
 		// calculate next movement on the route
-		nstate = S_NEXT_MOV;
+//		nstate = S_NEXT_MOV;
+		nstate = S_RD_RFID;
 	}
 	else
 	{
@@ -274,7 +316,7 @@ static void s_rd_rfid(void)
 		UART_puts(&bluet_uart, "RFID timeout\n\r");
 
 		// stop movement
-		motion_stop();
+//		motion_stop();
 		nstate = S_ERROR;
 	}
 }
@@ -292,6 +334,10 @@ uint8_t turn_func(void)
 	dir -= 1;
 
 	next_move_dir = dir * returning;
+
+	char str[32];
+	snprintf(str, sizeof(str), "Change to dir[%d].\n\r", next_move_dir);
+	UART_puts(&bluet_uart, str);
 
 	return S_ROTATE;
 }
@@ -339,6 +385,7 @@ static void s_next_mov(void)
 	if((route_ptr == NULL) || (route_base_ptr == NULL))
 	{
 		UART_puts(&bluet_uart,"Route not defined.\n\r");
+
 		// avoid bad memory access
 		nstate = S_ERROR;
 		return;
@@ -348,22 +395,35 @@ static void s_next_mov(void)
 	route_ptr += returning;
 
 	// is this the last RFID in the route?
-	if((route_ptr + 1)->RFID == 0)
+//	if((route_ptr + 1)->RFID == 0)
+//	{
+//		// check if this is the route start checkpoint
+//		if(route_ptr != route_base_ptr)
+//		{
+//			// last rfid in the route diferent from the firt rfid
+//			// turns around
+//			next_move_dir = MOVE_LEFT;
+//			// sinalises that the robot is returning to the start point
+//			returning = -1;
+//
+//			UART_puts(&bluet_uart,"Returning to origin\n\r");
+//
+//			nstate = S_ROTATE;
+//		}
+//	}
+	// check if this is the route start checkpoint
+	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
 	{
-		// check if this is the route start checkpoint
-		if(route_ptr != route_base_ptr)
-		{
-			// last rfid in the route diferent from the firt rfid
-			// turns around
-			next_move_dir = MOVE_LEFT;
-			// sinalises that the robot is returning to the start point
-			returning = -1;
+		// last rfid in the route diferent from the firt rfid
+		// turns around
+		next_move_dir = MOVE_LEFT;
+		// sinalises that the robot is returning to the start point
+		returning = -1;
 
-			UART_puts(&bluet_uart,"Return to origin\n\r");
-
-			nstate = S_ROTATE;
-		}
+		UART_puts(&bluet_uart,"Returning to origin\n\r");
+		nstate = S_ROTATE;
 	}
+
 	// robot at route start point?
 	else if(route_ptr == route_base_ptr)
 	{
@@ -398,6 +458,8 @@ static void s_rotate(void)
 //	write_led(LBLUE,0);
 //	write_led(LGREEN,1);
 
+	motion_stop();
+
 	// rotate to direction 'next_move_dir' (POLLING MODE)
 	err = lfollower_rotate(next_move_dir, ROTATE_TIMEOUT);
 
@@ -423,15 +485,20 @@ static void s_error(void)
 //	write_led(LBLUE,1);
 //	write_led(LGREEN,0);
 
-
+	// stop movement
+	motion_stop();
 
 	// send error messages
-	// ...
+	if((route_ptr != NULL) && ((route_ptr - 1) >= route_base_ptr))
+	{
+		char str[32];
+		UART_puts(&bluet_uart, "ERROR: last known location:\n\r");
 
-//	if(error_timeout)
-//	{
-//		// shutdown robot
-//		// ????
-//	}
+		snprintf(str, sizeof(str), "RFID '%s'\n\r", (route_ptr - 1)->RFID);
+		UART_puts(&bluet_uart, str);
+	}
+
+	while(1)
+		;
 }
 
