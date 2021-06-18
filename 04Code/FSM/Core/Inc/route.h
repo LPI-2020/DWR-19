@@ -8,9 +8,6 @@
 #ifndef __ROUTE_H__
 #define __ROUTE_H__
 
-#include "stdint.h" // using uint8_t
-#include "move.h"	// using move enums
-
 /******************************************************************************
 Route Definition
 ******************************************************************************/
@@ -25,7 +22,6 @@ typedef enum{
 // checkpoint struct definition
 typedef struct{
 	char *RFID;			// RFID: checkpoint unique identifier
-//	move_dir_e dir;			// Direction to take at the checkpoint
 	action_e action;	// Action to execute at the checkpoint
 } checkpoint_t;
 
