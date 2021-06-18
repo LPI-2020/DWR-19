@@ -15,7 +15,6 @@
 "Core/Src/pid.o"
 "Core/Src/qtr.o"
 "Core/Src/rfid-rc522.o"
-"Core/Src/route.o"
 "Core/Src/spi.o"
 "Core/Src/stm32f7xx_hal_msp.o"
 "Core/Src/stm32f7xx_it.o"

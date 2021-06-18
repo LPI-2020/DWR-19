@@ -1,24 +1,29 @@
 - Introdução
 - Arquitetura e Modulos Utilizados
-	- Introdução
-		- Diagrama de Sistema
-	- Sensores
-		- QTR, Sensor de obstáculos
-	- Driver
+DONE	- Introdução
+DONE		- Diagrama de Sistema
+DONE	- Sensores
+DONE		- QTR, Sensor de obstáculos
+DONE	- Driver
 	- Módulos
 		- Bluetooth, RFID
 	- STM, shield
-	- Circuito de alimentação
-		- Bateria, BMS e Step-UP
+DONE	- Circuito de alimentação
+DONE		- Bateria, BMS e Step-UP
 
 - Implementação em Software
-	- Introdução -> Máquina de estados (FSM)
+	- Introdução 
+		- Máquina de estados (FSM)
 	- Periféricos
 	- Descrição do SW
 		- Módulos criados
+		- Controlador
+			- Introdução ao PID
+			- O que é um controlador
+			- Algoritmo PID
 	- Simulações ?
 
-- Lista de componentes
+DONE- Lista de componentes
 - Circuito mecânico
 - Resultados Experimentais
 - Análise do produto
