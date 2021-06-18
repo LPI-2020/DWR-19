@@ -22,6 +22,7 @@ Define Motors in use
 ******************************************************************************/
 // Right Motor Struct
 static motor_st motor_right = {
+	.htim			= &PWM_TIM_INSTANCE,
 	.pwm_channel 	= PWM_R_TIM_CHANNEL,
 
 	.GPIO_port_IN1 	= IN1_RIGHT_GPIO_Port,
@@ -33,6 +34,7 @@ static motor_st motor_right = {
 
 // Left Motor Struct
 static motor_st motor_left = {
+	.htim			= &PWM_TIM_INSTANCE,
 	.pwm_channel 	= PWM_L_TIM_CHANNEL,
 
 	.GPIO_port_IN1 	= IN1_LEFT_GPIO_Port,

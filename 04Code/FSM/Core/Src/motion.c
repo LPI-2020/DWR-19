@@ -48,10 +48,6 @@ void motion_start(void)
 
 void motion_stop(void)
 {
-//	if(motion_status == MOT_OFF)
-//		// already stopped
-//		return;
-
 	// disable Line Follower
 	lfollower_stop();
 
@@ -65,9 +61,6 @@ void motion_stop(void)
 
 	// else, stop sampling motion sensors
 	HAL_TIM_Base_Stop_IT(&TIM_MOTION);
-
-	// motion OFF
-//	motion_status = MOT_OFF;
 }
 
 #include "tests.h"
@@ -80,45 +73,40 @@ void motion_isr(void)
 
 	if(motion_status == MOT_HOLD)
 	{
-		//if(timeout_flag)
+		// obstacle timeout?
 		if(hold_timeout)
 		{
-			write_led(LBLUE, 1);
 			//timeout_flag = 0;
 			hold_timeout = 0;
 			// motion timeout occured
 			motion_status = MOT_TIMEOUT;
-
-
-			// stop everything
-			//motion_stop();
 			return;
 		}
+		// obstacle not there?
 		if(err == 0)
 		{
 			// obstacle has been moved
 			// stop timeout
-			//timeout_stop();
-			write_led(LRED, 0);
 			hold_timeout_ctrl = 0;
 			hold_num_sec = 0;
 
-			motion_status = MOT_OK;
 			// restart movement
-			//motion_start();
+			motion_status = MOT_OK;
 			return;
 		}
-		else
-			// continue in Hold
-			return;
+
+		// continue in Hold
+		return;
 	}
+	// obstacle detected?
 	else if(err == E_ST_OBS_FOUND)
 	{
 		motion_status = MOT_HOLD;
-		write_led(LRED, 1);
+		// start timeout
 		hold_timeout_ctrl = 1;
 		return;
 	}
+	// cross detected?
 	else if(err == E_ST_CROSS_FOUND)
 		motion_status = MOT_CROSS_FOUND;
 
@@ -126,12 +114,6 @@ void motion_isr(void)
 	// continue to follow line
 	err = lfollower_isr();
 	if(err)
-	{
 		// signal motion error
 		motion_status = MOT_ERR;
-
-		// error following line
-		// stop movement
-//		motion_stop();
-	}
 }

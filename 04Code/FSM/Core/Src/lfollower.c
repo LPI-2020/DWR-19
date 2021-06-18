@@ -21,10 +21,10 @@ Define Debug Symbol
 #include "usart.h" // debug
 #include <stdio.h>
 #endif // !_DEBUG_
+
 /******************************************************************************
 Define Move Speeds (from 0 to 1)
 ******************************************************************************/
-//#define FORWARD_SPEED 	(float)(0.65)
 #define FORWARD_SPEED 	(float)(0.68)
 #define TURN_SPEED 		(float)(0.75)
 
@@ -137,17 +137,17 @@ uint8_t lfollower_isr(void)
 		// line follower is disabled
 		return E_LF_OFF;
 
-//	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
-//		(qtr_get_digital(LF_SENSOR_CTR_L) == 0) &&
-//		(qtr_get_digital(LF_SENSOR_L) == 0) &&
-//		(qtr_get_digital(LF_SENSOR_R) == 0))
-//	{
-//		// robot is not over the line
-//		// stop line follower
-//		lfollower_stop();
-//		// send error: no line to follow
-//		return E_LF_NO_LINE;
-//	}
+	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
+		(qtr_get_digital(LF_SENSOR_CTR_L) == 0) &&
+		(qtr_get_digital(LF_SENSOR_L) == 0) &&
+		(qtr_get_digital(LF_SENSOR_R) == 0))
+	{
+		// robot is not over the line
+		// stop line follower
+		lfollower_stop();
+		// send error: no line to follow
+		return E_LF_NO_LINE;
+	}
 
 	// else, robot over the line
 	// use PID to obtain PWM values to use on motors
@@ -167,12 +167,11 @@ Line Follower Rotate
 @param	dir - direction to rotate
 @retval '1' if timeout occured
 ******************************************************************************/
-uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout)
+uint8_t lfollower_rotate(move_dir_e dir)
 {
 	// start movement and rotate to 'dir' at speed equal to TURN_SPEED
 	move_rotate(dir, TURN_SPEED);
 	// start rotate 4second timeout
-//	timeout_start(timeout);
 	rotate_timeout_ctrl = 1;
 	// start storing QTR sensor values
 	qtr_init();
@@ -198,8 +197,6 @@ uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout)
 
 	// if timeout occured, then we must return an error code, signaling a
 	// non successful rotate
-	//if(num_timeout_2sec < TIMEOUT_4SEC)
-	//if(timeout_flag)
 	if(rotate_timeout)
 	{
 		rotate_timeout = 0;
@@ -209,7 +206,6 @@ uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout)
 	// stop timeout
 	rotate_timeout_ctrl = 0;
 	rotate_num_sec = 0;
-//	timeout_stop();
 	// if timeout didnt occurred then rotate was completed
 	return EXIT_SUCCESS;
 }

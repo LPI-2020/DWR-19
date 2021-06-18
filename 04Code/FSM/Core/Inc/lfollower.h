@@ -35,13 +35,9 @@ Line Follower Functions
 ******************************************************************************/
 void lfollower_start(void);
 void lfollower_stop(void);
-uint8_t lfollower_isr();
 
-uint8_t lfollower_rotate(move_dir_e dir, uint8_t timeout);
-/******************************************************************************
-Debug Functions
-******************************************************************************/
-// print line follower sensors values
+uint8_t lfollower_isr();
+uint8_t lfollower_rotate(move_dir_e dir);
 void lfollower_print_sens(void);
 
 #endif // !__LFOLLOWER_H__

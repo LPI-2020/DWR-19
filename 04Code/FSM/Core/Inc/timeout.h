@@ -16,16 +16,14 @@ Timeout TIM - counts 1sec timeouts
 #include "tim.h"
 #define TIM_TIMEOUTS	(htim3)
 
-/******************************************************************************
-Timeout Status Flag
-******************************************************************************/
-//extern volatile uint8_t timeout_flag;
-
 #define RFID_TIMEOUT		3	// RFID timeout time
 #define ROTATE_TIMEOUT		4	// rotate timeout time
 #define PICK_UP_TIMEOUT 	5	// Pick up (of the object in each room) timeout time
 #define HOLD_TIMEOUT		5
 
+/******************************************************************************
+Timeout Status Flags
+******************************************************************************/
 extern volatile uint8_t 	rfid_timeout,
 							rotate_timeout,
 							pick_up_timeout,
@@ -44,7 +42,6 @@ extern volatile uint8_t rfid_num_sec,
 /******************************************************************************
 Timeout Functions
 ******************************************************************************/
-//void timeout_start(int time_sec);
 void timeout_start(void);
 void timeout_stop(void);
 void timeout_isr(void);

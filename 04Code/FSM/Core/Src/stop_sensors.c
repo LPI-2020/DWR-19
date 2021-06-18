@@ -7,10 +7,11 @@
  */
 #include "stop_sensors.h"
 #include "errors.h"
+
 #include "auxiliares.h"
 
 /******************************************************************************
-Define Test symbol
+Define Test symbols
 ******************************************************************************/
 #include "usart.h"
 #include <stdio.h>
@@ -26,10 +27,11 @@ Private macros
 Obstacle Detector variables
 ******************************************************************************/
 // distance to obstacle (updated by DMA)
-//static uint32_t obs_distance = 0;
+uint32_t obs_distance = 0;
+
+// obstacle found flag
 volatile uint8_t obs_found_flag = 0;
 
-uint32_t obs_distance = 0;
 // stop detector status
 volatile uint8_t stop_detector_status = 0;
 
@@ -87,9 +89,6 @@ uint8_t stop_detector_isr()
 	// current sensor values
 	uint8_t sens = 0;
 
-	// Digital value of distance
-//	static uint32_t old_obs_distance = 0;
-
 	// is stop detector ON?
 	if(stop_detector_status == 0)
 		// return all ok
@@ -125,7 +124,6 @@ uint8_t stop_detector_isr()
 	if(obs_found_flag)
 		// return obstacle found error
 		return E_ST_OBS_FOUND;
-//		return 0;
 
 	// update sensors value
 	sens_prev = sens;

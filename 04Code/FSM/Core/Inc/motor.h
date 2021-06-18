@@ -8,24 +8,15 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
-/******************************************************************************
-Define PWM TIM Instance and Channels to be used
-******************************************************************************/
-#include "tim.h"
-#define PWM_TIM_INSTANCE 	(htim4)
-
-// Define Right Motor PWM TIM channel
-#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_3)
-
-// Define Left Motor PWM TIM channel
-#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_4)
+#include "stm32f7xx_hal.h"
 
 /******************************************************************************
 Motor Struct
 ******************************************************************************/
 typedef struct
 {
-	const uint8_t pwm_channel;		// Motor pwm channel
+	TIM_HandleTypeDef* htim;	// Motor pwm TIM instance
+	uint8_t pwm_channel;		// Motor pwm channel
 
 	GPIO_TypeDef *GPIO_port_IN1;	// Motor GPIO Port1
 	uint16_t GPIO_pin_IN1;			// Motor GPIO Pin1
@@ -48,7 +39,6 @@ Motor Functions
 ******************************************************************************/
 void motor_init(motor_st *m);
 void motor_kill(motor_st *m);
-
 void motor_control(motor_st *m,  uint8_t dc, motor_dir_e dir);
 
 /******************************************************************************

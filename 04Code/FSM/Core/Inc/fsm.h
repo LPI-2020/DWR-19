@@ -26,11 +26,6 @@ FSM states
 /******************************************************************************
 FSM Private Defines
 ******************************************************************************/
-// timeouts in seconds
-//#define RFID_TIMEOUT	2	// RFID timeout time
-//#define ROTATE_TIMEOUT	4	// rotate timeout time
-//#define PICK_UP_TIMEOUT 20	// Pick up (of the object in each room) timeout time
-
 // User button debounce
 #define USER_BTN_PORT	(GPIOC)
 #define USER_BTN_PIN	(GPIO_PIN_8)

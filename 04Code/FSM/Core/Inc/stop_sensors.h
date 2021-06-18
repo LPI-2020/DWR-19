@@ -21,21 +21,21 @@ Define Parameters
 #include "qtr.h"
 
 // Stop Detector RIGHT sensor
-#define ST_SENSOR_R		(SENSOR1)
+#define ST_SENSOR_R			(SENSOR1)
 // Stop Detector LEFT sensor
-#define ST_SENSOR_L		(SENSOR8)
+#define ST_SENSOR_L			(SENSOR8)
 
 // Obstacle Detector Limit = Digital value of 30 cm
 //#define ADC_DISTANCE_LIMIT (1139)
-#define ADC_DISTANCE_LIMIT (2000)
-//#define ADC_DISTANCE_LIMIT (7000)
+#define ADC_DISTANCE_LIMIT 	(2000)
 
 extern volatile uint8_t stop_detector_status;
 extern volatile uint8_t obs_found_flag;
+
 /******************************************************************************
 Stop Sensors Errors
 ******************************************************************************/
-#define E_ST_CROSS_FOUND	1	// error cross found
+#define E_ST_CROSS_FOUND	1		// error cross found
 #define E_ST_OBS_FOUND		2		// error obstacle found
 
 /******************************************************************************

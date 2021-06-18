@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define IN1_LEFT_GPIO_Port GPIOA
 #define DEBUG_LGREEN_Pin GPIO_PIN_0
 #define DEBUG_LGREEN_GPIO_Port GPIOB
+#define BUZZER_Pin GPIO_PIN_1
+#define BUZZER_GPIO_Port GPIOB
 #define DEBUG_LRED_Pin GPIO_PIN_14
 #define DEBUG_LRED_GPIO_Port GPIOB
 #define BLUET_RX_Pin GPIO_PIN_15
