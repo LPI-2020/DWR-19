@@ -17,9 +17,9 @@ Timeout TIM - counts 1sec timeouts
 #define TIM_TIMEOUTS	(htim3)
 
 #define RFID_TIMEOUT		3	// RFID timeout time
-#define ROTATE_TIMEOUT		4	// rotate timeout time
-#define PICK_UP_TIMEOUT 	5	// Pick up (of the object in each room) timeout time
-#define HOLD_TIMEOUT		5
+#define ROTATE_TIMEOUT		4	// Rotate timeout time
+#define PICK_UP_TIMEOUT 	5	// Pick up timeout time
+#define HOLD_TIMEOUT		5	// Obstacle presence (hold) timeout time
 
 /******************************************************************************
 Timeout Status Flags

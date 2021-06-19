@@ -15,8 +15,8 @@ Motor Struct
 ******************************************************************************/
 typedef struct
 {
-	TIM_HandleTypeDef* htim;	// Motor pwm TIM instance
-	uint8_t pwm_channel;		// Motor pwm channel
+	TIM_HandleTypeDef* htim;		// Motor PWM TIM instance
+	uint8_t pwm_channel;			// Motor PWM channel
 
 	GPIO_TypeDef *GPIO_port_IN1;	// Motor GPIO Port1
 	uint16_t GPIO_pin_IN1;			// Motor GPIO Pin1

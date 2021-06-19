@@ -1,5 +1,5 @@
 #include "commands.h"
-//#include "error.h"
+#include "errors.h"
 
 #include "usart.h" // UART_puts
 #include <stdio.h> // snprintf
@@ -67,44 +67,23 @@ const Command_t cmd_list[] =
 char exec_cmd(const char *str)
 {
 	char err;
-	
+
 	err = parse_cmd(cmd_list, str);
-	
-//	switch((char)(-err))
-//	{
-//		case ECMDNF:
-//			// No command found
-//			UART_puts("Command [");
-//			UART_puts(Rx_Buffer);
-//			UART_puts("] not found.\n\r");
-//			break;
-//
-//		case EINVARG:
-//			UART_puts("Invalid arguments.\n\r");
-//			break;
-//
-//		case ENOCMD:
-//			// Command is empty
-//		case ENOMEM:
-//			// Command list is empty
-//		//case (char)(-ENOLIST):
-//			// No memory available or bad allocation of memory
-//			break;
-//		case EPERM:
-//			UART_puts("No permission.\n\r");
-//			break;
-//
-//		case ENOKEY:
-//			UART_puts("Required key not defined.\n\r");
-//			break;
-//		case EALREADY:
-//			UART_puts("Operation already in progress.\n\r");
-//			break;
-//		case ENOP:
-//			UART_puts("No operation in progress.\n\r");
-//
-//	}
-	
+
+	switch((char)(-err))
+	{
+		case ECMDNF:
+			// No command found
+			UART_puts(&bluet_uart,"Command [");
+			UART_puts(&bluet_uart, str);
+			UART_puts(&bluet_uart,"] not found.\n\r");
+			break;
+
+		case EINVARG:
+			UART_puts(&bluet_uart,"Invalid arguments.\n\r");
+			break;
+
+	}
 
 	return err;
 }
@@ -143,15 +122,12 @@ char help_cb(uint8_t argc, char** argv)
 ******************************************************************************/
 char route_sel_cb(uint8_t argc, char** argv)
 {
-	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
-
 	if(argc != 2) // number of arguments invalid?
 		//return (char)(-EINVARG);
 		return (-1);
 
 	// route selection
 	route_ptr = route1;
-//	route_base_ptr = &route1;
 
 	// command received with success
 	bluet_status = BLUET_OK;
@@ -167,8 +143,6 @@ char route_sel_cb(uint8_t argc, char** argv)
 ******************************************************************************/
 char init_receive_cb(uint8_t argc, char** argv)
 {
-	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
-
 	if(argc != 1) // number of arguments invalid?
 		//return (char)(-EINVARG);
 		return (-1);
@@ -186,8 +160,6 @@ char init_receive_cb(uint8_t argc, char** argv)
 ******************************************************************************/
 char start_cb(uint8_t argc, char** argv)
 {
-	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
-
 	if(argc != 1) // number of arguments invalid?
 		//return (char)(-EINVARG);
 		return (-1);
@@ -205,8 +177,6 @@ char start_cb(uint8_t argc, char** argv)
 ******************************************************************************/
 char stop_cb(uint8_t argc, char** argv)
 {
-	//char str[32]; // Output message. Max message len is the same as buffer used in UART_puts
-
 	if(argc != 1) // number of arguments invalid?
 		//return (char)(-EINVARG);
 		return (-1);

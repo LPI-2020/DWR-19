@@ -10,13 +10,11 @@
 #include "stdint.h"
 
 typedef enum {
-	BLUET_OK,
-	BLUET_READY,
-	BLUET_RECEIVING,
-	BLUET_N_INIT
+	BLUET_OK,				// Bluetooth received
+	BLUET_READY,			// Bluetooth ready
+	BLUET_RECEIVING,		// Bluetooth receiving
+	BLUET_OFF				// Bluetooth not initialized
 } bluet_state_t;
-
-#define BLUET_SET_STATUS
 
 extern bluet_state_t bluet_status;
 
