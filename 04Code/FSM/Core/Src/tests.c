@@ -12,6 +12,7 @@
 #include "debounce.h"
 
 #include "usart.h"
+#include "cmdparser.h"
 #include "parser.h"
 #include "commands.h"
 

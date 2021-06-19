@@ -24,10 +24,10 @@ Timeout TIM - counts 1sec timeouts
 /******************************************************************************
 Timeout Status Flags
 ******************************************************************************/
-extern volatile uint8_t 	rfid_timeout,
-							rotate_timeout,
-							pick_up_timeout,
-							hold_timeout;
+extern volatile uint8_t rfid_timeout;
+extern volatile uint8_t rotate_timeout;
+extern volatile uint8_t pick_up_timeout;
+extern volatile uint8_t hold_timeout;
 
 extern volatile uint8_t rfid_timeout_ctrl,
 		rotate_timeout_ctrl,
