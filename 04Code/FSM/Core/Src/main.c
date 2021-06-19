@@ -124,7 +124,9 @@ int main(void)
 
   while (1)
   {
+	  // execute state
 	  fsm_func_ptr[state]();
+	  // update current state
 	  state = nstate;
 
     /* USER CODE END WHILE */

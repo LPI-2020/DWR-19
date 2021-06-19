@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  000203cc  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00027b46  00000000  00000000  000203fa  2**0
+ 12 .debug_info   00027b9a  00000000  00000000  000203fa  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 0000527f  00000000  00000000  00047f40  2**0
+ 13 .debug_abbrev 00005247  00000000  00000000  00047f94  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001690  00000000  00000000  0004d1c0  2**3
+ 14 .debug_aranges 00001688  00000000  00000000  0004d1e0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00001428  00000000  00000000  0004e850  2**3
+ 15 .debug_ranges 00001420  00000000  00000000  0004e868  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002e427  00000000  00000000  0004fc78  2**0
+ 16 .debug_macro  0002e3fd  00000000  00000000  0004fc88  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00020120  00000000  00000000  0007e09f  2**0
+ 17 .debug_line   000200c2  00000000  00000000  0007e085  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00106b43  00000000  00000000  0009e1bf  2**0
+ 18 .debug_str    00106b1d  00000000  00000000  0009e147  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  001a4d02  2**0
+ 19 .comment      00000053  00000000  00000000  001a4c64  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00006894  00000000  00000000  001a4d58  2**2
+ 20 .debug_frame  0000686c  00000000  00000000  001a4cb8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3215,6 +3215,7 @@ int main(void)
 
   while (1)
   {
+	  // execute state
 	  fsm_func_ptr[state]();
  80016a2:	4b06      	ldr	r3, [pc, #24]	; (80016bc <main+0x6c>)
  80016a4:	781b      	ldrb	r3, [r3, #0]
@@ -3222,6 +3223,7 @@ int main(void)
  80016a8:	4b07      	ldr	r3, [pc, #28]	; (80016c8 <main+0x78>)
  80016aa:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
  80016ae:	4798      	blx	r3
+	  // update current state
 	  state = nstate;
  80016b0:	4b03      	ldr	r3, [pc, #12]	; (80016c0 <main+0x70>)
  80016b2:	781a      	ldrb	r2, [r3, #0]

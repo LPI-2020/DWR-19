@@ -27,7 +27,4 @@ Obstacle Detector Peripherals
 // Convert digital value to analog
 #define DIG_TO_ANALOG(_val_)	((_val_) * 3.3 / 4095)
 
-// Mean of a sliding Window
-float mean_window(float val, float* window, uint8_t w_size);
-
 #endif /* __AUXILIARES_H__ */
