@@ -367,7 +367,7 @@ static void s_next_mov(void)
 	write_led(LRED,1);
 	write_led(LBLUE,0);
 	write_led(LGREEN,0);
-#endif // !_DEBUG_
+#endif // !_DEBUG
 
 	// route can be used?
 	if((route_ptr == NULL) || (route_base_ptr == NULL))
@@ -382,19 +382,34 @@ static void s_next_mov(void)
 	// move to the next checkpoint in route
 	route_ptr += returning;
 
+	// robot at route start point?
+	if(route_ptr == route_base_ptr)
+	{
+		// returned to starting point
+		// signal route finished from route_ptr
+		 char err = lfollower_rotate(next_move_dir);
+
+		// rotate has returned error?
+		if(err)
+		{
+			// rotate TIMEOUT
+			// rotate was not successful
+			UART_puts(&bluet_uart, "Rotate timeout\n\r");
+			nstate = S_ERROR;
+			return;
+		}
+
+		// turn completed
+		route_ptr = NULL;
+		nstate = S_STOPPED;
+		return;
+	}
+
 	if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
 		// rfid is as expected
 		// execute next move
 		nstate = next_move_func[route_ptr->action]();
 
-	// robot at route start point?
-	else if(route_ptr == route_base_ptr)
-	{
-		// returned to starting point
-		// signal route finished from route_ptr
-		route_ptr = NULL;
-		nstate = S_STOPPED;
-	}
 	else
 	{
 		// detected RFID but there is no match with route
