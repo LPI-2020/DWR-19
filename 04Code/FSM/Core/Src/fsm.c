@@ -387,7 +387,7 @@ static void s_next_mov(void)
 	{
 		// returned to starting point
 		// signal route finished from route_ptr
-		 char err = lfollower_rotate(next_move_dir);
+		 char err = lfollower_rotate(MOVE_LEFT);
 
 		// rotate has returned error?
 		if(err)
@@ -419,10 +419,10 @@ static void s_next_mov(void)
 
 	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
 	{
-		// last rfid in the route diferent from the firt rfid
+		// last rfid in the route different from the first rfid
 		// turns around
 		next_move_dir = MOVE_LEFT;
-		// sinalises that the robot is returning to the start point
+		// Signalizes that the robot is returning to the start point
 		returning = -1;
 	}
 }
