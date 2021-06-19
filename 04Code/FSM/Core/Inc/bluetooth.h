@@ -7,8 +7,11 @@
 #ifndef __BLUETOOTH_H__
 #define __BLUETOOTH_H__
 
-#include "stdint.h"
+#include "stdint.h" // using uint8_t
 
+/******************************************************************************
+Bluetooth Enum
+******************************************************************************/
 typedef enum {
 	BLUET_OK,				// Bluetooth received
 	BLUET_READY,			// Bluetooth ready
@@ -18,6 +21,14 @@ typedef enum {
 
 extern bluet_state_t bluet_status;
 
+/******************************************************************************
+Bluetooth Functions
+******************************************************************************/
 void bluet_receive(void);
+
+char route_sel_cb(uint8_t argc, char** argv);
+char init_receive_cb(uint8_t argc, char** argv);
+char start_cb(uint8_t argc, char** argv);
+char stop_cb(uint8_t argc, char** argv);
 
 #endif /* __BLUETOOTH_H__ */

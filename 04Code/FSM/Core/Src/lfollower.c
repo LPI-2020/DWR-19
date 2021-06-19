@@ -137,10 +137,19 @@ uint8_t lfollower_isr(void)
 		// line follower is disabled
 		return E_LF_OFF;
 
-	if((qtr_get_digital(LF_SENSOR_CTR_R) == 0) &&
-		(qtr_get_digital(LF_SENSOR_CTR_L) == 0) &&
-		(qtr_get_digital(LF_SENSOR_L) == 0) &&
-		(qtr_get_digital(LF_SENSOR_R) == 0))
+	uint8_t last_sens = 0;
+
+	// run through QTR sensors
+	for(uint8_t sens = 0; sens < QTR_SENS_NUM; sens++)
+	{
+		last_sens = qtr_get_digital(sens);
+		// is this sensor ON?
+		if(last_sens == 1)
+			break;
+	}
+
+	// none sensor over the line?
+	if(last_sens == 0)
 	{
 		// robot is not over the line
 		// stop line follower

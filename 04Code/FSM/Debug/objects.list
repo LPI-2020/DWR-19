@@ -1,6 +1,7 @@
 "Core/Src/adc.o"
 "Core/Src/auxiliares.o"
 "Core/Src/bluetooth.o"
+"Core/Src/cmdparser.o"
 "Core/Src/commands.o"
 "Core/Src/debounce.o"
 "Core/Src/dma.o"

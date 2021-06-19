@@ -8,6 +8,7 @@ C_SRCS += \
 ../Core/Src/adc.c \
 ../Core/Src/auxiliares.c \
 ../Core/Src/bluetooth.c \
+../Core/Src/cmdparser.c \
 ../Core/Src/commands.c \
 ../Core/Src/debounce.c \
 ../Core/Src/dma.c \
@@ -38,6 +39,7 @@ OBJS += \
 ./Core/Src/adc.o \
 ./Core/Src/auxiliares.o \
 ./Core/Src/bluetooth.o \
+./Core/Src/cmdparser.o \
 ./Core/Src/commands.o \
 ./Core/Src/debounce.o \
 ./Core/Src/dma.o \
@@ -68,6 +70,7 @@ C_DEPS += \
 ./Core/Src/adc.d \
 ./Core/Src/auxiliares.d \
 ./Core/Src/bluetooth.d \
+./Core/Src/cmdparser.d \
 ./Core/Src/commands.d \
 ./Core/Src/debounce.d \
 ./Core/Src/dma.d \
@@ -102,6 +105,8 @@ Core/Src/auxiliares.o: ../Core/Src/auxiliares.c Core/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/auxiliares.d" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@"
 Core/Src/bluetooth.o: ../Core/Src/bluetooth.c Core/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/bluetooth.d" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@"
+Core/Src/cmdparser.o: ../Core/Src/cmdparser.c Core/Src/subdir.mk
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/cmdparser.d" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@"
 Core/Src/commands.o: ../Core/Src/commands.c Core/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F767xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/commands.d" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@"
 Core/Src/debounce.o: ../Core/Src/debounce.c Core/Src/subdir.mk
