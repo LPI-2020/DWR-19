@@ -1,0 +1,7 @@
+ISO 21448
+https://www.perforce.com/blog/qac/sotif-iso-pas-21448-autonomous-driving
+https://semiengineering.com/knowledge_centers/automotive/iso-pas-21448-sotif/
+
+/*NAO É BEM PARA VAIECULOS AUTONOMOS*/
+ISO 26262.
+https://www.perforce.com/blog/qac/what-is-iso-26262
