@@ -29,7 +29,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
-//#include "tests.h"
+#include "tests.h"
 
 #include "rfid-rc522.h"
 #include "timeout.h"
@@ -114,6 +114,9 @@ int main(void)
   // initialize FSM state and next state
   state = S_STOPPED;
   nstate = S_STOPPED;
+
+  //while(1)
+//	  test_lf_print_qtr();
 
   // enable RFID reader
   RFID_RC522_Init();
