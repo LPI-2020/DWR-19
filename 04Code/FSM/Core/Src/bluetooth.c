@@ -57,6 +57,7 @@ char route_sel_cb(uint8_t argc, char** argv)
 
 	// command received with success
 	bluet_status = BLUET_OK;
+//	nstate = S_STOPPED;
 
 	return 0;
 }
@@ -89,6 +90,9 @@ char start_cb(uint8_t argc, char** argv)
 		return (char)(-EINVARG);
 
 	nstate = S_FLW_LINE;
+
+	// command received with success
+//	bluet_status = BLUET_OK;
 
 	return 0;
 }

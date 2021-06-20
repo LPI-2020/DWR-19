@@ -98,14 +98,14 @@ checkpoint_t route1[] = {
 			.RFID = "0xa31cd604",
 			.action = ACT_STOP
 		},
-		{
-			.RFID = "0x53fde405",
-			.action = ACT_LEFT
-		},
-		{
-			.RFID = "0x034bfc03",
-			.action = ACT_STOP
-		},
+//		{
+//			.RFID = "0x53fde405",
+//			.action = ACT_LEFT
+//		},
+//		{
+//			.RFID = "0x034bfc03",
+//			.action = ACT_STOP
+//		},
 		// end of Checkpoint Array
 		{
 			.RFID = 0,
@@ -140,15 +140,12 @@ static void s_stopped(void)
 	returning_nstate >>= 1;
 	// returning_nstate is 0 or +1
 
-	// is there a route available?
-	if(route_ptr == NULL)
-	{
-		bluet_receive();
+	// check for incoming messages
+	bluet_receive();
 
-		if(bluet_status == BLUET_RECEIVING)
-			// receiving new route
-			nstate = S_RECEIVE;
-	}
+	if(bluet_status == BLUET_RECEIVING)
+		// receiving new route
+		nstate = S_RECEIVE;
 
 	else if(motion_status == MOT_OK)
 	{
@@ -317,11 +314,13 @@ static void s_rd_rfid(void)
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
+#ifdef _DEBUG_
 const static char dir_str[][8] =
 {
 		"Right",
 		"Left"
 };
+#endif // !_DEBUG_
 
 uint8_t turn_func(void)
 {
@@ -329,16 +328,16 @@ uint8_t turn_func(void)
 	// dir = 1 -> move left
 	char dir = route_ptr->action;
 
-	dir <<= 1;
-	dir -= 1;
-
-	next_move_dir = dir * returning;
-
 #ifdef _DEBUG_
 	char str[32];
 	snprintf(str, sizeof(str), "Change direction to %s.\n\r", dir_str[(int)dir & 0x01]);
 	UART_puts(&bluet_uart, str);
 #endif // !_DEBUG_
+
+	dir <<= 1;
+	dir -= 1;
+
+	next_move_dir = dir * returning;
 
 	return S_ROTATE;
 }
@@ -470,13 +469,18 @@ static void s_rotate(void)
 	write_led(LRED,1);
 	write_led(LBLUE,0);
 	write_led(LGREEN,1);
-#endif // !_DEBUG_
-
-	motion_stop();
 
 	char str[32];
-	snprintf(str, sizeof(str), "Rotate dir[%d]\n\r", next_move_dir);
+	int dir = next_move_dir;
+	dir += 1;
+	dir >>= 1;
+
+	snprintf(str, sizeof(str), "Change direction to %s.\n\r", dir_str[(int)dir & 0x01]);
 	UART_puts(&bluet_uart, str);
+#endif // !_DEBUG_
+
+	// stop motion
+	motion_stop();
 
 	// rotate to direction 'next_move_dir' (POLLING MODE)
 	err = lfollower_rotate(next_move_dir);
