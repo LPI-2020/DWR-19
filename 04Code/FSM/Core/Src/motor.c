@@ -6,6 +6,7 @@
  *  Created on: May 5, 2021
  */
 #include "motor.h"
+#include "tim.h" // using set_pwm()
 
 /******************************************************************************
 Motor Init
@@ -16,7 +17,7 @@ Motor Init
 ******************************************************************************/
 void motor_init(motor_st *m)
 {
-	HAL_TIM_PWM_Start(&PWM_TIM_INSTANCE, m->pwm_channel);
+	HAL_TIM_PWM_Start(m->htim, m->pwm_channel);
 }
 
 /******************************************************************************
@@ -28,7 +29,7 @@ Motor Kill
 ******************************************************************************/
 void motor_kill(motor_st *m)
 {
-	HAL_TIM_PWM_Stop(&PWM_TIM_INSTANCE, m->pwm_channel);
+	HAL_TIM_PWM_Stop(m->htim, m->pwm_channel);
 	// disable IN pins
 	motor_control(m,  0, MOTOR_STOP);
 }
@@ -62,5 +63,5 @@ void motor_control(motor_st *m,  uint8_t dc, motor_dir_e dir)
 	// Write motor GPIO Pin1
 	HAL_GPIO_WritePin(m->GPIO_port_IN2, m->GPIO_pin_IN2, motor_pin_config[dir][1]);
 	// Set/Update motor PWM duty cycle
-	set_pwm(&PWM_TIM_INSTANCE, m->pwm_channel, dc);
+	set_pwm(m->htim, m->pwm_channel, dc);
 }

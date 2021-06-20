@@ -50,7 +50,8 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, IN2_RIGHT_Pin|IN1_LEFT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, DEBUG_LGREEN_Pin|DEBUG_LRED_Pin|DEBUG_LBLUE_Pin|IN1_RIGHT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, DEBUG_LGREEN_Pin|BUZZER_Pin|DEBUG_LRED_Pin|DEBUG_LBLUE_Pin
+                          |IN1_RIGHT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, IN2_LEFT_Pin|SPI3_SDA_Pin, GPIO_PIN_RESET);
@@ -68,8 +69,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = DEBUG_LGREEN_Pin|DEBUG_LRED_Pin|DEBUG_LBLUE_Pin|IN1_RIGHT_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
+                           PBPin */
+  GPIO_InitStruct.Pin = DEBUG_LGREEN_Pin|BUZZER_Pin|DEBUG_LRED_Pin|DEBUG_LBLUE_Pin
+                          |IN1_RIGHT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

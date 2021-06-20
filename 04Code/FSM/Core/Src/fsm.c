@@ -16,24 +16,80 @@
 #include "lfollower.h"	// using lfollower_rotate
 #include "rfid-rc522.h"	// using read_RFID
 
-#include "tests.h"
+/******************************************************************************
+Define Test Symbol
+******************************************************************************/
+#define _DEBUG_
 
+#ifdef _DEBUG_
+#include "tests.h"
+#endif // !_DEBUG_
+
+// LRED, LBLUE, LGREEN, by this order, indicates FSM state, in binary.
+/******************************************************************************
+Printing messages
+******************************************************************************/
 #include <stdlib.h>
 #include "usart.h"
 
-// -------- removbe this
-#include "stop_sensors.h"
+/******************************************************************************
+FSM state functions
+******************************************************************************/
+static void s_stopped(void);
+static void s_receive(void);
+
+static void s_flw_line(void);
+static void s_rd_rfid(void);
+static void s_next_mov(void);
+static void s_rotate(void);
+
+static void s_error(void);
+
+// BUZZER pin defined at main.h
+#define buzzer_on(void) 	(HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1))
+#define buzzer_off(void) 	(HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0))
 
 /******************************************************************************
-Private Defines
+FSM current state pointer
 ******************************************************************************/
+void (*fsm_func_ptr[])(void) = {
+		s_stopped,
+		s_receive,
+
+		s_flw_line,
+		s_rd_rfid,
+		s_next_mov,
+		s_rotate,
+
+		s_error
+};
+
+/******************************************************************************
+FSM Private Defines and Flags
+******************************************************************************/
+// Current FSM state
+uint8_t state = 0;
+// Next FSM state
+uint8_t nstate = 0;
+
+// Route pointer to the selected route
+checkpoint_t *route_ptr = NULL;
+// Route pointer to array base address
+static checkpoint_t *route_base_ptr = NULL;
+
+// Direction of the next movement at junction
+static uint8_t next_move_dir = 0;
+
+// indicates if robot is going forward on route (+1) or returning to origin (-1)
+static int returning = 1;
+
 // User button debounce
 debounce_t button;
 
 /******************************************************************************
 Route Defines
 ******************************************************************************/
-checkpoint_t route1[5] = {
+checkpoint_t route1[] = {
 		{
 			.RFID = "0xc3ed9705",
 			.action = ACT_FORWARD
@@ -56,54 +112,6 @@ checkpoint_t route1[5] = {
 			.action = 0
 		}
 };
-/******************************************************************************
-FSM state functions
-******************************************************************************/
-static void s_stopped(void);
-static void s_receive(void);
-
-static void s_flw_line(void);
-static void s_rd_rfid(void);
-static void s_next_mov(void);
-static void s_rotate(void);
-
-static void s_error(void);
-
-/******************************************************************************
-FSM current state pointer
-******************************************************************************/
-void (*fsm_func_ptr[])(void) = {
-		s_stopped,
-		s_receive,
-
-		s_flw_line,
-		s_rd_rfid,
-		s_next_mov,
-		s_rotate,
-
-		s_error
-};
-
-/******************************************************************************
-FSM flags
-******************************************************************************/
-// Current FSM state
-uint8_t state = 0;
-// Next FSM state
-uint8_t nstate = 0;
-
-// Route pointer to the selected route
-checkpoint_t *route_ptr = NULL;
-// first rfid
-static checkpoint_t *route_base_ptr = NULL;
-
-// Direction of the next movement at junction
-static uint8_t next_move_dir = 0;
-
-// returning:
-//		+1 - going forward
-// 		-1 - comming back
-static int returning = 1;
 
 /******************************************************************************
 State Stopped
@@ -118,9 +126,11 @@ static void s_stopped(void)
 {
 	uint8_t returning_nstate = returning;
 
-//	write_led(LRED,0);
-//	write_led(LBLUE,0);
-//	write_led(LGREEN,0);
+#ifdef _DEBUG_
+	write_led(LRED,0);
+	write_led(LBLUE,0);
+	write_led(LGREEN,0);
+#endif // !_DEBUG_
 
 	// stop movement
 	motion_stop();
@@ -143,6 +153,8 @@ static void s_stopped(void)
 	else if(motion_status == MOT_OK)
 	{
 		// obstacle is not there anymore and timer not finished
+		// stop buzzer
+		buzzer_off();
 		// restart movement
 		nstate = S_FLW_LINE;
 		UART_puts(&bluet_uart,"Restart movement\n\r");
@@ -156,7 +168,7 @@ static void s_stopped(void)
 		UART_puts(&bluet_uart,"Obstacle timeout\n\r");
 	}
 
-	else if(button.pin_output == 1)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> adicionar condiçº~ies
+	else if(button.pin_output == 1)// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> add conditions
 	{
 		pick_num_sec = 0;
 		pick_timeout_ctrl = 0;
@@ -181,9 +193,11 @@ State Receive
 ******************************************************************************/
 static void s_receive(void)
 {
-//	write_led(LRED,0);
-//	write_led(LBLUE,0);
-//	write_led(LGREEN,1);
+#ifdef _DEBUG_
+	write_led(LRED,0);
+	write_led(LBLUE,0);
+	write_led(LGREEN,1);
+#endif // !_DEBUG_
 
 	// receives and parses commands by uart
 	// if received with success returns 0 (bluet_ok)
@@ -216,9 +230,11 @@ State Follow Line
 ******************************************************************************/
 static void s_flw_line(void)
 {
-//	write_led(LRED,0);
-//	write_led(LBLUE,1);
-//	write_led(LGREEN,0);
+#ifdef _DEBUG_
+	write_led(LRED,0);
+	write_led(LBLUE,1);
+	write_led(LGREEN,0);
+#endif // !_DEBUG_
 
 	// start movement
 	motion_start();
@@ -233,6 +249,8 @@ static void s_flw_line(void)
 
 		case MOT_HOLD:
 			// Obstacle found
+			// activate buzzer
+			buzzer_on();
 			UART_puts(&bluet_uart,"Obstacle Found\n\r");
 			nstate = S_STOPPED;
 			break;
@@ -260,9 +278,11 @@ static void s_rd_rfid(void)
 {
 	uint8_t err;
 
-//	write_led(LRED,0);
-//	write_led(LBLUE,1);
-//	write_led(LGREEN,1);
+#ifdef _DEBUG_
+	write_led(LRED,0);
+	write_led(LBLUE,1);
+	write_led(LGREEN,1);
+#endif // !_DEBUG_
 
 	// start movement
 	// wait for RFID read or timeout (POLLING MODE)
@@ -343,9 +363,11 @@ uint8_t (*next_move_func [])(void) = {
 
 static void s_next_mov(void)
 {
-//	write_led(LRED,1);
-//	write_led(LBLUE,0);
-//	write_led(LGREEN,0);
+#ifdef _DEBUG_
+	write_led(LRED,1);
+	write_led(LBLUE,0);
+	write_led(LGREEN,0);
+#endif // !_DEBUG
 
 	// route can be used?
 	if((route_ptr == NULL) || (route_base_ptr == NULL))
@@ -360,19 +382,34 @@ static void s_next_mov(void)
 	// move to the next checkpoint in route
 	route_ptr += returning;
 
+	// robot at route start point?
+	if(route_ptr == route_base_ptr)
+	{
+		// returned to starting point
+		// signal route finished from route_ptr
+		 char err = lfollower_rotate(MOVE_LEFT);
+
+		// rotate has returned error?
+		if(err)
+		{
+			// rotate TIMEOUT
+			// rotate was not successful
+			UART_puts(&bluet_uart, "Rotate timeout\n\r");
+			nstate = S_ERROR;
+			return;
+		}
+
+		// turn completed
+		route_ptr = NULL;
+		nstate = S_STOPPED;
+		return;
+	}
+
 	if(strcmp(route_ptr->RFID, rfid.CardID_str) == 0)
 		// rfid is as expected
 		// execute next move
 		nstate = next_move_func[route_ptr->action]();
 
-	// robot at route start point?
-	else if(route_ptr == route_base_ptr)
-	{
-		// returned to starting point
-		// signal route finished from route_ptr
-		route_ptr = NULL;
-		nstate = S_STOPPED;
-	}
 	else
 	{
 		// detected RFID but there is no match with route
@@ -382,10 +419,10 @@ static void s_next_mov(void)
 
 	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
 	{
-		// last rfid in the route diferent from the firt rfid
+		// last rfid in the route different from the first rfid
 		// turns around
 		next_move_dir = MOVE_LEFT;
-		// sinalises that the robot is returning to the start point
+		// Signalizes that the robot is returning to the start point
 		returning = -1;
 	}
 }
@@ -397,14 +434,16 @@ static void s_rotate(void)
 {
 	uint8_t err;
 
-//	write_led(LRED,1);
-//	write_led(LBLUE,0);
-//	write_led(LGREEN,1);
+#ifdef _DEBUG_
+	write_led(LRED,1);
+	write_led(LBLUE,0);
+	write_led(LGREEN,1);
+#endif // !_DEBUG_
 
 	motion_stop();
 
 	// rotate to direction 'next_move_dir' (POLLING MODE)
-	err = lfollower_rotate(next_move_dir, ROTATE_TIMEOUT);
+	err = lfollower_rotate(next_move_dir);
 
 	// rotate has returned error?
 	if(err)
@@ -424,12 +463,16 @@ State Error
 ******************************************************************************/
 static void s_error(void)
 {
-//	write_led(LRED,1);
-//	write_led(LBLUE,1);
-//	write_led(LGREEN,0);
+#ifdef _DEBUG_
+	write_led(LRED,1);
+	write_led(LBLUE,1);
+	write_led(LGREEN,0);
+#endif // !_DEBUG_
 
 	// stop movement
 	motion_stop();
+	// activate buzzer
+	buzzer_on();
 
 	// send error messages
 	if((route_ptr != NULL) && ((route_ptr - 1) >= route_base_ptr))
@@ -440,9 +483,15 @@ static void s_error(void)
 		snprintf(str, sizeof(str), "RFID '%s'\n\r", (route_ptr - 1)->RFID);
 		UART_puts(&bluet_uart, str);
 	} else
-		UART_puts(&bluet_uart, "ERROR: ....\n\r");
+		UART_puts(&bluet_uart, "ERROR: cannot send last location\n\r");
 
 	while(1)
-		;
+	{
+#ifdef _DEBUG_
+		toggle_led(LRED);
+		toggle_led(LBLUE);
+		HAL_Delay(500);
+#endif // !_DEBUG_
+	}
 }
 

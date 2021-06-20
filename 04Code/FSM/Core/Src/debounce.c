@@ -2,10 +2,6 @@
 
 /******************************************************************************
 Debounce Start
-
-@brief
-@param
-@retval	none
 ******************************************************************************/
 void debounce_start(debounce_t *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -24,10 +20,6 @@ void debounce_start(debounce_t *s, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 
 /******************************************************************************
 Debounce DeInit
-
-@brief
-@param	none
-@retval	none
 ******************************************************************************/
 void debounce_stop(void)
 {
@@ -37,10 +29,6 @@ void debounce_stop(void)
 
 /******************************************************************************
 Debounce ISR
-
-@brief
-@param	none
-@retval	none
 ******************************************************************************/
 static uint8_t debounce(debounce_t *pb)
 {

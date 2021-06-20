@@ -7,35 +7,33 @@
  */
 
 #include <stdint.h> // using uint8_t
-
 #include "route.h"
 
 /******************************************************************************
 FSM states
 ******************************************************************************/
-#define S_STOPPED		0	// Robot stopped. Waiting for interaction
-#define S_RECEIVE		1	// Robot is receiving a new route
+typedef enum
+{
+	S_STOPPED = 0,	// Robot stopped. Waiting for interaction
+	S_RECEIVE,		// Robot is receiving a new route
 
-#define S_FLW_LINE 		2	// Robot is following line
-#define S_RD_RFID		3	// Robot detects and reads RFID
-#define S_NEXT_MOV		4	// Robot determines next movement to make
-#define S_ROTATE		5	// Robot rotates in order to move in other direction
+	S_FLW_LINE,		// Robot is following line
+	S_RD_RFID,		// Robot detects and reads RFID
 
-#define S_ERROR			6	// Robot waiting for intervention
+	S_NEXT_MOV,		// Robot determines next movement to make
+	S_ROTATE,		// Robot rotates in order to move in other direction
+
+	S_ERROR			// Robot waiting for intervention
+} state_e;
 
 /******************************************************************************
 FSM Private Defines
 ******************************************************************************/
-// timeouts in seconds
-//#define RFID_TIMEOUT	2	// RFID timeout time
-//#define ROTATE_TIMEOUT	4	// rotate timeout time
-//#define PICK_UP_TIMEOUT 20	// Pick up (of the object in each room) timeout time
-
 // User button debounce
 #define USER_BTN_PORT	(GPIOC)
 #define USER_BTN_PIN	(GPIO_PIN_8)
 
-extern checkpoint_t route1[5];
+extern checkpoint_t route1[];
 extern checkpoint_t *route_ptr;
 
 /******************************************************************************
@@ -43,5 +41,5 @@ FSM current state pointer
 ******************************************************************************/
 extern void (*fsm_func_ptr[])(void);
 
-extern uint8_t state;
-extern uint8_t nstate;
+extern state_e state;
+extern state_e nstate;

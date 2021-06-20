@@ -12,13 +12,8 @@
 Motion Peripherals
 ******************************************************************************/
 #include "tim.h"
+// Used to apply PID algorythm and Stop sensors ISRs
 #define TIM_MOTION 			(htim6)
-
-/******************************************************************************
-Motion Defines
-******************************************************************************/
-// Motion Hold timeout, in seconds
-//#define HOLD_TIMEOUT		(15)
 
 /******************************************************************************
 Motion Status
@@ -27,7 +22,7 @@ typedef enum
 {
 	MOT_ON = 0,			// Motion ON (moving)
 	MOT_OFF,			// Motion OFF (stopped)
-	MOT_OK,
+	MOT_OK,				// Motion OK
 
 	MOT_CROSS_FOUND,	// Motion: stopped at a cross
 	MOT_HOLD,			// Motion in Hold (obstacle detected)

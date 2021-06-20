@@ -56,10 +56,9 @@
  * Used with most functions
  */
 typedef enum {
-	MI_OK = 0,
-	MI_NOTAGERR,
-	MI_ERR,
-	MI_TIMEOUT,
+	MI_OK = 0,			// RFID good read
+	MI_ERR,				// RFID bad read
+	MI_TIMEOUT,			// RFID timeout
 } TM_MFRC522_Status_t;
 
 /*

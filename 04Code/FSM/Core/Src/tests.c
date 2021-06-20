@@ -12,6 +12,7 @@
 #include "debounce.h"
 
 #include "usart.h"
+#include "cmdparser.h"
 #include "parser.h"
 #include "commands.h"
 
@@ -96,7 +97,7 @@ int test_lf_rotate(move_dir_e dir)
 	uint8_t err;
 
 //	write_led(LBLUE, 1);
-	err = lfollower_rotate(dir, 4);
+	err = lfollower_rotate(dir);
 //	write_led(LBLUE, 0);
 
 	return err;
@@ -217,7 +218,7 @@ int test_rfid(void)
 	write_led(LBLUE, 0);
 	// init rotate
 	write_led(LGREEN, 1);
-	status = lfollower_rotate(MOVE_LEFT, 4);
+	status = lfollower_rotate(MOVE_LEFT);
 	write_led(LGREEN, 0);
 
 	return status;

@@ -9,6 +9,19 @@
 #define __MOVE_H__
 
 /******************************************************************************
+Define Motors peripherals: PWM TIM Instance and Channels to be used
+******************************************************************************/
+#include "tim.h"
+
+#define PWM_TIM_INSTANCE 	(htim4)
+
+// Define Right Motor PWM TIM channel
+#define PWM_R_TIM_CHANNEL 	(TIM_CHANNEL_3)
+
+// Define Left Motor PWM TIM channel
+#define PWM_L_TIM_CHANNEL 	(TIM_CHANNEL_4)
+
+/******************************************************************************
 Move Enums
 ******************************************************************************/
 typedef enum {
@@ -16,20 +29,11 @@ typedef enum {
 	MOVE_LEFT = 1
 } move_dir_e;
 
-//typedef enum
-//{
-//	// move
-//	MOVE_FORWARD = 1,
-//	// stop
-//	MOVE_STOP = 2
-//} move_action_e;
-
 /******************************************************************************
 Move Functions
 ******************************************************************************/
 void move_start(void);
 void move_stop(void);
-
 void move_control(float speedL, float speedR);
 
 /******************************************************************************
