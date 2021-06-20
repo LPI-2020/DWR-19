@@ -98,14 +98,14 @@ checkpoint_t route1[] = {
 			.RFID = "0xa31cd604",
 			.action = ACT_STOP
 		},
-//		{
-//			.RFID = "0x53fde405",
-//			.action = ACT_LEFT
-//		},
-//		{
-//			.RFID = "0x034bfc03",
-//			.action = ACT_STOP
-//		},
+		{
+			.RFID = "0x53fde405",
+			.action = ACT_LEFT
+		},
+		{
+			.RFID = "0x034bfc03",
+			.action = ACT_STOP
+		},
 		// end of Checkpoint Array
 		{
 			.RFID = 0,
