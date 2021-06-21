@@ -9,7 +9,7 @@
 #define __ROUTE_H__
 
 /******************************************************************************
-Route Definition
+Checkpoints Definition
 ******************************************************************************/
 // action enum - defines the next move when founds a cross
 typedef enum{
@@ -20,13 +20,15 @@ typedef enum{
 } action_e;
 
 // checkpoint struct definition
-
 typedef struct{
 	char *RFID;			// RFID: checkpoint unique identifier
 	action_e action;	// Action to execute at the checkpoint
 } checkpoint_t;
 
-// route_t is a series of checkpoints
-typedef checkpoint_t* route_t;
+/******************************************************************************
+Route Definition
+******************************************************************************/
+// Route is a list of checkpoints
+#define route_t checkpoint_t*
 
 #endif /* _ROUTE_H_ */

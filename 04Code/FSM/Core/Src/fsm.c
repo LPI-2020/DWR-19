@@ -78,7 +78,7 @@ checkpoint_t *route_ptr = NULL;
 static checkpoint_t *route_base_ptr = NULL;
 
 // Direction of the next movement at junction
-static uint8_t next_move_dir = 0;
+static move_dir_e next_move_dir = 0;
 
 // indicates if robot is going forward on route (+1) or returning to origin (-1)
 static int returning = 1;
@@ -89,8 +89,9 @@ debounce_t button;
 /******************************************************************************
 Route Defines
 ******************************************************************************/
-checkpoint_t route1[] = {
+static checkpoint_t route1[] = {
 		{
+			// Route origin. First checkpoint in route
 			.RFID = "0xc3ed9705",
 			.action = ACT_FORWARD
 		},
@@ -99,11 +100,11 @@ checkpoint_t route1[] = {
 			.action = ACT_STOP
 		},
 		{
-			.RFID = "0x034bfc03",
+			.RFID = "0x53fde405",
 			.action = ACT_LEFT
 		},
 		{
-			.RFID = "0x53fde405",
+			.RFID = "0x034bfc03",
 			.action = ACT_STOP
 		},
 		// end of Checkpoint Array
@@ -112,6 +113,34 @@ checkpoint_t route1[] = {
 			.action = 0
 		}
 };
+
+static checkpoint_t route2[] = {
+		{
+			// Route origin. First checkpoint in route
+			.RFID = "0xc3ed9705",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0xa31cd604",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0x53fde405",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0x03b09105",
+			.action = ACT_STOP
+		},
+		// end of Checkpoint Array
+		{
+			.RFID = 0,
+			.action = 0
+		}
+};
+
+// list of available routes
+route_t route_arr[] = {route1, route2};
 
 /******************************************************************************
 State Stopped
@@ -140,15 +169,12 @@ static void s_stopped(void)
 	returning_nstate >>= 1;
 	// returning_nstate is 0 or +1
 
-	// is there a route available?
-	if(route_ptr == NULL)
-	{
-		bluet_receive();
+	// check for incoming messages
+	bluet_receive();
 
-		if(bluet_status == BLUET_RECEIVING)
-			// receiving new route
-			nstate = S_RECEIVE;
-	}
+	if(bluet_status == BLUET_RECEIVING)
+		// receiving new route
+		nstate = S_RECEIVE;
 
 	else if(motion_status == MOT_OK)
 	{
@@ -205,18 +231,15 @@ static void s_receive(void)
 
 	if(bluet_status == BLUET_OK)
 	{
+		// route received
 		// save route base pointer
 		route_base_ptr = route_ptr;
 
 		// going forward
 		returning = +1;
 
-		// route received
 		// bluetooth ready to receive again
 		bluet_status = BLUET_READY;
-
-		// initialize debounce button
-		debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
 
 		// Wait for user_button
 		nstate = S_STOPPED;
@@ -294,6 +317,12 @@ static void s_rd_rfid(void)
 		// converts CardID to an hexadecimal string
 		bin_to_strhex((unsigned char *)rfid.CardID, sizeof(rfid.CardID), &rfid.CardID_str);
 
+#ifdef _DEBUG_
+		char str[32];
+		snprintf(str, sizeof(str), "RFID[%s]\n\r", rfid.CardID_str);
+		UART_puts(&bluet_uart, str);
+#endif // !_DEBUG_
+
 		// calculate next movement on the route
 		nstate = S_NEXT_MOV;
 	}
@@ -311,20 +340,30 @@ static void s_rd_rfid(void)
 /******************************************************************************
 State Next Movement
 ******************************************************************************/
+#ifdef _DEBUG_
+const static char dir_str[][8] =
+{
+		"Right",
+		"Left"
+};
+#endif // !_DEBUG_
+
 uint8_t turn_func(void)
 {
 	// dir = 0 -> move right
 	// dir = 1 -> move left
 	char dir = route_ptr->action;
 
+#ifdef _DEBUG_
+	char str[32];
+	snprintf(str, sizeof(str), "Change direction to %s.\n\r", dir_str[(int)dir & 0x01]);
+	UART_puts(&bluet_uart, str);
+#endif // !_DEBUG_
+
 	dir <<= 1;
 	dir -= 1;
 
 	next_move_dir = dir * returning;
-
-	char str[32];
-	snprintf(str, sizeof(str), "Change to dir[%d].\n\r", next_move_dir);
-	UART_puts(&bluet_uart, str);
 
 	return S_ROTATE;
 }
@@ -382,12 +421,19 @@ static void s_next_mov(void)
 	// move to the next checkpoint in route
 	route_ptr += returning;
 
-	// robot at route start point?
+	// robot returned to route start point?
 	if(route_ptr == route_base_ptr)
 	{
+#ifdef _DEBUG_
+		UART_puts(&bluet_uart, "At route origin\n\r");
+#endif // !_DEBUG
+
+		// Stop motion
+		motion_stop();
+
 		// returned to starting point
 		// signal route finished from route_ptr
-		 char err = lfollower_rotate(MOVE_LEFT);
+		uint8_t err = lfollower_rotate(MOVE_LEFT);
 
 		// rotate has returned error?
 		if(err)
@@ -400,7 +446,10 @@ static void s_next_mov(void)
 		}
 
 		// turn completed
+		// completed route
 		route_ptr = NULL;
+		UART_puts(&bluet_uart, "Route finished\n\r");
+		// currently stopped
 		nstate = S_STOPPED;
 		return;
 	}
@@ -414,7 +463,15 @@ static void s_next_mov(void)
 	{
 		// detected RFID but there is no match with route
 		UART_puts(&bluet_uart,"RFID not as expected\n\r");
+
+#ifdef _DEBUG_
+		char str[32];
+		snprintf(str, sizeof(str), "Expected RFID[%s]\n\r", route_ptr->RFID);
+		UART_puts(&bluet_uart, str);
+#endif // !_DEBUG_
+
 		nstate = S_ERROR;
+		return;
 	}
 
 	if(((route_ptr + 1)->RFID == 0) && (route_ptr != route_base_ptr))
@@ -438,8 +495,17 @@ static void s_rotate(void)
 	write_led(LRED,1);
 	write_led(LBLUE,0);
 	write_led(LGREEN,1);
+
+	char str[32];
+	int dir = next_move_dir;
+	dir += 1;
+	dir >>= 1;
+
+	snprintf(str, sizeof(str), "Change direction to %s.\n\r", dir_str[(int)dir & 0x01]);
+	UART_puts(&bluet_uart, str);
 #endif // !_DEBUG_
 
+	// stop motion
 	motion_stop();
 
 	// rotate to direction 'next_move_dir' (POLLING MODE)
@@ -475,15 +541,15 @@ static void s_error(void)
 	buzzer_on();
 
 	// send error messages
-	if((route_ptr != NULL) && ((route_ptr - 1) >= route_base_ptr))
+	if((route_ptr != NULL) && ((route_ptr - returning) >= route_base_ptr))
 	{
 		char str[32];
 		UART_puts(&bluet_uart, "ERROR: last known location:\n\r");
 
-		snprintf(str, sizeof(str), "RFID '%s'\n\r", (route_ptr - 1)->RFID);
+		snprintf(str, sizeof(str), "RFID '%s'\n\r", (route_ptr - returning)->RFID);
 		UART_puts(&bluet_uart, str);
 	} else
-		UART_puts(&bluet_uart, "ERROR: cannot send last location\n\r");
+		UART_puts(&bluet_uart, "ERROR: last location unknown\n\r");
 
 	while(1)
 	{

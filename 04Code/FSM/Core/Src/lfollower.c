@@ -192,10 +192,13 @@ uint8_t lfollower_rotate(move_dir_e dir)
 	dir += 1;
 	// dir is now 0 or 2
 	dir >>= 1;
+
+	// make sure that sensor isnt already over the line
+	HAL_Delay(500);
+
 	// dir is now 0 (MOVE_RIGHT) or 1 (MOVE_LEFT)
 	// so, if: 	dir = 0 					-> SENSOR1
 	//			dir = 1* (QTR_SENS_NUM - 1) -> SENSOR8 (last sensor)
-	//while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (timeout_flag == 0))
 	while((qtr_get_digital(dir * (QTR_SENS_NUM - 1)) == 0) && (rotate_timeout == 0))
 		;
 

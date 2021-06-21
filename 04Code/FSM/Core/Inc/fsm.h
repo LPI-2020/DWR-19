@@ -33,7 +33,12 @@ FSM Private Defines
 #define USER_BTN_PORT	(GPIOC)
 #define USER_BTN_PIN	(GPIO_PIN_8)
 
-extern checkpoint_t route1[];
+// define number of routes created
+#define NUM_ROUTES		(2)
+
+// list of routes
+extern route_t route_arr[NUM_ROUTES];
+// current route
 extern checkpoint_t *route_ptr;
 
 /******************************************************************************
