@@ -32,6 +32,7 @@
 #include "tests.h"
 
 #include "rfid-rc522.h"
+#include "debounce.h"
 #include "timeout.h"
 /* USER CODE END Includes */
 
@@ -115,13 +116,13 @@ int main(void)
   state = S_STOPPED;
   nstate = S_STOPPED;
 
-  //while(1)
-//	  test_lf_print_qtr();
-
   // enable RFID reader
   RFID_RC522_Init();
   // enable UART
   Rx_UART_init(&bluet_uart);
+  // initialize debounce button
+  debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
+
   // enable timeouts
   timeout_start();
 

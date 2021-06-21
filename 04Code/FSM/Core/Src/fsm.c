@@ -89,8 +89,9 @@ debounce_t button;
 /******************************************************************************
 Route Defines
 ******************************************************************************/
-checkpoint_t route1[] = {
+static checkpoint_t route1[] = {
 		{
+			// Route origin. First checkpoint in route
 			.RFID = "0xc3ed9705",
 			.action = ACT_FORWARD
 		},
@@ -98,20 +99,48 @@ checkpoint_t route1[] = {
 			.RFID = "0xa31cd604",
 			.action = ACT_STOP
 		},
-//		{
-//			.RFID = "0x53fde405",
-//			.action = ACT_LEFT
-//		},
-//		{
-//			.RFID = "0x034bfc03",
-//			.action = ACT_STOP
-//		},
+		{
+			.RFID = "0x53fde405",
+			.action = ACT_LEFT
+		},
+		{
+			.RFID = "0x034bfc03",
+			.action = ACT_STOP
+		},
 		// end of Checkpoint Array
 		{
 			.RFID = 0,
 			.action = 0
 		}
 };
+
+static checkpoint_t route2[] = {
+		{
+			// Route origin. First checkpoint in route
+			.RFID = "0xc3ed9705",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0xa31cd604",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0x53fde405",
+			.action = ACT_FORWARD
+		},
+		{
+			.RFID = "0x03b09105",
+			.action = ACT_STOP
+		},
+		// end of Checkpoint Array
+		{
+			.RFID = 0,
+			.action = 0
+		}
+};
+
+// list of available routes
+route_t route_arr[] = {route1, route2};
 
 /******************************************************************************
 State Stopped
@@ -202,18 +231,15 @@ static void s_receive(void)
 
 	if(bluet_status == BLUET_OK)
 	{
+		// route received
 		// save route base pointer
 		route_base_ptr = route_ptr;
 
 		// going forward
 		returning = +1;
 
-		// route received
 		// bluetooth ready to receive again
 		bluet_status = BLUET_READY;
-
-		// initialize debounce button
-		debounce_start(&button, USER_BTN_PORT, USER_BTN_PIN);
 
 		// Wait for user_button
 		nstate = S_STOPPED;

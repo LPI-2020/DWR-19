@@ -12,6 +12,7 @@
 #include "usart.h"
 
 #include "fsm.h"
+#include <stdlib.h>
 
 /******************************************************************************
 Bluetooth Status Flag
@@ -52,12 +53,17 @@ char route_sel_cb(uint8_t argc, char** argv)
 	if(argc != 2) // number of arguments invalid?
 		return (char)(-EINVARG);
 
-	// route selection
-	route_ptr = route1;
+	// route number
+	uint8_t route_num = atoi(argv[1]);
+
+	if(route_num > NUM_ROUTES)
+		return (char)(-EINVARG);
+
+	// else, select route
+	route_ptr = route_arr[route_num - 1];
 
 	// command received with success
 	bluet_status = BLUET_OK;
-//	nstate = S_STOPPED;
 
 	return 0;
 }
@@ -73,6 +79,7 @@ char init_receive_cb(uint8_t argc, char** argv)
 	if(argc != 1) // number of arguments invalid?
 		return (char)(-EINVARG);
 
+	// able to start receiving
 	bluet_status = BLUET_RECEIVING;
 
 	return 0;
