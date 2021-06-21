@@ -19,7 +19,7 @@
 /******************************************************************************
 Define Test Symbol
 ******************************************************************************/
-#define _DEBUG_
+//#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "tests.h"
@@ -204,10 +204,13 @@ static void s_stopped(void)
 
 	else if((motion_status == MOT_OFF) && (pick_up_timeout))
 	{
+
+#ifdef _DEBUG_
+		UART_puts(&bluet_uart,"Pick up timeout\n\r");
+#endif // !_DEBUG_
+
 		// Restart movement.
 		pick_up_timeout = 0;
-		UART_puts(&bluet_uart,"Pick up timeout\n\r");
-
 		nstate = returning_nstate_arr[returning_nstate];
 	}
 
@@ -266,7 +269,9 @@ static void s_flw_line(void)
 	{
 		case MOT_CROSS_FOUND:
 			// Cross Found
+#ifdef _DEBUG_
 			UART_puts(&bluet_uart,"Cross Found\n\r");
+#endif // !_DEBUG_
 			nstate = S_RD_RFID;
 			break;
 
@@ -370,7 +375,9 @@ uint8_t turn_func(void)
 
 uint8_t forward_func(void)
 {
+#ifdef _DEBUG_
 	UART_puts(&bluet_uart,"Continue moving.\n\r");
+#endif // !_DEBUG_
 	return S_FLW_LINE;
 }
 
