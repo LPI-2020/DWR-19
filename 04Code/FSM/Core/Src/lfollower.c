@@ -107,9 +107,65 @@ Line Follower ISR
 /******************************************************************************
 Define PID parameters to be used
 ******************************************************************************/
-#define KP (float) (1.05)
-#define KI (float) (0.35)
-#define KD (float) (0.013)
+//#define KP (float) (1.05)
+//#define KI (float) (0.35)
+//#define KD (float) (0.013)
+
+//#define KP (float) (1)
+//#define KI (float) (0)
+//#define KD (float) (0)
+
+//#define KP (float) (2)
+//#define KI (float) (0.1)
+//#define KD (float) (0)
+
+//#define KP (float) (1)
+//#define KI (float) (0.5)
+//#define KD (float) (0)
+
+//#define KP (float) (1)
+//#define KI (float) (0.5)
+//#define KD (float) (0.02)
+
+//#define KP (float) (1)
+//#define KI (float) (0.5)
+//#define KD (float) (0.05)
+
+//#define KP (float) (1)
+//#define KI (float) (0.5)
+//#define KD (float) (0.08)
+
+//#define KP (float) (1)
+//#define KI (float) (0.7)
+//#define KD (float) (0.1)
+
+//#define KP (float) (1.2)
+//#define KI (float) (0.7)
+//#define KD (float) (0.12)
+
+//#define KP (float) (1.2)
+//#define KI (float) (0.7)
+//#define KD (float) (0.2)
+
+//#define KP (float) (1.2)
+//#define KI (float) (0.9)
+//#define KD (float) (0.12)
+
+#define KP (float) (1.2)
+#define KI (float) (1)
+#define KD (float) (0.1) //8/10
+
+//#define KP (float) (1.2)
+//#define KI (float) (2)
+//#define KD (float) (0.1)
+
+//#define KP (float) (1.2)
+//#define KI (float) (0.6)
+//#define KD (float) (0.1)
+
+//#define KP (float) (1.2)
+//#define KI (float) (0.9)
+//#define KD (float) (0.09) //7.5/10
 
 static pid_st pid = {
 	.kp_h 		= KP,
