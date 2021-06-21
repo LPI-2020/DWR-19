@@ -1,5 +1,0 @@
-# Motors Module
-
-Implementation of:
-
-- 
