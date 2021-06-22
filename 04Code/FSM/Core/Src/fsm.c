@@ -19,7 +19,7 @@
 /******************************************************************************
 Define Test Symbol
 ******************************************************************************/
-//#define _DEBUG_
+#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "tests.h"
@@ -534,6 +534,10 @@ static void s_rotate(void)
 /******************************************************************************
 State Error
 ******************************************************************************/
+int remote_ctrl_dir = -1;
+
+#define REMOTE_CTRL_SPEED (0.80)
+
 static void s_error(void)
 {
 #ifdef _DEBUG_
@@ -558,13 +562,55 @@ static void s_error(void)
 	} else
 		UART_puts(&bluet_uart, "ERROR: last location unknown\n\r");
 
+	move_start();
+
 	while(1)
 	{
-#ifdef _DEBUG_
-		toggle_led(LRED);
-		toggle_led(LBLUE);
-		HAL_Delay(500);
-#endif // !_DEBUG_
+//#ifdef _DEBUG_
+////		toggle_led(LRED);
+////		toggle_led(LBLUE);
+////		HAL_Delay(500);
+//#endif // !_DEBUG_
+
+		bluet_receive();
+
+		// start has occured?
+		if(nstate == S_FLW_LINE)
+		{
+			remote_ctrl_dir = -1;
+			return;
+		}
+
+		// disable buzzer
+		if(remote_ctrl_dir != -1)
+			buzzer_off();
+
+		switch(remote_ctrl_dir)
+		{
+			case ACT_RIGHT:
+				// move right
+				move_rotate(MOVE_RIGHT, REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_LEFT:
+				// move left
+				move_rotate(MOVE_LEFT, REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_FORWARD:
+				// move forward
+				move_forward(REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_BACKWARD:
+				// move backwards
+				move_backwards(REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_STOP:
+				// stop movement
+				move_forward(0);
+		}
 	}
 }
 

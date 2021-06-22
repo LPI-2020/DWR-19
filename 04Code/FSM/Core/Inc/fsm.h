@@ -41,6 +41,8 @@ extern route_t route_arr[NUM_ROUTES];
 // current route
 extern checkpoint_t *route_ptr;
 
+extern int remote_ctrl_dir;
+
 /******************************************************************************
 FSM current state pointer
 ******************************************************************************/

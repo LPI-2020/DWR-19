@@ -104,7 +104,50 @@ char start_cb(uint8_t argc, char** argv)
 	return 0;
 }
 
+/******************************************************************************
+@function	movement
+******************************************************************************/
 char stop_cb(uint8_t argc, char** argv)
 {
+	if(argc != 1) // number of arguments invalid?
+			return (char)(-EINVARG);
+
+	remote_ctrl_dir = ACT_STOP;
+	return 0;
+}
+
+char move_fw_cb(uint8_t argc, char** argv)
+{
+	if(argc != 1) // number of arguments invalid?
+			return (char)(-EINVARG);
+
+	remote_ctrl_dir = ACT_FORWARD;
+	return 0;
+}
+
+char move_bw_cb(uint8_t argc, char** argv)
+{
+	if(argc != 1) // number of arguments invalid?
+			return (char)(-EINVARG);
+
+	remote_ctrl_dir = ACT_BACKWARD;
+	return 0;
+}
+
+char move_right_cb(uint8_t argc, char** argv)
+{
+	if(argc != 1) // number of arguments invalid?
+			return (char)(-EINVARG);
+
+	remote_ctrl_dir = ACT_RIGHT;
+	return 0;
+}
+
+char move_left_cb(uint8_t argc, char** argv)
+{
+	if(argc != 1) // number of arguments invalid?
+			return (char)(-EINVARG);
+
+	remote_ctrl_dir = ACT_LEFT;
 	return 0;
 }

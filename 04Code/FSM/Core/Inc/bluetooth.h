@@ -29,6 +29,11 @@ void bluet_receive(void);
 char route_sel_cb(uint8_t argc, char** argv);
 char init_receive_cb(uint8_t argc, char** argv);
 char start_cb(uint8_t argc, char** argv);
+
 char stop_cb(uint8_t argc, char** argv);
+char move_fw_cb(uint8_t argc, char** argv);
+char move_bw_cb(uint8_t argc, char** argv);
+char move_right_cb(uint8_t argc, char** argv);
+char move_left_cb(uint8_t argc, char** argv);
 
 #endif /* __BLUETOOTH_H__ */
