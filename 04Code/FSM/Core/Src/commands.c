@@ -44,6 +44,26 @@ const Command_t cmd_list[] =
 		"Stop: ",
 		stop_cb
 	},
+	{
+		"FW",
+		"Forward",
+		move_fw_cb
+	},
+	{
+		"BW",
+		"Backwards",
+		move_bw_cb
+	},
+	{
+		"R",
+		"Move right",
+		move_right_cb
+	},
+	{
+		"L",
+		"Move left",
+		move_left_cb
+	},
 	{ //end of Command list
 		0,
 		0,

@@ -19,7 +19,7 @@
 /******************************************************************************
 Define Test Symbol
 ******************************************************************************/
-#define _DEBUG_
+//#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "tests.h"
@@ -204,10 +204,13 @@ static void s_stopped(void)
 
 	else if((motion_status == MOT_OFF) && (pick_up_timeout))
 	{
+
+#ifdef _DEBUG_
+		UART_puts(&bluet_uart,"Pick up timeout\n\r");
+#endif // !_DEBUG_
+
 		// Restart movement.
 		pick_up_timeout = 0;
-		UART_puts(&bluet_uart,"Pick up timeout\n\r");
-
 		nstate = returning_nstate_arr[returning_nstate];
 	}
 
@@ -266,7 +269,9 @@ static void s_flw_line(void)
 	{
 		case MOT_CROSS_FOUND:
 			// Cross Found
+#ifdef _DEBUG_
 			UART_puts(&bluet_uart,"Cross Found\n\r");
+#endif // !_DEBUG_
 			nstate = S_RD_RFID;
 			break;
 
@@ -370,7 +375,9 @@ uint8_t turn_func(void)
 
 uint8_t forward_func(void)
 {
+#ifdef _DEBUG_
 	UART_puts(&bluet_uart,"Continue moving.\n\r");
+#endif // !_DEBUG_
 	return S_FLW_LINE;
 }
 
@@ -527,6 +534,10 @@ static void s_rotate(void)
 /******************************************************************************
 State Error
 ******************************************************************************/
+int remote_ctrl_dir = -1;
+
+#define REMOTE_CTRL_SPEED (0.80)
+
 static void s_error(void)
 {
 #ifdef _DEBUG_
@@ -551,13 +562,56 @@ static void s_error(void)
 	} else
 		UART_puts(&bluet_uart, "ERROR: last location unknown\n\r");
 
+	move_start();
+
 	while(1)
 	{
-#ifdef _DEBUG_
-		toggle_led(LRED);
-		toggle_led(LBLUE);
-		HAL_Delay(500);
-#endif // !_DEBUG_
+//#ifdef _DEBUG_
+//		toggle_led(LRED);
+//		toggle_led(LBLUE);
+//		HAL_Delay(500);
+//#endif // !_DEBUG_
+
+		bluet_receive();
+
+		// start has occured?
+		if(nstate == S_FLW_LINE)
+		{
+			remote_ctrl_dir = -1;
+			move_stop();
+			return;
+		}
+
+		// disable buzzer
+		if(remote_ctrl_dir != -1)
+			buzzer_off();
+
+		switch(remote_ctrl_dir)
+		{
+			case ACT_RIGHT:
+				// move right
+				move_rotate(MOVE_RIGHT, REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_LEFT:
+				// move left
+				move_rotate(MOVE_LEFT, REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_FORWARD:
+				// move forward
+				move_forward(REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_BACKWARD:
+				// move backwards
+				move_backwards(REMOTE_CTRL_SPEED);
+				break;
+
+			case ACT_STOP:
+				// stop movement
+				move_forward(0);
+		}
 	}
 }
 

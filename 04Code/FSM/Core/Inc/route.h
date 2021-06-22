@@ -16,7 +16,8 @@ typedef enum{
 	ACT_RIGHT,		// turn right (at a cross)
 	ACT_LEFT,		// turn left (at a cross)
 	ACT_FORWARD,	// don't stop (at a room)
-	ACT_STOP		// stops (at a room)
+	ACT_STOP,		// stops (at a room)
+	ACT_BACKWARD	// backwards
 } action_e;
 
 // checkpoint struct definition

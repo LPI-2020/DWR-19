@@ -1,4 +1,0 @@
-# RFID
-https://www.nxp.com/docs/en/data-sheet/MFRC522.pdf - datasheet MFRC522
-https://github.com/xtrinch/stm32f7-demos/tree/master/07-rfid-rc522 - github code for spi communication with RC522
-https://www.digikey.com/en/maker/projects/getting-started-with-stm32-how-to-use-spi/09eab3dfe74c4d0391aaaa99b0a8ee17 - Getting Started with STM32 - How to Use SPI
