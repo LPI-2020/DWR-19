@@ -19,7 +19,7 @@
 /******************************************************************************
 Define Test Symbol
 ******************************************************************************/
-#define _DEBUG_
+//#define _DEBUG_
 
 #ifdef _DEBUG_
 #include "tests.h"
@@ -567,9 +567,9 @@ static void s_error(void)
 	while(1)
 	{
 //#ifdef _DEBUG_
-////		toggle_led(LRED);
-////		toggle_led(LBLUE);
-////		HAL_Delay(500);
+//		toggle_led(LRED);
+//		toggle_led(LBLUE);
+//		HAL_Delay(500);
 //#endif // !_DEBUG_
 
 		bluet_receive();
@@ -578,6 +578,7 @@ static void s_error(void)
 		if(nstate == S_FLW_LINE)
 		{
 			remote_ctrl_dir = -1;
+			move_stop();
 			return;
 		}
 
